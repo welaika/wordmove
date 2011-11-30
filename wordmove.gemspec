@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Wordmove::VERSION
 
-  gem.add_dependency 'paint'
+  gem.add_dependency 'colored'
   gem.add_dependency 'escape'
   gem.add_dependency 'rake'
   gem.add_dependency 'net-ssh'

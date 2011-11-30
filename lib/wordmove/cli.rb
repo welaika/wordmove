@@ -2,6 +2,7 @@ require 'thor'
 require 'wordmove/generators/movefile'
 require 'wordmove/deployer'
 
+
 module Wordmove
   class CLI < Thor
 
@@ -15,6 +16,7 @@ module Wordmove
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
     method_option :skip_plugins,  :aliases => "-p", :type => :boolean
+    method_option :verbose,       :aliases => "-v", :type => :boolean
     method_option :config,        :aliases => "-c"
     def pull
       deployer = Wordmove::Deployer.new(options)
@@ -26,6 +28,7 @@ module Wordmove
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
     method_option :skip_plugins,  :aliases => "-p", :type => :boolean
+    method_option :verbose,       :aliases => "-v", :type => :boolean
     method_option :config,        :aliases => "-c"
     def push
       deployer = Wordmove::Deployer.new(options)

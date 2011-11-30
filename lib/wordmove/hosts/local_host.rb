@@ -1,15 +1,19 @@
+require 'escape'
+
 module Wordmove
   class LocalHost
 
     attr_reader :options
+    attr_reader :logger
 
     def initialize(options = {})
       @options = Hashie::Mash.new(options)
+      @logger = @options[:logger]
     end
 
     def run(*args)
       command = shell_command(*args)
-      pa "Executing locally #{command}", :green, :bright
+      logger.verbose "Executing locally #{command}"
       unless system(command)
         raise Thor::Error, "Error executing \"#{command}\""
       end

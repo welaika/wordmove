@@ -13,6 +13,7 @@ remote:
     - .git
     - .DS_Store
     - .sass-cache
+    - Movefile
   database:
     name: "database_name"
     username: "username"

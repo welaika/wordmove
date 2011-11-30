@@ -1,25 +1,33 @@
+require 'net/ssh'
+require 'net/scp'
+
 module Wordmove
   class RemoteHost < LocalHost
 
     alias :locally_run :run
 
+    attr_reader :session
+
     def initialize(options = {})
       super
-      pa "Connecting to #{options.ssh.host}...", :green, :bright
-      @session = Net::SSH.start(options.ssh.host, options.ssh.username, :password => options.ssh.password)
+    end
+
+    def session
+      logger.verbose "Connecting to #{options.ssh.host}..." unless @session.present?
+      @session ||= Net::SSH.start(options.ssh.host, options.ssh.username, :password => options.ssh.password)
     end
 
     def close
-      @session.close
+      session.close
     end
 
     def upload_file(source_file, destination_file)
-      pa "Copying remote #{source_file} to #{destination_file}...", :green, :bright
+      logger.verbose "Copying remote #{source_file} to #{destination_file}..."
       Net::SCP.download!(options.ssh.host, options.ssh.username, source_file, destination_file, :password => options.ssh.password)
     end
 
     def download_file(source_file, destination_file)
-      pa "Copying local #{source_file} to #{destination_file}...", :green, :bright
+      logger.verbose "Copying local #{source_file} to #{destination_file}..."
       Net::SCP.upload!(options.ssh.host, options.ssh.username, source_file, destination_file, :password => options.ssh.password)
     end
 
@@ -33,8 +41,8 @@ module Wordmove
 
     def run(*args)
       command = shell_command(*args)
-      pa "Executing remotely #{command}", :green, :bright
-      @session.exec!(command)
+      logger.verbose "Executing remotely #{command}"
+      session.exec!(command)
     end
 
     private
@@ -48,7 +56,7 @@ module Wordmove
       exclude_file.write(options.exclude.join("\n"))
       exclude_file.close
 
-      locally_run "rsync", "-avz", "--password-file=#{password_file.path}", "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir
+      locally_run "rsync", "-az", "--password-file=#{password_file.path}", "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir
 
       password_file.unlink
       exclude_file.unlink

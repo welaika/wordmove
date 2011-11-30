@@ -1,35 +1,50 @@
 require 'active_support/core_ext'
 require 'hashie'
-require 'paint/pa'
-require 'escape'
-require 'net/ssh'
-require 'net/scp'
-
 require 'wordmove/hosts/local_host'
 require 'wordmove/hosts/remote_host'
+require 'wordmove/logger'
 
 module Wordmove
 
   class Deployer
 
+    attr_reader :options
+    attr_reader :logger
+
     def initialize(options = {})
       @options = Hashie::Mash.new(options)
+      @logger = Logger.new
+      @logger.level = options.verbose ? Logger::VERBOSE : Logger::INFO
     end
 
     def push
-      %w(db uploads themes plugins).each do |step|
-        unless @options["skip_#{step}".to_s]
-          pa "Pushing #{step.titleize}...", :cyan
-          send "push_#{step}"
+      unless options.skip_db
+        logger.info "Pushing the DB..."
+        push_db
+      end
+
+      remotely do |host|
+        %w(uploads themes plugins).each do |step|
+          unless options.send("skip_#{step}")
+            logger.info "Pushing wp-content/#{step}..."
+            host.download_dir local_wpcontent_path(step), remote_wpcontent_path(step)
+          end
         end
       end
     end
 
     def pull
-      %w(db uploads themes plugins).each do |step|
-        unless @options["skip_#{step}".to_s]
-          pa "Pushing #{step.titleize}...", :cyan
-          send "pull_#{step}"
+      unless options.skip_db
+        logger.info "Pushing the DB..."
+        pull_db
+      end
+
+      remotely do |host|
+        %w(uploads themes plugins).each do |step|
+          unless options.send("skip_#{step}")
+            logger.info "Pushing wp-content/#{step}..."
+            host.upload_dir remote_wpcontent_path(step), local_wpcontent_path(step)
+          end
         end
       end
     end
@@ -58,23 +73,6 @@ module Wordmove
       end
     end
 
-    def push_uploads
-      remotely do |host|
-        host.download_dir local_wpcontent_path("uploads"), remote_wpcontent_path("uploads")
-      end
-    end
-
-    def push_themes
-      remotely do |host|
-        host.download_dir local_wpcontent_path("themes"), remote_wpcontent_path("themes")
-      end
-    end
-
-    def push_plugins
-      remotely do |host|
-        host.download_dir local_wpcontent_path("plugins"), remote_wpcontent_path("plugins")
-      end
-    end
 
     def pull_db
       local_mysql_dump_path = local_wpcontent_path("database_dump.sql")
@@ -99,24 +97,6 @@ module Wordmove
 
     end
 
-    def pull_uploads
-      remotely do |host|
-        host.upload_dir remote_wpcontent_path("uploads"), local_wpcontent_path("uploads")
-      end
-    end
-
-    def pull_themes
-      remotely do |host|
-        host.upload_dir remote_wpcontent_path("themes"), local_wpcontent_path("themes")
-      end
-    end
-
-    def pull_plugins
-      remotely do |host|
-        host.upload_dir remote_wpcontent_path("plugins"), local_wpcontent_path("plugins")
-      end
-    end
-
     def config
       if @config.blank?
         config_path = @options[:config] || "Movefile"
@@ -137,13 +117,13 @@ module Wordmove
     end
 
     def locally
-      host = LocalHost.new(config.local)
+      host = LocalHost.new(config.local.merge(:logger => @logger))
       yield host
       host.close
     end
 
     def remotely
-      host = RemoteHost.new(config.remote)
+      host = RemoteHost.new(config.remote.merge(:logger => @logger))
       yield host
       host.close
     end
