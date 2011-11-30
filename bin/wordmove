@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'wordmove/cli'
+Wordmove::CLI.start
