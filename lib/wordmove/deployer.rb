@@ -35,14 +35,14 @@ module Wordmove
 
     def pull
       unless options.skip_db
-        logger.info "Pushing the DB..."
+        logger.info "Pulling the DB..."
         pull_db
       end
 
       remotely do |host|
         %w(uploads themes plugins).each do |step|
           unless options.send("skip_#{step}")
-            logger.info "Pushing wp-content/#{step}..."
+            logger.info "Pulling wp-content/#{step}..."
             host.upload_dir remote_wpcontent_path(step), local_wpcontent_path(step)
           end
         end

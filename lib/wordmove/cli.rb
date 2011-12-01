@@ -11,7 +11,7 @@ module Wordmove
       Wordmove::Generators::Movefile.start
     end
 
-    desc "pull", "Pulls Wordpress data from remote host to the local machine"
+    desc "pull", "Pulls WP data from remote host to the local machine"
     method_option :skip_db,       :aliases => "-d", :type => :boolean
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
@@ -23,7 +23,7 @@ module Wordmove
       deployer.pull
     end
 
-    desc "push", "Push Wordpress data to remote host from local machine"
+    desc "push", "Pushes WP data from local machine to remote host"
     method_option :skip_db,       :aliases => "-d", :type => :boolean
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
