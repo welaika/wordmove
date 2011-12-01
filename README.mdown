@@ -12,7 +12,7 @@ That's easy:
 gem install wordmove
 ```
 
-### Usage
+## Usage
 
 ```
 > wordmove help
