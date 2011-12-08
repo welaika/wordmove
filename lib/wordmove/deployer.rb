@@ -18,32 +18,36 @@ module Wordmove
     end
 
     def push
-      unless options.skip_db
-        logger.info "Pushing the DB..."
-        push_db
-      end
+      informative_errors do
+        unless options.skip_db
+          logger.info "Pushing the DB..."
+          push_db
+        end
 
-      remotely do |host|
-        %w(uploads themes plugins).each do |step|
-          unless options.send("skip_#{step}")
-            logger.info "Pushing wp-content/#{step}..."
-            host.download_dir local_wpcontent_path(step), remote_wpcontent_path(step)
+        remotely do |host|
+          %w(uploads themes plugins).each do |step|
+            unless options.send("skip_#{step}")
+              logger.info "Pushing wp-content/#{step}..."
+              host.download_dir local_wpcontent_path(step), remote_wpcontent_path(step)
+            end
           end
         end
       end
     end
 
     def pull
-      unless options.skip_db
-        logger.info "Pulling the DB..."
-        pull_db
-      end
+      informative_errors do
+        unless options.skip_db
+          logger.info "Pulling the DB..."
+          pull_db
+        end
 
-      remotely do |host|
-        %w(uploads themes plugins).each do |step|
-          unless options.send("skip_#{step}")
-            logger.info "Pulling wp-content/#{step}..."
-            host.upload_dir remote_wpcontent_path(step), local_wpcontent_path(step)
+        remotely do |host|
+          %w(uploads themes plugins).each do |step|
+            unless options.send("skip_#{step}")
+              logger.info "Pulling wp-content/#{step}..."
+              host.upload_dir remote_wpcontent_path(step), local_wpcontent_path(step)
+            end
           end
         end
       end
@@ -126,6 +130,19 @@ module Wordmove
       host = RemoteHost.new(config.remote.merge(:logger => @logger))
       yield host
       host.close
+    end
+
+    def informative_errors
+      yield
+    rescue Timeout::Error
+      logger.error "Connection timed out!"
+      puts "Timed out"
+    rescue Errno::EHOSTUNREACH
+      logger.error "Host unreachable!"
+    rescue Errno::ECONNREFUSED
+      logger.error "Connection refused!"
+    rescue Net::SSH::AuthenticationFailed
+      logger.error "SSH authentification failure, please double check the SSH credentials on your Movefile!"
     end
 
   end

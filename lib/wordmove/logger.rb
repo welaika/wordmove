@@ -3,15 +3,16 @@ require 'colored'
 module Wordmove
   class Logger
 
-    INFO = 0
-    VERBOSE = 1
+    ERROR = 0
+    INFO = 1
+    VERBOSE = 2
 
     attr_accessor :level
 
     def log(l, message)
-      colors = [ :green, :cyan ]
+      colors = [ :red, :green, :cyan ]
       if l <= level
-        puts "  " * l + message.send(colors[l])
+        puts "  " * [l-1, 0].max + message.send(colors[l])
       end
     end
 
@@ -21,6 +22,10 @@ module Wordmove
 
     def verbose(message)
       log VERBOSE, message
+    end
+
+    def error(message)
+      log ERROR, message
     end
 
   end
