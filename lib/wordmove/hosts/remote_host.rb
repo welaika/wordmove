@@ -56,7 +56,7 @@ module Wordmove
       exclude_file.write(options.exclude.join("\n"))
       exclude_file.close
 
-      locally_run "rsync", "-azlK", "--password-file=#{password_file.path}", "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir
+      locally_run "rsync", "-azLK", "--password-file=#{password_file.path}", "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir
 
       password_file.unlink
       exclude_file.unlink
