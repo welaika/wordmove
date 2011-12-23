@@ -55,23 +55,23 @@ remote:
     host: "host"
     port: 2202 # optional
 ```
-
-## Requirements
-* Wordmove requires an SSH connection to the remote host;
-* Wordmove requires `mysqldump` and `mysql` to be present in the remote host and executable by the SSH user;
-* Wordmove requires `rsync` to be present and executable in your machine;
-
 ## About SSH authentication
 
 ### If you have your local SSH public key already installed on the remote machine.. (recommended)
 Just drop the `remote.ssh.password` file on your `Movefile`.
 
 ### Else..
-You need to have `sshpass` on your machine. On Linux, install it with your standard package manager. On Mac, you can have it via [`brew`](https://github.com/mxcl/homebrew):
+You need to have [`sshpass`](http://sourceforge.net/projects/sshpass/) on your machine. On Linux, install it with your standard package manager. On Mac, you can have it via [`brew`](https://github.com/mxcl/homebrew):
 
 ```
 sudo brew install https://raw.github.com/gist/1513663/3e98bf9e03feb7e31eeddcd08f89ca86163a376d/sshpass.rb
 ```
+
+## Requirements
+* Wordmove requires an SSH connection to the remote host;
+* Wordmove requires `mysqldump` and `mysql` to be present in the remote host and executable by the SSH user;
+* Wordmove requires `rsync` to be present and executable in your machine;
+* As said above, you may also need `sshpass` on your machine;
 
 ## License
 
