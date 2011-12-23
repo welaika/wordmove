@@ -21,6 +21,7 @@ remote:
     host: "host"
   ssh:
     username: "username"
-    password: "password" # Password is optional, will use public keys if available.
+    password: "password"
     host: "host"
-    # port: 22 # Port is optional
+    port: 30000
+

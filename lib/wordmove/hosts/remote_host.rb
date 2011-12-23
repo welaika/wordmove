@@ -36,11 +36,15 @@ module Wordmove
     end
 
     def download_dir(source_dir, destination_dir)
-      rsync "#{source_dir}/", "#{options.ssh.username}@#{options.ssh.host}:#{destination_dir}"
+      destination_dir = "#{options.ssh.host}:#{destination_dir}"
+      destination_dir = "#{options.ssh.username}@#{destination_dir}" if options.ssh.username
+      rsync "#{source_dir}/", destination_dir
     end
 
     def upload_dir(source_dir, destination_dir)
-      rsync "#{options.ssh.username}@#{options.ssh.host}:#{source_dir}/", destination_dir
+      source_dir = "#{options.ssh.host}:#{source_dir}/"
+      source_dir = "#{options.ssh.username}@#{source_dir}" if options.ssh.username
+      rsync source_dir, destination_dir
     end
 
     def run(*args)
@@ -59,26 +63,25 @@ module Wordmove
 
       arguments = [ "-azLK" ]
 
-      password_file = nil
-      if options.ssh
+      if options.ssh && (options.ssh.port || options.ssh.password)
+
+        remote_shell_arguments = [ "ssh" ]
 
         if options.ssh.port
-          arguments << [ '-e', "ssh -p #{options.ssh.port}" ]
+          remote_shell_arguments << [ "-p", options.ssh.port ]
         end
 
         if options.ssh.password
-          password_file = Tempfile.new('rsync_password')
-          password_file.write(options.ssh.password)
-          password_file.close
-          arguments << "--password-file=#{password_file.path}"
+          remote_shell_arguments = [ "sshpass", "-p", options.ssh.password ] + remote_shell_arguments
         end
+
+        arguments << [ "-e", remote_shell_arguments.join(" ") ]
       end
 
       arguments <<  [ "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir ]
       arguments.flatten!
       locally_run "rsync", *arguments
 
-      password_file.unlink if password_file
       exclude_file.unlink
     end
 
