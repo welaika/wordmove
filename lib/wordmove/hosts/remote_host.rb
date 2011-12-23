@@ -52,7 +52,7 @@ module Wordmove
     private
 
     def rsync(source_dir, destination_dir)
-      
+
       exclude_file = Tempfile.new('exclude')
       exclude_file.write(options.exclude.join("\n"))
       exclude_file.close
@@ -61,6 +61,7 @@ module Wordmove
 
       password_file = nil
       if options.ssh
+
         if options.ssh.port
           arguments << [ '-e', "ssh -p #{options.ssh.port}" ]
         end
@@ -72,9 +73,9 @@ module Wordmove
           arguments << "--password-file=#{password_file.path}"
         end
       end
-      
+
       arguments <<  [ "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir ]
-      arguments.flatten! # do we need this?
+      arguments.flatten!
       locally_run "rsync", *arguments
 
       password_file.unlink if password_file
