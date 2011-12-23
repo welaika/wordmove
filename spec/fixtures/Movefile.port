@@ -23,4 +23,4 @@ remote:
     username: "username"
     password: "password" # Password is optional, will use public keys if available.
     host: "host"
-    # port: 22 # Port is optional
+    port: 30000

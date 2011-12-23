@@ -51,8 +51,9 @@ remote:
     host: "host"
   ssh:
     username: "username"
-    password: "password"
+    password: "password" # optional, will use SSH public key if available
     host: "host"
+    port: 2202 # optional
 ```
 
 ## Known problems and limitations

@@ -5,10 +5,15 @@ module Wordmove
 
     attr_reader :options
     attr_reader :logger
+    attr_reader :ssh_extras
 
     def initialize(options = {})
       @options = Hashie::Mash.new(options)
       @logger = @options[:logger]
+      @ssh_extras = {}
+      [ :port, :password ].each do |p|
+        @ssh_extras.merge!( { p => @options.ssh[p] } ) if @options.ssh and @options.ssh[p]
+      end
     end
 
     def run(*args)

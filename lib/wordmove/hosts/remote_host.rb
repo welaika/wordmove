@@ -14,7 +14,7 @@ module Wordmove
 
     def session
       logger.verbose "Connecting to #{options.ssh.host}..." unless @session.present?
-      @session ||= Net::SSH.start(options.ssh.host, options.ssh.username, :password => options.ssh.password)
+      @session ||= Net::SSH.start(options.ssh.host, options.ssh.username, @ssh_extras )
     end
 
     def close
@@ -23,12 +23,16 @@ module Wordmove
 
     def upload_file(source_file, destination_file)
       logger.verbose "Copying remote #{source_file} to #{destination_file}..."
-      Net::SCP.download!(options.ssh.host, options.ssh.username, source_file, destination_file, :password => options.ssh.password)
+      Net::SSH.start options.ssh.host, options.ssh.username, @ssh_extras do |ssh|
+        ssh.scp.download! source_file, destination_file
+      end
     end
 
     def download_file(source_file, destination_file)
       logger.verbose "Copying local #{source_file} to #{destination_file}..."
-      Net::SCP.upload!(options.ssh.host, options.ssh.username, source_file, destination_file, :password => options.ssh.password)
+      Net::SSH.start options.ssh.host, options.ssh.username, @ssh_extras do |ssh|
+        ssh.scp.upload! source_file, destination_file
+      end
     end
 
     def download_dir(source_dir, destination_dir)
@@ -48,17 +52,32 @@ module Wordmove
     private
 
     def rsync(source_dir, destination_dir)
-      password_file = Tempfile.new('rsync_password')
-      password_file.write(options.ssh.password)
-      password_file.close
-
+      
       exclude_file = Tempfile.new('exclude')
       exclude_file.write(options.exclude.join("\n"))
       exclude_file.close
 
-      locally_run "rsync", "-azLK", "--password-file=#{password_file.path}", "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir
+      arguments = [ "-azLK" ]
 
-      password_file.unlink
+      password_file = nil
+      if options.ssh
+        if options.ssh.port
+          arguments << [ '-e', "ssh -p #{options.ssh.port}" ]
+        end
+
+        if options.ssh.password
+          password_file = Tempfile.new('rsync_password')
+          password_file.write(options.ssh.password)
+          password_file.close
+          arguments << "--password-file=#{password_file.path}"
+        end
+      end
+      
+      arguments <<  [ "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir ]
+      arguments.flatten! # do we need this?
+      locally_run "rsync", *arguments
+
+      password_file.unlink if password_file
       exclude_file.unlink
     end
 
