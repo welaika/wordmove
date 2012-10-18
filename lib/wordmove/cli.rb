@@ -13,6 +13,7 @@ module Wordmove
 
     desc "pull", "Pulls WP data from remote host to the local machine"
     method_option :skip_db,       :aliases => "-d", :type => :boolean
+    method_option :adapt_sql,     :aliases => "-a", :type => :boolean
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
     method_option :skip_plugins,  :aliases => "-p", :type => :boolean
@@ -25,6 +26,7 @@ module Wordmove
 
     desc "push", "Pushes WP data from local machine to remote host"
     method_option :skip_db,       :aliases => "-d", :type => :boolean
+    method_option :adapt_sql,     :aliases => "-a", :type => :boolean
     method_option :skip_uploads,  :aliases => "-u", :type => :boolean
     method_option :skip_themes,   :aliases => "-t", :type => :boolean
     method_option :skip_plugins,  :aliases => "-p", :type => :boolean
