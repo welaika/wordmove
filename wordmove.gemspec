@@ -15,15 +15,12 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Wordmove::VERSION
 
-  gem.add_dependency 'colored'
-  gem.add_dependency 'escape'
-  gem.add_dependency 'rake'
-  gem.add_dependency 'net-ssh'
-  gem.add_dependency 'net-scp'
+  gem.add_dependency "colored"
+  gem.add_dependency "rake"
   gem.add_dependency "thor"
-  gem.add_dependency "activesupport", "~> 3.0.0"
+  gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
-  gem.add_dependency "hashie"
+  gem.add_dependency "photocopier"
 
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "cucumber"
