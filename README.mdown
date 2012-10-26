@@ -65,9 +65,10 @@ Please take a look at the various gotchas of the underlying [`photocopier` gem](
 
 ### How the heck you are able to sync the DB via FTP?
 Thanks for asking. We basically upload via FTP a PHP script that performs the various
-import/export operations. This script then get's required via HTTP to execute it.
-This file gets deleted just after the usage, and can only be executed by `wordmove`,
-as each time it requires a pre-shared one-time-password.
+import/export operations. This script then gets executed via HTTP. Don't worry
+too much about security though: the script is deleted just after the usage,
+and can only be executed by `wordmove`, as each time it requires a pre-shared
+one-time-password to be run.
 
 * The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl;
 * The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library;
