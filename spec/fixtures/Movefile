@@ -3,24 +3,19 @@ local:
   wordpress_path: "~/dev/sites/your_site"
   database:
     name: "database_name"
-    username: "username"
+    user: "user"
     password: "password"
     host: "host"
 remote:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
-  exclude:
-    - .git
-    - .DS_Store
-    - .sass-cache
-    - Movefile
   database:
     name: "database_name"
-    username: "username"
+    user: "user"
     password: "password"
     host: "host"
   ssh:
-    username: "username"
+    user: "user"
     password: "password"
     host: "host"
     port: 30000
