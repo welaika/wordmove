@@ -69,6 +69,15 @@ module Wordmove
         end
       end
 
+      def download(url, local_path)
+        logger.task_step true, "download #{url}"
+        unless simulate?
+          open(local_path, 'w') do |file|
+            file << open(url).read
+          end
+        end
+      end
+
       def simulate?
         options[:simulate]
       end
@@ -79,6 +88,10 @@ module Wordmove
 
       def remote_wpcontent_path(*args)
         File.join(options[:remote][:wordpress_path], "wp-content", *args)
+      end
+
+      def remote_wpcontent_url(*args)
+        options[:remote][:vhost] + File.join("/wp-content", *args)
       end
 
       def adapt_sql(save_to_path, local, remote)
@@ -95,6 +108,7 @@ module Wordmove
         arguments << "--host=#{options[:host]}" if options[:host].present?
         arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
+        arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
         arguments << options[:name]
         Escape.shell_command(arguments) + " > #{save_to_path}"
       end
