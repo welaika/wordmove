@@ -94,7 +94,8 @@ module Wordmove
 
       arguments = [ "-azLKO" ]
 
-      if options.ssh && (options.ssh.port || options.ssh.password || options.ssh.gateway)
+      # if options.ssh && (options.ssh.port || options.ssh.password || options.ssh.gateway)
+      if options.ssh
 
         remote_shell_arguments = []
 
