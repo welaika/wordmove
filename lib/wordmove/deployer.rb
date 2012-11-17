@@ -62,7 +62,8 @@ module Wordmove
       locally do |host|
         host.run "mysqldump", "--host=#{config.local.database.host}", "--user=#{config.local.database.username}", "--password=#{config.local.database.password}", config.local.database.name, :stdout => local_mysql_dump_path
         File.open(local_mysql_dump_path, 'a') do |file|
-          file.write "UPDATE wp_options SET option_value=\"#{config.remote.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
+          table_name = table_prefix + "options"
+          file.write "UPDATE #{table_name} SET option_value=\"#{config.remote.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
         end
       end
 
@@ -89,7 +90,8 @@ module Wordmove
 
       locally do |host|
         File.open(local_mysql_dump_path, 'a') do |file|
-          file.write "UPDATE wp_options SET option_value=\"#{config.local.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
+          table_name = table_prefix + "options"
+          file.write "UPDATE #{table_name} SET option_value=\"#{config.local.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
         end
         host.run "mysql", "--user=#{config.local.database.username}", "--password=#{config.local.database.password}", "--host=#{config.local.database.host}", "--database=#{config.local.database.name}", :stdin => local_mysql_dump_path
         host.run "rm", local_mysql_dump_path
@@ -111,6 +113,12 @@ module Wordmove
       end
       @config
     end
+    
+    def table_prefix
+      @table_prefix ||= config.table_prefix || "wp_"
+      @table_prefix
+    end
+    
 
     def local_wpcontent_path(*args)
       File.join(config.local.wordpress_path, "wp-content", *args)
