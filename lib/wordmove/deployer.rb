@@ -3,6 +3,7 @@ require 'hashie'
 require 'wordmove/hosts/local_host'
 require 'wordmove/hosts/remote_host'
 require 'wordmove/logger'
+require 'wordmove/sql_mover'
 
 module Wordmove
 
