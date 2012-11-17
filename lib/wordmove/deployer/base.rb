@@ -1,5 +1,6 @@
 require 'active_support/core_ext'
 require 'wordmove/logger'
+require 'wordmove/sql_mover'
 require 'escape'
 
 module Wordmove
@@ -51,16 +52,20 @@ module Wordmove
       %w(uploads themes plugins).each do |task|
         define_method "push_#{task}" do
           logger.task "Pushing #{task.titleize}"
-          remote_put_directory(local_wpcontent_path(task), remote_wpcontent_path(task))
+          remote_put_directory(local_wpcontent_path(task), remote_wpcontent_path(task), paths_to_exclude)
         end
 
         define_method "pull_#{task}" do
           logger.task "Pulling #{task.titleize}"
-          remote_get_directory(remote_wpcontent_path(task), local_wpcontent_path(task))
+          remote_get_directory(remote_wpcontent_path(task), local_wpcontent_path(task), paths_to_exclude)
         end
       end
 
       protected
+
+      def paths_to_exclude
+        options[:remote][:exclude] || Array.new
+      end
 
       def run(command)
         logger.task_step true, command
@@ -97,16 +102,14 @@ module Wordmove
       def adapt_sql(save_to_path, local, remote)
         logger.task_step true, "adapt dump"
         unless simulate?
-          File.open(save_to_path, 'a') do |file|
-            file.write "UPDATE wp_options SET option_value=\"#{remote[:vhost]}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
-          end
+          SqlMover.new(save_to_path, local, remote).move!
         end
       end
 
       def mysql_dump_command(options, save_to_path)
         arguments = [ "mysqldump" ]
         arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--user=#{options[:user]}" if options[:user].present?
+        arguments << "--user=#{options[:username]}" if options[:username].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
         arguments << options[:name]
@@ -116,7 +119,7 @@ module Wordmove
       def mysql_import_command(dump_path, options)
         arguments = [ "mysql" ]
         arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--user=#{options[:user]}" if options[:user].present?
+        arguments << "--user=#{options[:username]}" if options[:username].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
         Escape.shell_command(arguments) + " < #{dump_path}"

@@ -10,7 +10,7 @@ if ($_GET['shared_key'] != $shared_key) {
 // Database configuration
 
 $db_server = '<%= escape_php db[:host] %>';
-$db_username = '<%= escape_php db[:user] %>';
+$db_username = '<%= escape_php db[:username] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php db[:name] %>';
 
@@ -48,7 +48,7 @@ $comment[]='/*!';                     // Or add your own string to leave out oth
 // See http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html for the full list
 // Change this if you have problems with non-latin letters
 
-$db_connection_charset = '<%= db[:charset] || utf8';
+$db_connection_charset = '<%= db[:charset] || 'utf8' %>';
 
 // Default query delimiter: this character at the line end tells Bigdump where a SQL statement ends
 // Can be changed by DELIMITER statement in the dump file (normally used when defining procedures/functions)

@@ -10,7 +10,8 @@ module Wordmove
       def initialize(options)
         super
         ftp_options = options[:remote][:ftp]
-        @copier = Photocopier::FTP.new(ftp_options.merge(logger: logger))
+        @copier = Photocopier::FTP.new(ftp_options)
+        @copier.logger = logger
       end
 
       def push_db

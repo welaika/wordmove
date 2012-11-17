@@ -7,7 +7,8 @@ module Wordmove
       def initialize(options)
         super
         ssh_options = options[:remote][:ssh]
-        @copier = Photocopier::SSH.new(ssh_options.merge(logger: logger))
+        @copier = Photocopier::SSH.new(ssh_options)
+        @copier.logger = logger
       end
 
       def push_db

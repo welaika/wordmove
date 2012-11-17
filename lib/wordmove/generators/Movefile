@@ -3,15 +3,15 @@ local:
   wordpress_path: "~/dev/sites/your_site"
   database:
     name: "database_name"
-    user: "user"
+    username: "user"
     password: "password"
-    host: "host"
+    host: "127.0.0.1"
 remote:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
   database:
     name: "database_name"
-    user: "user"
+    username: "user"
     password: "password"
     host: "host"
   ssh: # also ftp is allowed
