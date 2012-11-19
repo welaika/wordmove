@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wordmove (0.0.7)
+    wordmove (0.0.8)
       activesupport (~> 3.0.0)
       colored
       escape
@@ -9,6 +9,7 @@ PATH
       i18n
       net-scp
       net-ssh
+      net-ssh-gateway
       rake
       thor
 
@@ -38,13 +39,13 @@ GEM
       json (>= 1.4.6)
     hashie (1.2.0)
     i18n (0.6.1)
-    jruby-pageant (1.1.1)
     json (1.6.3)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
-    net-ssh (2.6.0)
-      jruby-pageant (>= 1.1.1)
-    rake (0.9.2.2)
+    net-ssh (2.6.1)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    rake (10.0.1)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
