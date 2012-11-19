@@ -86,6 +86,14 @@ module Wordmove
 
     private
 
+    def get_host_for_options(options)
+      if options.username
+        "#{options.username}@#{options.host}"
+      else
+        options.host
+      end
+    end
+
     def rsync(source_dir, destination_dir)
 
       exclude_file = Tempfile.new('exclude')
@@ -94,43 +102,36 @@ module Wordmove
 
       arguments = [ "-azLKO" ]
 
-      # if options.ssh && (options.ssh.port || options.ssh.password || options.ssh.gateway)
       if options.ssh
-
         remote_shell_arguments = []
 
         if options.ssh.gateway
-          host = options.ssh.gateway.host
-          host = "#{options.ssh.gateway.username}@#{host}" if options.ssh.gateway.username
-          remote_shell_arguments << [ "ssh", host ]
+          remote_shell_arguments.push("ssh", get_host_for_options(options.ssh.gateway))
+
           if options.ssh.gateway.port
-            remote_shell_arguments << [ "-p", options.ssh.gateway.port ]
+            remote_shell_arguments.push("-p", options.ssh.gateway.port)
           end
         end
 
-        remote_shell_arguments << [ "ssh" ]
+        remote_shell_arguments.push("ssh")
 
         if options.ssh.port
-          remote_shell_arguments << [ "-p", options.ssh.port ]
+          remote_shell_arguments.push("-p", options.ssh.port)
         end
 
         if options.ssh.password
-          remote_shell_arguments = [ "sshpass", "-p", options.ssh.password ] + remote_shell_arguments
+          remote_shell_arguments.unshift("sshpass", "-p", options.ssh.password)
         end
 
-        host = options.ssh.host
-        host = "#{options.ssh.username}@#{host}" if options.ssh.username
-        remote_shell_arguments << host
+        remote_shell_arguments.push(get_host_for_options(options.ssh))
 
-        arguments << [ "-e", remote_shell_arguments.join(" ") ]
+        arguments.push("-e", remote_shell_arguments.join(" "))
       end
 
-      arguments <<  [ "--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir ]
-      arguments.flatten!
+      arguments.push("--exclude-from=#{exclude_file.path}", "--delete", source_dir, destination_dir)
       locally_run "rsync", *arguments
 
       exclude_file.unlink
     end
-
   end
 end

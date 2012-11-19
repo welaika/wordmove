@@ -66,7 +66,7 @@ module Wordmove
           Wordmove::SqlMover.new(local_mysql_dump_path, config.local, config.remote).move!
         else
           File.open(local_mysql_dump_path, 'a') do |file|
-            file.write "UPDATE wp_options SET option_value=\"#{config.remote.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
+            file.write "UPDATE #{options_table} SET option_value=\"#{config.remote.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
           end
         end
       end
@@ -97,7 +97,7 @@ module Wordmove
           Wordmove::SqlMover.new(local_mysql_dump_path, config.remote, config.local).move!
         else
           File.open(local_mysql_dump_path, 'a') do |file|
-            file.write "UPDATE wp_options SET option_value=\"#{config.local.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
+            file.write "UPDATE #{options_table} SET option_value=\"#{config.local.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
           end
         end
         host.run "mysql", "--user=#{config.local.database.username}", "--password=#{config.local.database.password}", "--host=#{config.local.database.host}", "--database=#{config.local.database.name}", :stdin => local_mysql_dump_path
@@ -119,6 +119,14 @@ module Wordmove
         @config = Hashie::Mash.new(YAML::load(File.open(config_path)))
       end
       @config
+    end
+
+    def table_prefix
+      config.table_prefix || "wp_"
+    end
+
+    def options_table
+      table_prefix + "options"
     end
 
     def local_wpcontent_path(*args)
