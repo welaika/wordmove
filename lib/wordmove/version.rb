@@ -1,3 +1,3 @@
 module Wordmove
-  VERSION = "0.1.0.rc"
+  VERSION = "1.0.0"
 end

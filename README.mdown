@@ -11,14 +11,14 @@ Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 That's easy:
 
 ```
-gem install wordmove --pre
+gem install wordmove
 ```
 
 ## Upgrading?
 
 Beware!
 
-From version 0.1.0 we have decided to change wordmove flags' behaviour: they used to tell
+From version 1.0 we have decided to change wordmove flags' behaviour: they used to tell
 wordmove which options to **skip**, now they tell instead which options to **include**.
 In the Movefile, we have also changed in the ssh subsection the "username" field to be
 just "user".
