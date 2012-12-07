@@ -109,7 +109,7 @@ module Wordmove
       def mysql_dump_command(options, save_to_path)
         arguments = [ "mysqldump" ]
         arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--user=#{options[:username]}" if options[:username].present?
+        arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
         arguments << options[:name]
@@ -119,7 +119,7 @@ module Wordmove
       def mysql_import_command(dump_path, options)
         arguments = [ "mysql" ]
         arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--user=#{options[:username]}" if options[:username].present?
+        arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
         Escape.shell_command(arguments) + " < #{dump_path}"

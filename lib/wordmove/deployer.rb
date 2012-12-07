@@ -61,7 +61,7 @@ module Wordmove
       remote_mysql_dump_path = remote_wpcontent_path("database_dump.sql")
 
       locally do |host|
-        host.run "mysqldump", "--host=#{config.local.database.host}", "--user=#{config.local.database.username}", "--password=#{config.local.database.password}", config.local.database.name, :stdout => local_mysql_dump_path
+        host.run "mysqldump", "--host=#{config.local.database.host}", "--user=#{config.local.database.user}", "--password=#{config.local.database.password}", config.local.database.name, :stdout => local_mysql_dump_path
         if options.adapt_sql
           Wordmove::SqlMover.new(local_mysql_dump_path, config.local, config.remote).move!
         else
@@ -73,7 +73,7 @@ module Wordmove
 
       remotely do |host|
         host.download_file local_mysql_dump_path, remote_mysql_dump_path
-        host.run "mysql", "--user=#{config.remote.database.username}", "--password=#{config.remote.database.password}", "--host=#{config.remote.database.host}", "--database=#{config.remote.database.name}", :stdin => remote_mysql_dump_path
+        host.run "mysql", "--user=#{config.remote.database.user}", "--password=#{config.remote.database.password}", "--host=#{config.remote.database.host}", "--database=#{config.remote.database.name}", :stdin => remote_mysql_dump_path
         host.run "rm", remote_mysql_dump_path
       end
 
@@ -88,7 +88,7 @@ module Wordmove
       remote_mysql_dump_path = remote_wpcontent_path("database_dump.sql")
 
       remotely do |host|
-        host.run "mysqldump", "--host=#{config.remote.database.host}", "--user=#{config.remote.database.username}", "--password=#{config.remote.database.password}", config.remote.database.name, :stdout => remote_mysql_dump_path
+        host.run "mysqldump", "--host=#{config.remote.database.host}", "--user=#{config.remote.database.user}", "--password=#{config.remote.database.password}", config.remote.database.name, :stdout => remote_mysql_dump_path
         host.upload_file remote_mysql_dump_path, local_mysql_dump_path
       end
 
@@ -100,7 +100,7 @@ module Wordmove
             file.write "UPDATE #{options_table} SET option_value=\"#{config.local.vhost}\" WHERE option_name=\"siteurl\" OR option_name=\"home\";\n"
           end
         end
-        host.run "mysql", "--user=#{config.local.database.username}", "--password=#{config.local.database.password}", "--host=#{config.local.database.host}", "--database=#{config.local.database.name}", :stdin => local_mysql_dump_path
+        host.run "mysql", "--user=#{config.local.database.user}", "--password=#{config.local.database.password}", "--host=#{config.local.database.host}", "--database=#{config.local.database.name}", :stdin => local_mysql_dump_path
         host.run "rm", local_mysql_dump_path
       end
 
