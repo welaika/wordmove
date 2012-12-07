@@ -153,8 +153,8 @@ class MySQLDump
   }
 }
 
-function get_connection($db_host, $db_username, $db_password, $db_name, $error = NULL) {
-  $db_connection = new mysqli($db_host, $db_username, $db_password);
+function get_connection($db_host, $db_user, $db_password, $db_name, $error = NULL) {
+  $db_connection = new mysqli($db_host, $db_user, $db_password);
   if (!$db_connection || !$db_connection->select_db($db_name)) {
     if ($db_connection) {
       $error = mysqli_connect_error();
@@ -167,7 +167,7 @@ function get_connection($db_host, $db_username, $db_password, $db_name, $error =
 }
 
 $db_host = '<%= escape_php db[:host] %>';
-$db_username = '<%= escape_php db[:user] %>';
+$db_user = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php_literal db[:name] %>';
 $shared_key = '<%= password %>';
@@ -175,7 +175,7 @@ $shared_key = '<%= password %>';
 $mysql_error = '';
 
 if ($_GET['shared_key'] == $shared_key) {
-  $connection = get_connection($db_host, $db_username, $db_password, $db_name, &$mysql_error);
+  $connection = get_connection($db_host, $db_user, $db_password, $db_name, &$mysql_error);
   $dump = new MySQLDump($connection);
   $dump->send('dump.mysql');
 }

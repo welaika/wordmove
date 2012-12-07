@@ -13,18 +13,18 @@ Feature: Generating Movefile
         vhost: "http://vhost.local"
         wordpress_path: "~/dev/sites/your_site"
         database:
-          username: "username"
+          user: "user"
           password: "password"
           host: "host"
       remote:
         vhost: "http://remote.com"
         wordpress_path: "/var/www/your_site"
         database:
-          username: "username"
+          user: "user"
           password: "password"
           host: "host"
         ssh:
-          username: "username"
+          user: "user"
           password: "password"
           host: "host"
       """
