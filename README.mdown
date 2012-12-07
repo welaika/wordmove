@@ -14,6 +14,17 @@ That's easy:
 gem install wordmove --pre
 ```
 
+## Upgrading?
+
+Beware!
+
+From version 0.1.0 we have decided to change wordmove flags' behaviour: they used to tell
+wordmove which options to **skip**, now they tell instead which options to **include**.
+In the Movefile, we have also changed in the ssh subsection the "username" field to be
+just "user".
+
+So please, be very careful when upgrading :heart:
+
 ## Usage
 
 ```
@@ -64,7 +75,7 @@ Just not use the `remote.ssh.password` field on your `Movefile`. Easy peasy.
 Please take a look at the various gotchas of the underlying [`photocopier` gem](https://github.com/stefanoverna/photocopier#password-gotchas).
 
 ### How the heck you are able to sync the DB via FTP?
-Thanks for asking. We basically upload via FTP a PHP script that performs the various
+We're glad you asked! We basically upload via FTP a PHP script that performs the various
 import/export operations. This script then gets executed via HTTP. Don't worry
 too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
@@ -77,7 +88,7 @@ one-time-password to be run.
 
 (The MIT License)
 
-Copyright © 2011 weLaika
+Copyright © 2012 weLaika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -25,4 +25,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "cucumber"
   gem.add_development_dependency "aruba"
+
+  gem.post_install_message = "Beware! We have changed the wordmove flags' behaviour: they used to tell wordmove what to _skip_, now they tell what to _include_. Read `wordmove help` for more info."
 end

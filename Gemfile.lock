@@ -1,21 +1,20 @@
 PATH
   remote: .
   specs:
-    wordmove (0.0.6)
-      activesupport (~> 3.0.0)
+    wordmove (0.1.0.rc)
+      activesupport
       colored
-      escape
-      hashie
       i18n
-      net-scp
-      net-ssh
+      photocopier
       rake
       thor
 
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.0.11)
+    activesupport (3.2.9)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
     aruba (0.4.9)
       childprocess (>= 0.2.3)
       cucumber (>= 1.1.1)
@@ -36,13 +35,22 @@ GEM
     ffi (1.0.11)
     gherkin (2.7.1)
       json (>= 1.4.6)
-    hashie (1.2.0)
-    i18n (0.6.0)
+    i18n (0.6.1)
     json (1.6.3)
+    multi_json (1.4.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
-    net-ssh (2.2.1)
-    rake (0.9.2.2)
+    net-ssh (2.6.2)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    photocopier (0.0.4)
+      activesupport
+      escape
+      i18n
+      net-scp
+      net-ssh
+      net-ssh-gateway
+    rake (10.0.2)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
@@ -52,7 +60,7 @@ GEM
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.7.0)
     term-ansicolor (1.0.7)
-    thor (0.14.6)
+    thor (0.16.0)
 
 PLATFORMS
   ruby
