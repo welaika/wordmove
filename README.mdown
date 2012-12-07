@@ -1,6 +1,8 @@
 # Wordmove
 
-Wordmove is a nice little gem that lets you automatically mirror local Wordpress installations and DB data back and forth from your local development machine to the remote staging server.
+Wordmove is a nice little gem that lets you automatically mirror local Wordpress
+installations and DB data back and forth from your local development machine to
+the remote staging server. SSH and FTP connections are both supported.
 
 Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
@@ -9,8 +11,19 @@ Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 That's easy:
 
 ```
-gem install wordmove
+gem install wordmove --pre
 ```
+
+## Upgrading?
+
+Beware!
+
+From version 0.1.0 we have decided to change wordmove flags' behaviour: they used to tell
+wordmove which options to **skip**, now they tell instead which options to **include**.
+In the Movefile, we have also changed in the ssh subsection the "username" field to be
+just "user".
+
+So please, be very careful when upgrading :heart:
 
 ## Usage
 
@@ -33,7 +46,7 @@ local:
   wordpress_path: "~/dev/sites/your_site"
   database:
     name: "database_name"
-    username: "username"
+    user: "user"
     password: "password"
     host: "host"
 remote:
@@ -46,40 +59,36 @@ remote:
     - Movefile
   database:
     name: "database_name"
-    username: "username"
+    user: "user"
     password: "password"
     host: "host"
   ssh:
-    username: "username"
+    user: "user"
     password: "password" # optional, will use SSH public key if available
     host: "host"
     port: 2202 # optional
 ```
-## About SSH authentication
-
 ### If you have your local SSH public key already installed on the remote machine.. (recommended)
-Just drop the `remote.ssh.password` file on your `Movefile`.
+Just not use the `remote.ssh.password` field on your `Movefile`. Easy peasy.
 
-### Else..
-You need to have [`sshpass`](http://sourceforge.net/projects/sshpass/) on your machine. On Linux, install it with your standard package manager. On Mac, you can have it via [`brew`](https://github.com/mxcl/homebrew):
+### If you want to specify SSH password on the Movefile
+Please take a look at the various gotchas of the underlying [`photocopier` gem](https://github.com/stefanoverna/photocopier#password-gotchas).
 
-```
-sudo brew install https://raw.github.com/gist/1513663/3e98bf9e03feb7e31eeddcd08f89ca86163a376d/sshpass.rb
-```
+### How the heck you are able to sync the DB via FTP?
+We're glad you asked! We basically upload via FTP a PHP script that performs the various
+import/export operations. This script then gets executed via HTTP. Don't worry
+too much about security though: the script is deleted just after the usage,
+and can only be executed by `wordmove`, as each time it requires a pre-shared
+one-time-password to be run.
 
-**Please note that on Ubuntu 11.10 `sshpass` is at version 1.04, which has a [bug](https://bugs.launchpad.net/ubuntu/+source/sshpass/+bug/774882) that prevents it from working. Install version 1.03 or 1.05.**
-
-## Requirements
-* Wordmove requires an SSH connection to the remote host;
-* Wordmove requires `mysqldump` and `mysql` to be present in the remote host and executable by the SSH user;
-* Wordmove requires `rsync` to be present and executable in your machine;
-* As said above, you may also need `sshpass` on your machine;
+* The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl;
+* The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library;
 
 ## License
 
 (The MIT License)
 
-Copyright © 2011 weLaika
+Copyright © 2012 weLaika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

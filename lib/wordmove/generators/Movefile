@@ -3,30 +3,25 @@ local:
   wordpress_path: "~/dev/sites/your_site"
   database:
     name: "database_name"
-    username: "username"
+    username: "user"
     password: "password"
-    host: "host"
+    host: "127.0.0.1"
 remote:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
-  exclude:
-    - .git
-    - .DS_Store
-    - .sass-cache
-    - Movefile
   database:
     name: "database_name"
-    username: "username"
+    username: "user"
     password: "password"
     host: "host"
-  ssh:
+  ssh: # also ftp is allowed
     host: "host"
-    username: "username"
+    user: "user"
     password: "password" # password is optional, will use public keys if available.
     # port: 22 # Port is optional
     #
     # gateway:
     #   host: "host"
-    #   username: "username"
+    #   user: "user"
     #   password: "password" # password is optional, will use public keys if available.
 

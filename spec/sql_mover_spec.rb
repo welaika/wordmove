@@ -57,10 +57,13 @@ describe Wordmove::SqlMover do
   end
 
   context ".replace_field!" do
-    let(:source_config) { stub(:field => "DUMP") }
-    let(:dest_config) { stub(:field => "FUNK") }
+    let(:source_config) { stub("config") }
+    let(:dest_config) { stub("config") }
 
     it "should replace source vhost with dest vhost" do
+      source_config.stub(:[]).with(:field).and_return("DUMP")
+      dest_config.stub(:[]).with(:field).and_return("FUNK")
+
       sql_mover.should_receive(:serialized_replace!).ordered.with("DUMP", "FUNK").and_return(true)
       sql_mover.should_receive(:simple_replace!).ordered.with("DUMP", "FUNK").and_return(true)
       sql_mover.replace_field!(:field)

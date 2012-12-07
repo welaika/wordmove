@@ -30,8 +30,8 @@ module Wordmove
     end
 
     def replace_field!(field_sym)
-      source_field = source_config.send(field_sym)
-      dest_field = dest_config.send(field_sym)
+      source_field = source_config[field_sym]
+      dest_field = dest_config[field_sym]
       if source_field && dest_field
         serialized_replace!(source_field, dest_field)
         simple_replace!(source_field, dest_field)

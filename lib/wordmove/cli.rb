@@ -1,7 +1,6 @@
 require 'thor'
 require 'wordmove/generators/movefile'
-require 'wordmove/deployer'
-
+require 'wordmove/deployer/base'
 
 module Wordmove
   class CLI < Thor
@@ -12,29 +11,37 @@ module Wordmove
     end
 
     desc "pull", "Pulls WP data from remote host to the local machine"
-    method_option :skip_db,       :aliases => "-d", :type => :boolean
-    method_option :adapt_sql,     :aliases => "-a", :type => :boolean
-    method_option :skip_uploads,  :aliases => "-u", :type => :boolean
-    method_option :skip_themes,   :aliases => "-t", :type => :boolean
-    method_option :skip_plugins,  :aliases => "-p", :type => :boolean
-    method_option :verbose,       :aliases => "-v", :type => :boolean
-    method_option :config,        :aliases => "-c"
+    method_option :db,       :aliases => "-d", :type => :boolean
+    method_option :uploads,  :aliases => "-u", :type => :boolean
+    method_option :themes,   :aliases => "-t", :type => :boolean
+    method_option :plugins,  :aliases => "-p", :type => :boolean
+    method_option :verbose,  :aliases => "-v", :type => :boolean
+    method_option :simulate, :aliases => "-s", :type => :boolean
+    method_option :config,   :aliases => "-c"
     def pull
-      deployer = Wordmove::Deployer.new(options)
-      deployer.pull
+      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      %w(db uploads themes plugins).map(&:to_sym).each do |task|
+        if options[task]
+          deployer.send("pull_#{task}")
+        end
+      end
     end
 
     desc "push", "Pushes WP data from local machine to remote host"
-    method_option :skip_db,       :aliases => "-d", :type => :boolean
-    method_option :adapt_sql,     :aliases => "-a", :type => :boolean
-    method_option :skip_uploads,  :aliases => "-u", :type => :boolean
-    method_option :skip_themes,   :aliases => "-t", :type => :boolean
-    method_option :skip_plugins,  :aliases => "-p", :type => :boolean
-    method_option :verbose,       :aliases => "-v", :type => :boolean
-    method_option :config,        :aliases => "-c"
+    method_option :db,       :aliases => "-d", :type => :boolean
+    method_option :uploads,  :aliases => "-u", :type => :boolean
+    method_option :themes,   :aliases => "-t", :type => :boolean
+    method_option :plugins,  :aliases => "-p", :type => :boolean
+    method_option :verbose,  :aliases => "-v", :type => :boolean
+    method_option :simulate, :aliases => "-s", :type => :boolean
+    method_option :config,   :aliases => "-c"
     def push
-      deployer = Wordmove::Deployer.new(options)
-      deployer.push
+      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      %w(db uploads themes plugins).map(&:to_sym).each do |task|
+        if options[task]
+          deployer.send("push_#{task}")
+        end
+      end
     end
 
   end

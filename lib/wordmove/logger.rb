@@ -1,31 +1,23 @@
+# encoding: utf-8
+
 require 'colored'
+require 'logger'
 
 module Wordmove
-  class Logger
+  class Logger < ::Logger
 
-    ERROR = 0
-    INFO = 1
-    VERBOSE = 2
+    def task(title)
+      puts ""
+      title = " ✓ #{title} "
+      puts "▬" * 2 + title.green + "▬" * (70 - title.length)
+    end
 
-    attr_accessor :level
-
-    def log(l, message)
-      colors = [ :red, :green, :cyan ]
-      if l <= level
-        puts "  " * [l-1, 0].max + message.send(colors[l])
+    def task_step(local_step, title)
+      if local_step
+        puts "    local".cyan + " | ".black + title
+      else
+        puts "   remote".yellow + " | ".black + title
       end
-    end
-
-    def info(message)
-      log INFO, message
-    end
-
-    def verbose(message)
-      log VERBOSE, message
-    end
-
-    def error(message)
-      log ERROR, message
     end
 
   end
