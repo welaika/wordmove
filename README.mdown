@@ -20,8 +20,7 @@ Beware!
 
 From version 1.0 we have decided to change wordmove flags' behaviour: they used to tell
 wordmove which options to **skip**, now they tell instead which options to **include**.
-In the Movefile, we have also changed in the ssh subsection the "username" field to be
-just "user".
+In the Movefile, we have also changed all "username" fields to be just "user".
 
 So please, be very careful when upgrading :heart:
 

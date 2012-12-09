@@ -3,7 +3,7 @@ local:
   wordpress_path: "~/dev/sites/your_site"
   database:
     name: "database_name"
-    username: "user"
+    user: "user"
     password: "password"
     host: "127.0.0.1"
 remote:
@@ -11,7 +11,7 @@ remote:
   wordpress_path: "/var/www/your_site"
   database:
     name: "database_name"
-    username: "user"
+    user: "user"
     password: "password"
     host: "host"
   ssh: # also ftp is allowed

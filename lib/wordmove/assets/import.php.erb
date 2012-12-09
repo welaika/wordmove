@@ -10,7 +10,7 @@ if ($_GET['shared_key'] != $shared_key) {
 // Database configuration
 
 $db_server = '<%= escape_php db[:host] %>';
-$db_username = '<%= escape_php db[:username] %>';
+$db_user = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php db[:name] %>';
 
@@ -324,7 +324,7 @@ if (!$error && isset($_REQUEST["delete"]) && $_REQUEST["delete"]!=basename($_SER
 // Connect to the database, set charset and execute pre-queries
 
 if (!$error && !TESTMODE)
-{ $dbconnection = @mysql_connect($db_server,$db_username,$db_password);
+{ $dbconnection = @mysql_connect($db_server,$db_user,$db_password);
   if ($dbconnection)
     $db = mysql_select_db($db_name);
   if (!$dbconnection || !$db)
