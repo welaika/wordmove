@@ -67,6 +67,7 @@ remote:
     host: "host"
     port: 2202 # optional
 ```
+
 ### If you have your local SSH public key already installed on the remote machine.. (recommended)
 Just not use the `remote.ssh.password` field on your `Movefile`. Easy peasy.
 
@@ -79,6 +80,13 @@ import/export operations. This script then gets executed via HTTP. Don't worry
 too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
+
+### If you want to specify both relative and absolute wordpress path (FTP paths anyone?)
+Just add to the YAML config a `wordpress_absolute_path` field specifying the absolute path,
+while using the usual `wordpress_path` for the relative one.
+
+### If you want to specify a passive FTP connection
+Add to the YAML config a `passive` flag set to `true`.
 
 * The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl;
 * The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library;
