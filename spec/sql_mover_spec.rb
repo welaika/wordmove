@@ -42,31 +42,42 @@ describe Wordmove::SqlMover do
     end
   end
 
-  context ".replace_vhost!" do
-    it "should replace source vhost with dest vhost" do
-      sql_mover.should_receive(:replace_field!).with(:vhost).and_return(true)
-      sql_mover.replace_vhost!
-    end
-  end
+  describe "replace single fields" do
+    context ".replace_vhost!" do
+      let(:source_config) do { :vhost => "DUMP" } end
+      let(:dest_config)   do { :vhost => "FUNK" } end
 
-  context ".replace_wordpress_path!" do
-    it "should replace source path with dest path" do
-      sql_mover.should_receive(:replace_field!).with(:wordpress_path).and_return(true)
-      sql_mover.replace_wordpress_path!
+      it "should replace source vhost with dest vhost" do
+        sql_mover.should_receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
+        sql_mover.replace_vhost!
+      end
+    end
+
+    context ".replace_wordpress_path!" do
+      let(:source_config) do { :wordpress_path => "DUMP" } end
+      let(:dest_config)   do { :wordpress_path => "FUNK" } end
+
+      it "should replace source vhost with dest wordpress paths" do
+        sql_mover.should_receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
+        sql_mover.replace_wordpress_path!
+      end
+
+      context "given an absolute path" do
+        let(:source_config) do { :wordpress_absolute_path => "ABSOLUTE_DUMP", :wordpress_path => "DUMP" } end
+
+        it "should replace the absolute path instead" do
+          sql_mover.should_receive(:replace_field!).with("ABSOLUTE_DUMP", "FUNK").and_return(true)
+          sql_mover.replace_wordpress_path!
+        end
+      end
     end
   end
 
   context ".replace_field!" do
-    let(:source_config) { stub("config") }
-    let(:dest_config) { stub("config") }
-
     it "should replace source vhost with dest vhost" do
-      source_config.stub(:[]).with(:field).and_return("DUMP")
-      dest_config.stub(:[]).with(:field).and_return("FUNK")
-
       sql_mover.should_receive(:serialized_replace!).ordered.with("DUMP", "FUNK").and_return(true)
       sql_mover.should_receive(:simple_replace!).ordered.with("DUMP", "FUNK").and_return(true)
-      sql_mover.replace_field!(:field)
+      sql_mover.replace_field!("DUMP", "FUNK")
     end
   end
 
