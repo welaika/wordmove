@@ -169,7 +169,7 @@ function get_connection($db_host, $db_user, $db_password, $db_name, $error = NUL
 $db_host = '<%= escape_php db[:host] %>';
 $db_user = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
-$db_name = '<%= escape_php_literal db[:name] %>';
+$db_name = '<%= escape_php db[:name] %>';
 $shared_key = '<%= password %>';
 
 $mysql_error = '';
