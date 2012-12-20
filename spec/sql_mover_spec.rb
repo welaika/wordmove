@@ -90,6 +90,15 @@ describe Wordmove::SqlMover do
       sql_mover.serialized_replace!('http://dump.com', 'http://shrubbery.com')
       sql_mover.sql_content.should == 's:4:"spam";s:25:"http://shrubbery.com/spam";s:6:"foobar";s:27:"http://shrubbery.com/foobar";s:8:"sausages"'
     end
+
+    context "given multiple types of string quoting" do
+      let(:content) { "s:20:\\\"http://dump.com/spam\\\";s:6:'foobar';s:22:'http://dump.com/foobar';s:8:'sausages'" }
+
+      it "handles replacing just as well" do
+        sql_mover.serialized_replace!('http://dump.com', 'http://shrubbery.com')
+        sql_mover.sql_content.should == "s:25:\\\"http://shrubbery.com/spam\\\";s:6:'foobar';s:27:'http://shrubbery.com/foobar';s:8:'sausages'"
+      end
+    end
   end
 
   context ".simple_replace!" do
