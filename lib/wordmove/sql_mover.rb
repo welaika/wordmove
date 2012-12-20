@@ -22,16 +22,18 @@ module Wordmove
     end
 
     def replace_vhost!
-      replace_field!(:vhost)
+      source_vhost = source_config[:vhost]
+      dest_vhost = dest_config[:vhost]
+      replace_field!(source_vhost, dest_vhost)
     end
 
     def replace_wordpress_path!
-      replace_field!(:wordpress_path)
+      source_path = source_config[:wordpress_absolute_path] || source_config[:wordpress_path]
+      dest_path = dest_config[:wordpress_absolute_path] || dest_config[:wordpress_path]
+      replace_field!(source_path, dest_path)
     end
 
-    def replace_field!(field_sym)
-      source_field = source_config[field_sym]
-      dest_field = dest_config[field_sym]
+    def replace_field!(source_field, dest_field)
       if source_field && dest_field
         serialized_replace!(source_field, dest_field)
         simple_replace!(source_field, dest_field)
