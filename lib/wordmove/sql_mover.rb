@@ -53,7 +53,7 @@ module Wordmove
           dest_field
         end
 
-        's:' + length.to_s + ':' + delimiter + string + delimiter + ';'
+        %(s:#{length}:#{delimiter}#{string}#{delimiter};)
       end
     end
 
