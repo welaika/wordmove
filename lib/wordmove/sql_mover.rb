@@ -1,3 +1,5 @@
+require 'php_serialization'
+
 module Wordmove
 
   class SqlMover
@@ -43,10 +45,10 @@ module Wordmove
     def serialized_replace!(source_field, dest_field)
       length_delta = source_field.length - dest_field.length
 
-      sql_content.gsub!(/s:(\d+):([\\'"]+)#{Regexp.escape(source_field)}/) do |match|
-        source_length = $1.to_i
-        dest_length = source_length - length_delta
-        "s:#{dest_length}:#{$2}#{dest_field}"
+      sql_content.gsub!(/s:\d+:".*?";(?=[i}])/) do |match|
+        source = PhpSerialization.load(match)
+        source.gsub!(source_field, dest_field)
+        PhpSerialization.dump(source)
       end
     end
 

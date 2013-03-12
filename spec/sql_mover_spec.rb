@@ -82,21 +82,21 @@ describe Wordmove::SqlMover do
   end
 
   context ".serialized_replace!" do
-    let(:content) { 's:4:"spam";s:20:"http://dump.com/spam";s:6:"foobar";s:22:"http://dump.com/foobar";s:8:"sausages"' }
+    let(:content) { 'a:3:{i:0;s:20:"http://dump.com/spam";i:1;s:6:"foobar";i:2;s:22:"http://dump.com/foobar";}' }
     let(:sql) { Tempfile.new('sql').tap do |d| d.write(content); d.close end }
     let(:sql_path) { sql.path }
 
     it "should replace source vhost with dest vhost" do
       sql_mover.serialized_replace!('http://dump.com', 'http://shrubbery.com')
-      sql_mover.sql_content.should == 's:4:"spam";s:25:"http://shrubbery.com/spam";s:6:"foobar";s:27:"http://shrubbery.com/foobar";s:8:"sausages"'
+      sql_mover.sql_content.should == 'a:3:{i:0;s:25:"http://shrubbery.com/spam";i:1;s:6:"foobar";i:2;s:27:"http://shrubbery.com/foobar";}'
     end
 
-    context "given multiple types of string quoting" do
-      let(:content) { "s:20:\\\"http://dump.com/spam\\\";s:6:'foobar';s:22:'http://dump.com/foobar';s:8:'sausages'" }
+    context "given multiple occurences in the same string" do
+      let(:content) { 'a:1:{i:0;s:52:"ni http://dump.com/spam ni http://dump.com/foobar ni";}' }
 
-      it "handles replacing just as well" do
+      it "should replace all occurences" do
         sql_mover.serialized_replace!('http://dump.com', 'http://shrubbery.com')
-        sql_mover.sql_content.should == "s:25:\\\"http://shrubbery.com/spam\\\";s:6:'foobar';s:27:'http://shrubbery.com/foobar';s:8:'sausages'"
+        sql_mover.sql_content.should == 'a:1:{i:0;s:62:"ni http://shrubbery.com/spam ni http://shrubbery.com/foobar ni";}'
       end
     end
   end

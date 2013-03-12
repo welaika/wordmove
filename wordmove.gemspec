@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
   gem.add_dependency "photocopier"
+  gem.add_dependency "php-serialization"
 
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "cucumber"
