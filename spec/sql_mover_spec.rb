@@ -91,6 +91,15 @@ describe Wordmove::SqlMover do
       sql_mover.sql_content.should == 'a:3:{i:0;s:25:"http://shrubbery.com/spam";i:1;s:6:"foobar";i:2;s:27:"http://shrubbery.com/foobar";}'
     end
 
+    context "given multiple types of string quoting" do
+      let(:content) { "a:3:{s:20:\\\"http://dump.com/spam\\\";s:6:'foobar';s:22:'http://dump.com/foobar';s:8:'sausages';}" }
+
+      it "should handle replacing just as well" do
+        sql_mover.serialized_replace!('http://dump.com', 'http://shrubbery.com')
+        sql_mover.sql_content.should == "a:3:{s:25:\\\"http://shrubbery.com/spam\\\";s:6:'foobar';s:27:'http://shrubbery.com/foobar';s:8:'sausages';}"
+      end
+    end
+
     context "given multiple occurences in the same string" do
       let(:content) { 'a:1:{i:0;s:52:"ni http://dump.com/spam ni http://dump.com/foobar ni";}' }
 
