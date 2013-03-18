@@ -6,7 +6,7 @@ local:
     user: "user"
     password: "password"
     host: "127.0.0.1"
-remote:
+staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
   database:

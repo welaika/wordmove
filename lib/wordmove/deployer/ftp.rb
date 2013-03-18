@@ -7,9 +7,9 @@ module Wordmove
   module Deployer
     class FTP < Base
 
-      def initialize(options)
+      def initialize(environment, options)
         super
-        ftp_options = options[:remote][:ftp]
+        ftp_options = remote_options[:ftp]
         @copier = Photocopier::FTP.new(ftp_options)
         @copier.logger = logger
       end
@@ -25,7 +25,7 @@ module Wordmove
         save_local_db(local_dump_path)
 
         # gsub sql
-        adapt_sql(local_dump_path, options[:local], options[:remote])
+        adapt_sql(local_dump_path, local_options, remote_options)
         # upload it
         remote_put(local_dump_path, remote_dump_path)
 
@@ -46,9 +46,9 @@ module Wordmove
         download_remote_db(local_dump_path)
 
         # gsub sql
-        adapt_sql(local_dump_path, options[:remote], options[:local])
+        adapt_sql(local_dump_path, remote_options, local_options)
         # import locally
-        run mysql_import_command(local_dump_path, options[:local][:database])
+        run mysql_import_command(local_dump_path, local_options[:database])
 
         # and locally
         run "rm #{local_dump_path}"
@@ -97,7 +97,7 @@ module Wordmove
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate dump script
-        dump_script = generate_dump_script(options[:remote][:database], one_time_password)
+        dump_script = generate_dump_script(remote_options[:database], one_time_password)
         # upload the dump script
         remote_put(dump_script, remote_dump_script)
         # download the resulting dump (using the password)
@@ -113,7 +113,7 @@ module Wordmove
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate import script
-        import_script = generate_import_script(options[:remote][:database], one_time_password)
+        import_script = generate_import_script(remote_options[:database], one_time_password)
         # upload import script
         remote_put(import_script, remote_import_script_path)
         # run import script

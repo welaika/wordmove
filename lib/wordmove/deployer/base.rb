@@ -9,16 +9,26 @@ module Wordmove
     class Base
       attr_reader :options
       attr_reader :logger
+      attr_reader :environment
 
-      def self.deployer_for(options)
-        options = fetch_movefile(options[:config]).merge(options)
+      def self.deployer_for(cli_options)
+        options = fetch_movefile(cli_options[:config])
+        available_enviroments = options.keys.map(&:to_sym) - [ :local ]
+        options.merge!(cli_options)
         recursive_symbolize_keys!(options)
-        if options[:remote][:ftp]
+
+        if available_enviroments.size > 1 && options[:environment].nil?
+          raise "You need to specify an environment with --environment parameter"
+        end
+
+        environment = (options[:environment] || available_enviroments.first).to_sym
+
+        if options[environment][:ftp]
           require 'wordmove/deployer/ftp'
-          FTP.new(options)
-        elsif options[:remote][:ssh]
+          FTP.new(environment, options)
+        elsif options[environment][:ssh]
           require 'wordmove/deployer/ssh'
-          SSH.new(options)
+          SSH.new(environment, options)
         else
           raise Thor::Error, "No valid adapter found."
         end
@@ -32,7 +42,8 @@ module Wordmove
         YAML::load(File.open(path))
       end
 
-      def initialize(options = {})
+      def initialize(environment, options = {})
+        @environment = environment.to_sym
         @options = options
         @logger = Logger.new(STDOUT)
         @logger.level = Logger::DEBUG
@@ -64,7 +75,7 @@ module Wordmove
       protected
 
       def paths_to_exclude
-        options[:remote][:exclude] || Array.new
+        remote_options[:exclude] || Array.new
       end
 
       def run(command)
@@ -89,15 +100,15 @@ module Wordmove
       end
 
       def local_wpcontent_path(*args)
-        File.join(options[:local][:wordpress_path], "wp-content", *args)
+        File.join(local_options[:wordpress_path], "wp-content", *args)
       end
 
       def remote_wpcontent_path(*args)
-        File.join(options[:remote][:wordpress_path], "wp-content", *args)
+        File.join(remote_options[:wordpress_path], "wp-content", *args)
       end
 
       def remote_wpcontent_url(*args)
-        options[:remote][:vhost] + File.join("/wp-content", *args)
+        remote_options[:vhost] + File.join("/wp-content", *args)
       end
 
       def adapt_sql(save_to_path, local, remote)
@@ -130,7 +141,15 @@ module Wordmove
 
       def save_local_db(local_dump_path)
         # dump local mysql into file
-        run mysql_dump_command(options[:local][:database], local_dump_path)
+        run mysql_dump_command(local_options[:database], local_dump_path)
+      end
+
+      def remote_options
+        options[environment].clone
+      end
+
+      def local_options
+        options[:local].clone
       end
 
       private
