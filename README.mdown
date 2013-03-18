@@ -47,25 +47,31 @@ local:
     name: "database_name"
     user: "user"
     password: "password"
-    host: "host"
-remote:
+    host: "127.0.0.1"
+staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
-  exclude:
-    - .git
-    - .DS_Store
-    - .sass-cache
-    - Movefile
   database:
     name: "database_name"
     user: "user"
     password: "password"
     host: "host"
-  ssh:
-    user: "user"
-    password: "password" # optional, will use SSH public key if available
-    host: "host"
-    port: 2202 # optional
+  # ssh:
+  #   host: "host"
+  #   user: "user"
+  #   password: "password" # password is optional, will use public keys if available.
+  #   port: 22 # Port is optional
+  #   gateway: # Gateway is optional
+  #     host: "host"
+  #     user: "user"
+  #     password: "password" # password is optional, will use public keys if available.
+  # ftp:
+  #   user: "user"
+  #   password: "password"
+  #   host: "host"
+  #   passive: true
+# production: # multiple environments can be specified
+#   [...]
 ```
 
 ### If you have your local SSH public key already installed on the remote machine.. (recommended)

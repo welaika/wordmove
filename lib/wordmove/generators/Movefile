@@ -28,3 +28,5 @@ staging:
   #   password: "password"
   #   host: "host"
   #   passive: true
+# production: # multiple environments can be specified
+#   [...]
