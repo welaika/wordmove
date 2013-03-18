@@ -71,11 +71,12 @@ module Wordmove
         logger.task_step true, command
         unless simulate?
           system(command)
+          raise "Return code reports an error" unless $?.success?
         end
       end
 
       def download(url, local_path)
-        logger.task_step true, "download #{url}"
+        logger.task_step true, "download #{url} > #{local_path}"
         unless simulate?
           open(local_path, 'w') do |file|
             file << open(url).read
@@ -100,9 +101,11 @@ module Wordmove
       end
 
       def adapt_sql(save_to_path, local, remote)
-        logger.task_step true, "adapt dump"
-        unless simulate?
-          SqlMover.new(save_to_path, local, remote).move!
+        unless options[:no_adapt]
+          logger.task_step true, "adapt dump"
+          unless simulate?
+            SqlMover.new(save_to_path, local, remote).move!
+          end
         end
       end
 
@@ -123,6 +126,11 @@ module Wordmove
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
         Escape.shell_command(arguments) + " < #{dump_path}"
+      end
+
+      def save_local_db(local_dump_path)
+        # dump local mysql into file
+        run mysql_dump_command(options[:local][:database], local_dump_path)
       end
 
       private

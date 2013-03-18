@@ -14,14 +14,17 @@ remote:
     user: "user"
     password: "password"
     host: "host"
-  ssh: # also ftp is allowed
-    host: "host"
-    user: "user"
-    password: "password" # password is optional, will use public keys if available.
-    # port: 22 # Port is optional
-    #
-    # gateway:
-    #   host: "host"
-    #   user: "user"
-    #   password: "password" # password is optional, will use public keys if available.
-
+  # ssh:
+  #   host: "host"
+  #   user: "user"
+  #   password: "password" # password is optional, will use public keys if available.
+  #   port: 22 # Port is optional
+  #   gateway: # Gateway is optional
+  #     host: "host"
+  #     user: "user"
+  #     password: "password" # password is optional, will use public keys if available.
+  # ftp:
+  #   user: "user"
+  #   password: "password"
+  #   host: "host"
+  #   passive: true

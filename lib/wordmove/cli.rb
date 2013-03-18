@@ -17,6 +17,7 @@ module Wordmove
     method_option :plugins,  :aliases => "-p", :type => :boolean
     method_option :verbose,  :aliases => "-v", :type => :boolean
     method_option :simulate, :aliases => "-s", :type => :boolean
+    method_option :no_adapt, :type => :boolean
     method_option :config,   :aliases => "-c"
     def pull
       deployer = Wordmove::Deployer::Base.deployer_for(options)
@@ -34,6 +35,7 @@ module Wordmove
     method_option :plugins,  :aliases => "-p", :type => :boolean
     method_option :verbose,  :aliases => "-v", :type => :boolean
     method_option :simulate, :aliases => "-s", :type => :boolean
+    method_option :no_adapt, :type => :boolean
     method_option :config,   :aliases => "-c"
     def push
       deployer = Wordmove::Deployer::Base.deployer_for(options)
