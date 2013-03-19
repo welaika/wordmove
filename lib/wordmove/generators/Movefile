@@ -9,6 +9,11 @@ local:
 staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
+  exclude:
+    - ".sass-cache"
+    - ".git"
+    - "tmp/*"
+    - "wp-content/*.sql"
   database:
     name: "database_name"
     user: "user"
