@@ -9,11 +9,16 @@ local:
 staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
-  # paths: # you can customize wordpress paths
+  # paths: # you can customize wordpress internal paths
   #   wp_content: "wp-content"
   #   uploads: "wp-content/uploads"
   #   plugins: "wp-content/plugins"
   #   languages: "wp-content/languages"
+  exclude:
+    - ".sass-cache"
+    - ".git"
+    - "tmp/*"
+    - "wp-content/*.sql"
   database:
     name: "database_name"
     user: "user"
