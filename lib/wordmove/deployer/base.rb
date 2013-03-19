@@ -1,5 +1,6 @@
 require 'active_support/core_ext'
 require 'wordmove/logger'
+require 'wordmove/wordpress_directory'
 require 'wordmove/sql_mover'
 require 'escape'
 
@@ -60,15 +61,19 @@ module Wordmove
       def remote_get_directory(directory); end
       def remote_put_directory(directory); end
 
-      %w(uploads themes plugins).each do |task|
+      %w(uploads themes plugins languages).each do |task|
         define_method "push_#{task}" do
           logger.task "Pushing #{task.titleize}"
-          remote_put_directory(local_wpcontent_path(task), remote_wpcontent_path(task), paths_to_exclude)
+          local_path = send("local_#{task}_dir").path
+          remote_path = send("remote_#{task}_dir").path
+          remote_put_directory(local_path, remote_path, paths_to_exclude)
         end
 
         define_method "pull_#{task}" do
           logger.task "Pulling #{task.titleize}"
-          remote_get_directory(remote_wpcontent_path(task), local_wpcontent_path(task), paths_to_exclude)
+          local_path = send("local_#{task}_dir").path
+          remote_path = send("remote_#{task}_dir").path
+          remote_get_directory(remote_path, local_path, paths_to_exclude)
         end
       end
 
@@ -99,16 +104,18 @@ module Wordmove
         options[:simulate]
       end
 
-      def local_wpcontent_path(*args)
-        File.join(local_options[:wordpress_path], "wp-content", *args)
-      end
-
-      def remote_wpcontent_path(*args)
-        File.join(remote_options[:wordpress_path], "wp-content", *args)
-      end
-
-      def remote_wpcontent_url(*args)
-        remote_options[:vhost] + File.join("/wp-content", *args)
+      [ WordpressDirectory::PATH::WP_CONTENT,
+        WordpressDirectory::PATH::PLUGINS,
+        WordpressDirectory::PATH::THEMES,
+        WordpressDirectory::PATH::UPLOADS,
+        WordpressDirectory::PATH::LANGUAGES
+      ].each do |type|
+        [ :remote, :local ].each do |location|
+          define_method "#{location}_#{type}_dir" do
+            options = send("#{location}_options")
+            WordpressDirectory.new(type, options)
+          end
+        end
       end
 
       def adapt_sql(save_to_path, local, remote)

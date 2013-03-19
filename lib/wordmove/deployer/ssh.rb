@@ -14,8 +14,8 @@ module Wordmove
       def push_db
         super
 
-        local_dump_path = local_wpcontent_path("dump.sql")
-        local_backup_path = local_wpcontent_path("remote-backup-#{Time.now.to_i}.sql")
+        local_dump_path = local_wp_content_dir.path("dump.sql")
+        local_backup_path = local_wp_content_dir.path("remote-backup-#{Time.now.to_i}.sql")
         download_remote_db(local_backup_path)
 
         save_local_db(local_dump_path)
@@ -27,9 +27,9 @@ module Wordmove
       def pull_db
         super
 
-        local_dump_path = local_wpcontent_path("dump.sql")
-        remote_dump_path = remote_wpcontent_path("dump.sql")
-        local_backup_path = local_wpcontent_path("local-backup-#{Time.now.to_i}.sql")
+        local_dump_path = local_wp_content_dir.path("dump.sql")
+        remote_dump_path = remote_wp_content_dir.path("dump.sql")
+        local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
         save_local_db(local_backup_path)
 
         download_remote_db(local_dump_path)
@@ -58,7 +58,7 @@ module Wordmove
       end
 
       def download_remote_db(local_dump_path)
-        remote_dump_path = remote_wpcontent_path("dump.sql")
+        remote_dump_path = remote_wp_content_dir.path("dump.sql")
         # dump remote db into file
         remote_run mysql_dump_command(remote_options[:database], remote_dump_path)
         # download remote dump
@@ -67,7 +67,7 @@ module Wordmove
       end
 
       def import_remote_dump(local_dump_path)
-        remote_dump_path = remote_wpcontent_path("dump.sql")
+        remote_dump_path = remote_wp_content_dir.path("dump.sql")
         remote_put(local_dump_path, remote_dump_path)
         remote_run mysql_import_command(remote_dump_path, remote_options[:database])
         remote_delete(remote_dump_path)

@@ -15,6 +15,7 @@ module Wordmove
     method_option :uploads,     :aliases => "-u", :type => :boolean
     method_option :themes,      :aliases => "-t", :type => :boolean
     method_option :plugins,     :aliases => "-p", :type => :boolean
+    method_option :languages,   :aliases => "-l", :type => :boolean
     method_option :verbose,     :aliases => "-v", :type => :boolean
     method_option :simulate,    :aliases => "-s", :type => :boolean
     method_option :no_adapt,    :type => :boolean
@@ -22,7 +23,7 @@ module Wordmove
     method_option :config,      :aliases => "-c"
     def pull
       deployer = Wordmove::Deployer::Base.deployer_for(options)
-      %w(db uploads themes plugins).map(&:to_sym).each do |task|
+      %w(db uploads themes plugins languages).map(&:to_sym).each do |task|
         if options[task]
           deployer.send("pull_#{task}")
         end
@@ -34,6 +35,7 @@ module Wordmove
     method_option :db,          :aliases => "-d", :type => :boolean
     method_option :themes,      :aliases => "-t", :type => :boolean
     method_option :plugins,     :aliases => "-p", :type => :boolean
+    method_option :languages,   :aliases => "-l", :type => :boolean
     method_option :verbose,     :aliases => "-v", :type => :boolean
     method_option :simulate,    :aliases => "-s", :type => :boolean
     method_option :no_adapt,    :type => :boolean
@@ -41,7 +43,7 @@ module Wordmove
     method_option :config,      :aliases => "-c"
     def push
       deployer = Wordmove::Deployer::Base.deployer_for(options)
-      %w(db uploads themes plugins).map(&:to_sym).each do |task|
+      %w(db uploads themes plugins languages).map(&:to_sym).each do |task|
         if options[task]
           deployer.send("push_#{task}")
         end

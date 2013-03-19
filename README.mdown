@@ -51,6 +51,11 @@ local:
 staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
+  # paths: # you can customize wordpress paths
+  #   wp_content: "wp-content"
+  #   uploads: "wp-content/uploads"
+  #   plugins: "wp-content/plugins"
+  #   languages: "wp-content/languages"
   database:
     name: "database_name"
     user: "user"

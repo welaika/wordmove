@@ -17,9 +17,9 @@ module Wordmove
       def push_db
         super
 
-        local_dump_path = local_wpcontent_path("dump.sql")
-        remote_dump_path = remote_wpcontent_path("dump.sql")
-        local_backup_path = local_wpcontent_path("remote-backup-#{Time.now.to_i}.sql")
+        local_dump_path = local_wp_content_dir.path("dump.sql")
+        remote_dump_path = remote_wp_content_dir.path("dump.sql")
+        local_backup_path = local_wp_content_dir.path("remote-backup-#{Time.now.to_i}.sql")
 
         download_remote_db(local_backup_path)
         save_local_db(local_dump_path)
@@ -39,8 +39,8 @@ module Wordmove
 
       def pull_db
         super
-        local_dump_path = local_wpcontent_path("dump.sql")
-        local_backup_path = local_wpcontent_path("local-backup-#{Time.now.to_i}.sql")
+        local_dump_path = local_wp_content_dir.path("dump.sql")
+        local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
 
         save_local_db(local_backup_path)
         download_remote_db(local_dump_path)
@@ -93,7 +93,7 @@ module Wordmove
       end
 
       def download_remote_db(local_dump_path)
-        remote_dump_script = remote_wpcontent_path("dump.php")
+        remote_dump_script = remote_wp_content_dir.path("dump.php")
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate dump script
@@ -101,15 +101,15 @@ module Wordmove
         # upload the dump script
         remote_put(dump_script, remote_dump_script)
         # download the resulting dump (using the password)
-        dump_url = "#{remote_wpcontent_url("dump.php")}?shared_key=#{one_time_password}"
+        dump_url = "#{remote_wp_content_dir.url("dump.php")}?shared_key=#{one_time_password}"
         download(dump_url, local_dump_path)
         # remove it remotely
         remote_delete(remote_dump_script)
       end
 
       def import_remote_dump
-        temp_path = local_wpcontent_path("temp.txt")
-        remote_import_script_path = remote_wpcontent_path("import.php")
+        temp_path = local_wp_content_dir.path("temp.txt")
+        remote_import_script_path = remote_wp_content_dir.path("import.php")
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate import script
@@ -117,7 +117,7 @@ module Wordmove
         # upload import script
         remote_put(import_script, remote_import_script_path)
         # run import script
-        import_url = "#{remote_wpcontent_url("import.php")}?shared_key=#{one_time_password}&start=1&foffset=0&totalqueries=0&fn=dump.sql"
+        import_url = "#{remote_wp_content_dir.url("import.php")}?shared_key=#{one_time_password}&start=1&foffset=0&totalqueries=0&fn=dump.sql"
         download(import_url, temp_path)
         run "rm #{temp_path}"
         # remove script remotely
