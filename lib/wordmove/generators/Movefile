@@ -17,8 +17,11 @@ staging:
   exclude:
     - ".sass-cache"
     - ".git"
+    - "bin"
     - "tmp/*"
     - "wp-content/*.sql"
+    - "Gemfile*"
+    - "Movefile"
   database:
     name: "database_name"
     user: "user"

@@ -77,6 +77,26 @@ module Wordmove
         end
       end
 
+      def get_options_for_wordpress(type)
+        {
+          :local_path    => local_options[:wordpress_path],
+          :remote_path   => remote_options[:wordpress_path],
+          :exclude_paths => paths_to_exclude.push(send("#{type}_wp_content_dir").relative_path)
+        }
+      end
+
+      def push_wordpress
+        logger.task "Pushing wordpress core"
+        options = get_options_for_wordpress("local")
+        remote_put_directory(options[:local_path], options[:remote_path], options[:exclude_paths])
+      end
+
+      def pull_wordpress
+        logger.task "Pulling wordpress core"
+        options = get_options_for_wordpress("remote")
+        remote_get_directory(options[:remote_path], options[:local_path], options[:exclude_paths])
+      end
+
       protected
 
       def paths_to_exclude
