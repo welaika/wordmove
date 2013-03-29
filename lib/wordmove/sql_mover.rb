@@ -41,19 +41,10 @@ module Wordmove
     end
 
     def serialized_replace!(source_field, dest_field)
-      length_delta = source_field.length - dest_field.length
-
-      sql_content.gsub!(/s:(\d+):([\\'"]+)(.*?)\2;/) do |match|
-        length = $1.to_i
-        delimiter = $2
-        string = $3
-
-        string.gsub!(/#{Regexp.escape(source_field)}/) do |match|
-          length -= length_delta
-          dest_field
-        end
-
-        %(s:#{length}:#{delimiter}#{string}#{delimiter};)
+      sql_content.gsub!(/s:(?:\d+):(\\*['"])(.*?)\1;/) do |match|
+        delimiter, string = $1, $2
+        string.gsub!(/#{Regexp.escape(source_field)}/, dest_field)
+        %(s:#{string.length}:#{delimiter}#{string}#{delimiter};)
       end
     end
 
