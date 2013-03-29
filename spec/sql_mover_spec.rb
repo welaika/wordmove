@@ -91,6 +91,24 @@ describe Wordmove::SqlMover do
       sql_mover.sql_content.should == 'a:3:{i:0;s:25:"http://shrubbery.com/spam";i:1;s:6:"foobar";i:2;s:27:"http://shrubbery.com/foobar";}'
     end
 
+    context "given empty strings" do
+      let(:content) { 's:0:"";s:3:"foo";s:0:"";' }
+
+      it "should leave them untouched" do
+        sql_mover.serialized_replace!('foo', 'sausage')
+        sql_mover.sql_content.should == 's:0:"";s:7:"sausage";s:0:"";'
+      end
+
+      context "considering escaping" do
+        let(:content) { 's:0:\"\";s:3:\"foo\";s:0:\"\";' }
+
+        it "should leave them untouched" do
+          sql_mover.serialized_replace!('foo', 'sausage')
+          sql_mover.sql_content.should == 's:0:\"\";s:7:\"sausage\";s:0:\"\";'
+        end
+      end
+    end
+
     context "given multiple types of string quoting" do
       let(:content) { "a:3:{s:20:\\\"http://dump.com/spam\\\";s:6:'foobar';s:22:'http://dump.com/foobar';s:8:'sausages';}" }
 
