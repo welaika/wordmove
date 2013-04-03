@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "thor"
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", ">= 0.0.6"
+  gem.add_dependency "photocopier", ">= 0.0.7"
 
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "cucumber"

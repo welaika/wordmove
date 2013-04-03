@@ -91,7 +91,7 @@ staging:
 Just not use the `remote.ssh.password` field on your `Movefile`. Easy peasy.
 
 ### If you want to specify SSH password on the Movefile
-Please take a look at the various gotchas of the underlying [`photocopier` gem](https://github.com/stefanoverna/photocopier#password-gotchas).
+Please take a look at the various gotchas of the underlying [`photocopier` gem](https://github.com/welaika/photocopier#password-gotchas).
 
 ### How the heck you are able to sync the DB via FTP?
 We're glad you asked! We basically upload via FTP a PHP script that performs the various
