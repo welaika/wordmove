@@ -109,6 +109,15 @@ describe Wordmove::SqlMover do
       end
     end
 
+    context "given strings with escaped content" do
+      let(:content) { 's:6:"dump\"\"";' }
+
+      it "should calculate the correct final length" do
+        sql_mover.serialized_replace!('dump', 'sausage')
+        sql_mover.sql_content.should == 's:9:"sausage\"\"";'
+      end
+    end
+
     context "given multiple types of string quoting" do
       let(:content) { "a:3:{s:20:\\\"http://dump.com/spam\\\";s:6:'foobar';s:22:'http://dump.com/foobar';s:8:'sausages';}" }
 
