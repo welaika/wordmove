@@ -13,6 +13,7 @@ staging:
   #   wp_content: "wp-content"
   #   uploads: "wp-content/uploads"
   #   plugins: "wp-content/plugins"
+  #   themes: "wp-content/themes"
   #   languages: "wp-content/languages"
   #   themes: "wp-content/themes"
   exclude:
@@ -44,3 +45,4 @@ staging:
   #   passive: true
 # production: # multiple environments can be specified
 #   [...]
+
