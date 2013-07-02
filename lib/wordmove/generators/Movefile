@@ -24,6 +24,7 @@ staging:
     - "wp-content/*.sql"
     - "Gemfile*"
     - "Movefile"
+    - "wp-config.php"
   database:
     name: "database_name"
     user: "user"
