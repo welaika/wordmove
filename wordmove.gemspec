@@ -2,11 +2,11 @@
 require File.expand_path('../lib/wordmove/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Stefano Verna"]
-  gem.email         = ["stefano.verna@welaika.com"]
+  gem.authors       = ["Stefano Verna", "Ju Liu"]
+  gem.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com"]
   gem.description   = %q{Capistrano for Wordpress}
   gem.summary       = %q{Capistrano for Wordpress}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/welaika/wordmove"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
