@@ -3,9 +3,9 @@ require 'tempfile'
 
 describe Wordmove::SqlMover do
 
-  let(:sql_path) { stub }
-  let(:source_config) { stub }
-  let(:dest_config) { stub }
+  let(:sql_path) { double }
+  let(:source_config) { double }
+  let(:dest_config) { double }
   let(:sql_mover) {
     Wordmove::SqlMover.new(
       sql_path,

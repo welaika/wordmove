@@ -31,16 +31,24 @@ module Wordmove
           require 'wordmove/deployer/ssh'
           SSH.new(environment, options)
         else
-          raise Thor::Error, "No valid adapter found."
+          raise StandardError, "No valid adapter found."
         end
       end
 
       def self.fetch_movefile(path)
         path ||= "Movefile"
-        unless File.exists?(path)
-          raise Thor::Error, "Could not find a valid Movefile"
+        full_path = File.join(movefile_dir, path)
+        entries = Dir["#{full_path}*"]
+
+        if entries.empty?
+          raise StandardError, "Could not find a valid Movefile"
         end
-        YAML::load(File.open(path))
+
+        YAML::load(File.open(entries.first))
+      end
+
+      def self.movefile_dir
+        '.'
       end
 
       def initialize(environment, options = {})
