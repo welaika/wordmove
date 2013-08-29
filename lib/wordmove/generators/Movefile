@@ -1,6 +1,7 @@
 local:
   vhost: "http://vhost.local"
-  wordpress_path: "/home/john/sites/your_site"
+  wordpress_path: "/home/john/sites/your_site" # use an absolute path here
+
   database:
     name: "database_name"
     user: "user"
@@ -9,7 +10,13 @@ local:
 
 staging:
   vhost: "http://remote.com"
-  wordpress_path: "/var/www/your_site"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
 
   exclude:
     - ".sass-cache"
@@ -20,12 +27,6 @@ staging:
     - "Gemfile*"
     - "Movefile"
     - "wp-config.php"
-
-  database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "host"
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: "wp-content"
