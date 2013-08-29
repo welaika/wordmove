@@ -1,4 +1,5 @@
 require 'active_support/core_ext'
+require 'wordmove/core_ext'
 require 'wordmove/logger'
 require 'wordmove/wordpress_directory'
 require 'wordmove/sql_mover'
@@ -12,50 +13,70 @@ module Wordmove
       attr_reader :logger
       attr_reader :environment
 
-      def self.deployer_for(cli_options)
-        options = fetch_movefile(cli_options[:config])
-        available_enviroments = options.keys.map(&:to_sym) - [ :local ]
-        options.merge!(cli_options)
-        recursive_symbolize_keys!(options)
+      class << self
+        def deployer_for(cli_options)
+          options = fetch_movefile(cli_options[:config])
+          available_enviroments = extract_available_envs(options)
+          options.merge!(cli_options).recursive_symbolize_keys!
 
-        if available_enviroments.size > 1 && options[:environment].nil?
-          raise "You need to specify an environment with --environment parameter"
+          if available_enviroments.size > 1 && options[:environment].nil?
+            raise "You need to specify an environment with --environment parameter"
+          end
+          environment = (options[:environment] || available_enviroments.first).to_sym
+
+          if options[environment][:ftp]
+            require 'wordmove/deployer/ftp'
+            FTP.new(environment, options)
+          elsif options[environment][:ssh]
+            require 'wordmove/deployer/ssh'
+            SSH.new(environment, options)
+          else
+            raise StandardError, "No valid adapter found."
+          end
         end
 
-        environment = (options[:environment] || available_enviroments.first).to_sym
-
-        if options[environment][:ftp]
-          require 'wordmove/deployer/ftp'
-          FTP.new(environment, options)
-        elsif options[environment][:ssh]
-          require 'wordmove/deployer/ssh'
-          SSH.new(environment, options)
-        else
-          raise StandardError, "No valid adapter found."
-        end
-      end
-
-      def self.fetch_movefile(path)
-        path ||= "Movefile"
-        full_path = File.join(movefile_dir, path)
-        entries = Dir["#{full_path}*"]
-
-        if entries.empty?
-          raise StandardError, "Could not find a valid Movefile"
+        def extract_available_envs(options)
+          options.keys.map(&:to_sym) - [ :local ]
         end
 
-        YAML::load(File.open(entries.first))
-      end
+        def fetch_movefile(name = nil, start_dir = current_dir)
+          name ||= "Movefile"
+          entries = Dir["#{File.join(start_dir, name)}*"]
 
-      def self.movefile_dir
-        '.'
+          if entries.empty?
+            if last_dir?(start_dir)
+              raise StandardError, "Could not find a valid Movefile"
+            else
+              return fetch_movefile(name, upper_dir(start_dir))
+            end
+          end
+
+          found = entries.first
+          logger.task("Using Movefile: #{found}")
+          YAML::load(File.open(found))
+        end
+
+        def current_dir
+          '.'
+        end
+
+        def last_dir?(directory)
+          directory == "/" || File.exists?(File.join(directory, 'wp-config.php'))
+        end
+
+        def upper_dir(directory)
+          File.expand_path(File.join(directory, '..'))
+        end
+
+        def logger
+          Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+        end
       end
 
       def initialize(environment, options = {})
         @environment = environment.to_sym
         @options = options
-        @logger = Logger.new(STDOUT)
-        @logger.level = Logger::DEBUG
+        @logger = self.class.logger
       end
 
       def push_db;
@@ -192,14 +213,6 @@ module Wordmove
       def local_options
         options[:local].clone
       end
-
-      private
-
-      def self.recursive_symbolize_keys! hash
-        hash.symbolize_keys!
-        hash.values.select{|v| v.is_a? Hash}.each{|h| recursive_symbolize_keys!(h)}
-      end
-
     end
 
   end

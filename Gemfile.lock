@@ -5,7 +5,7 @@ PATH
       activesupport
       colored
       i18n
-      photocopier (>= 0.0.7)
+      photocopier (>= 0.0.8)
       rake
       thor
 
@@ -30,7 +30,7 @@ GEM
     net-ssh (2.6.8)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
-    photocopier (0.0.7)
+    photocopier (0.0.8)
       activesupport
       escape
       i18n
@@ -55,6 +55,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rake
   rspec
   wordmove!
