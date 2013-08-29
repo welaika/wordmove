@@ -20,17 +20,18 @@ Gem::Specification.new do |gem|
   gem.add_dependency "thor"
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", ">= 0.0.7"
+  gem.add_dependency "photocopier", ">= 0.0.8"
 
-  gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
 
   gem.post_install_message = <<-EOF
 
+============================================================================
 Beware! From version 1.0, we have changed the wordmove flags' behaviour:
 they used to tell wordmove what to _skip_, now they tell what to _include_.
 
 Read `wordmove help` for more info.
+============================================================================
 
   EOF
 end
