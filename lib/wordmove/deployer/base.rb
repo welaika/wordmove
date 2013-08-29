@@ -1,4 +1,5 @@
 require 'active_support/core_ext'
+require 'wordmove/core_ext'
 require 'wordmove/logger'
 require 'wordmove/wordpress_directory'
 require 'wordmove/sql_mover'
@@ -15,14 +16,12 @@ module Wordmove
       class << self
         def deployer_for(cli_options)
           options = fetch_movefile(cli_options[:config])
-          available_enviroments = options.keys.map(&:to_sym) - [ :local ]
-          options.merge!(cli_options)
-          recursive_symbolize_keys!(options)
+          available_enviroments = extract_available_envs(options)
+          options.merge!(cli_options).recursive_symbolize_keys!
 
           if available_enviroments.size > 1 && options[:environment].nil?
             raise "You need to specify an environment with --environment parameter"
           end
-
           environment = (options[:environment] || available_enviroments.first).to_sym
 
           if options[environment][:ftp]
@@ -34,6 +33,10 @@ module Wordmove
           else
             raise StandardError, "No valid adapter found."
           end
+        end
+
+        def extract_available_envs(options)
+          options.keys.map(&:to_sym) - [ :local ]
         end
 
         def fetch_movefile(name = nil, start_dir = current_dir)
@@ -49,7 +52,7 @@ module Wordmove
           end
 
           found = entries.first
-          logger.task("Using Movefile #{found}")
+          logger.task("Using Movefile: #{found}")
           YAML::load(File.open(found))
         end
 
@@ -73,7 +76,7 @@ module Wordmove
       def initialize(environment, options = {})
         @environment = environment.to_sym
         @options = options
-        @logger ||= self.class.logger
+        @logger = self.class.logger
       end
 
       def push_db;
@@ -210,14 +213,6 @@ module Wordmove
       def local_options
         options[:local].clone
       end
-
-      private
-
-      def self.recursive_symbolize_keys! hash
-        hash.symbolize_keys!
-        hash.values.select{|v| v.is_a? Hash}.each{|h| recursive_symbolize_keys!(h)}
-      end
-
     end
 
   end
