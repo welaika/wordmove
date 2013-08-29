@@ -6,6 +6,8 @@ the remote staging server. SSH and FTP connections are both supported.
 
 Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
+[![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
+
 ## Installation
 
 That's easy:
@@ -83,6 +85,7 @@ staging:
   #   user: "user"
   #   password: "password" # password is optional, will use public keys if available.
   #   port: 22 # Port is optional
+  #   rsync_options: "--verbose" # Additional rsync options, optional
   #   gateway: # Gateway is optional
   #     host: "host"
   #     user: "user"

@@ -41,6 +41,7 @@ staging:
   #   user: "user"
   #   password: "password" # password is optional, will use public keys if available.
   #   port: 22 # Port is optional
+  #   rsync_options: "--verbose" # Additional rsync options, optional
   #   gateway: # Gateway is optional
   #     host: "host"
   #     user: "user"
