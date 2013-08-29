@@ -42,21 +42,17 @@ You can configure Wordmove creating a `Movefile`. That's just a YAML file with a
 ```yaml
 local:
   vhost: "http://vhost.local"
-  wordpress_path: "~/dev/sites/your_site"
+  wordpress_path: "/home/john/sites/your_site"
   database:
     name: "database_name"
     user: "user"
     password: "password"
     host: "127.0.0.1"
+
 staging:
   vhost: "http://remote.com"
   wordpress_path: "/var/www/your_site"
-  # paths: # you can customize wordpress internal paths
-  #   wp_content: "wp-content"
-  #   uploads: "wp-content/uploads"
-  #   plugins: "wp-content/plugins"
-  #   themes: "wp-content/themes"
-  #   languages: "wp-content/languages"
+
   exclude:
     - ".sass-cache"
     - ".git"
@@ -65,11 +61,22 @@ staging:
     - "wp-content/*.sql"
     - "Gemfile*"
     - "Movefile"
+    - "wp-config.php"
+
   database:
     name: "database_name"
     user: "user"
     password: "password"
     host: "host"
+
+  # paths: # you can customize wordpress internal paths
+  #   wp_content: "wp-content"
+  #   uploads: "wp-content/uploads"
+  #   plugins: "wp-content/plugins"
+  #   themes: "wp-content/themes"
+  #   languages: "wp-content/languages"
+  #   themes: "wp-content/themes"
+
   # ssh:
   #   host: "host"
   #   user: "user"
@@ -79,13 +86,16 @@ staging:
   #     host: "host"
   #     user: "user"
   #     password: "password" # password is optional, will use public keys if available.
+
   # ftp:
   #   user: "user"
   #   password: "password"
   #   host: "host"
   #   passive: true
+
 # production: # multiple environments can be specified
 #   [...]
+
 ```
 
 ### If you have your local SSH public key already installed on the remote machine.. (recommended)
