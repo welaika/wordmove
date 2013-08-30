@@ -10,7 +10,7 @@ module Wordmove
     def task(title)
       prefix = "▬" * 2
       title = " ✓ #{title} "
-      padding = "▬" * padding_length
+      padding = "▬" * padding_length(title)
 
       puts "\n" + prefix + title + padding
     end
