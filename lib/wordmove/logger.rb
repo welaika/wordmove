@@ -5,11 +5,14 @@ require 'logger'
 
 module Wordmove
   class Logger < ::Logger
+    MAX_LINE = 70
 
     def task(title)
-      puts ""
+      prefix = "▬" * 2
       title = " ✓ #{title} "
-      puts "▬" * 2 + title.green + "▬" * (70 - title.length)
+      padding = "▬" * padding_length
+
+      puts "\n" + prefix + title + padding
     end
 
     def task_step(local_step, title)
@@ -18,6 +21,13 @@ module Wordmove
       else
         puts "   remote".yellow + " | ".black + title
       end
+    end
+
+    private
+
+    def padding_length(line)
+      result = MAX_LINE - line.length
+      result > 0 ? result : 0
     end
 
   end
