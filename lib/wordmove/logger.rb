@@ -12,7 +12,7 @@ module Wordmove
       title = " ✓ #{title} "
       padding = "▬" * padding_length(title)
 
-      puts "\n" + prefix + title + padding
+      puts "\n" + prefix + title.green + padding
     end
 
     def task_step(local_step, title)

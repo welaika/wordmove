@@ -4,8 +4,8 @@ require File.expand_path('../lib/wordmove/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Stefano Verna", "Ju Liu"]
   gem.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com"]
-  gem.description   = %q{Capistrano for Wordpress}
-  gem.summary       = %q{Capistrano for Wordpress}
+  gem.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
+  gem.summary       = %q{Wordmove, Capistrano for Wordpress}
   gem.homepage      = "https://github.com/welaika/wordmove"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
