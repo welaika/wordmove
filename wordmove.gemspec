@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
   gem.summary       = %q{Wordmove, Capistrano for Wordpress}
   gem.homepage      = "https://github.com/welaika/wordmove"
+  gem.license       = "MIT"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
