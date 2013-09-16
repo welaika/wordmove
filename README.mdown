@@ -101,11 +101,28 @@ staging:
 #   [...]
 ```
 
-### If you have your local SSH public key already installed on the remote machine.. (recommended)
-Just not use the `remote.ssh.password` field on your `Movefile`. Easy peasy.
+## SSH support
+
+In order for wordmove to work with SSH, you need to install `rsync` on your
+machine.
+
+### If you want to use your SSH public key to connect to the remote host
+Just delete the `remote.ssh.password` field in your `Movefile`. Easy peasy.
 
 ### If you want to specify SSH password on the Movefile
 Please take a look at the various gotchas of the underlying [`photocopier` gem](https://github.com/welaika/photocopier#password-gotchas).
+
+## FTP support
+
+In order for wordmove to work with FTP, you need to install `lftp` on your
+machine.
+
+Then in the remote host section in your Movefile:
+* Use the relative FTP path as `wordpress_path`
+* Use the absolute FTP path as `wordpress_absolute_path` (you may need to recover this from the `__FILE__` constant)
+
+### If you want to specify a passive FTP connection
+Add to the YAML config a `passive` flag set to `true`.
 
 ### How the heck you are able to sync the DB via FTP?
 We're glad you asked! We basically upload via FTP a PHP script that performs the various
@@ -114,13 +131,7 @@ too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
 
-### If you want to specify both relative and absolute wordpress path (FTP relative paths anyone?)
-Just add in the remote section of the Movefile a `wordpress_absolute_path` field
-specifying the absolute path (you may need to recover this from the `__FILE__` constant),
-while using `wordpress_path` for the relative folder path.
-
-### If you want to specify a passive FTP connection
-Add to the YAML config a `passive` flag set to `true`.
+## Credits
 
 * The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl;
 * The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library;
@@ -131,9 +142,20 @@ Add to the YAML config a `passive` flag set to `true`.
 
 Copyright © 2013 weLaika
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the ‘Software’), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
