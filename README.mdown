@@ -106,7 +106,7 @@ staging:
 In order for wordmove to work with SSH, you need to install `rsync` on your
 machine.
 
-### If you want to use your SSH public key to connect to the remote host
+### If you want to use your SSH public key for authentication
 Just delete the `remote.ssh.password` field in your `Movefile`. Easy peasy.
 
 ### If you want to specify SSH password on the Movefile
@@ -115,9 +115,8 @@ Please take a look at the various gotchas of the underlying [`photocopier` gem](
 ## FTP support
 
 In order for wordmove to work with FTP, you need to install `lftp` on your
-machine.
+machine. Then in the remote host section in your Movefile:
 
-Then in the remote host section in your Movefile:
 * Use the relative FTP path as `wordpress_path`
 * Use the absolute FTP path as `wordpress_absolute_path` (you may need to recover this from the `__FILE__` constant)
 
