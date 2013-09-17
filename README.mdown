@@ -8,6 +8,12 @@ Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
 
+## Screencasts
+
+* Push all WordPress, including database and uploads: http://vimeo.com/74648079
+* Pull database and uploads, adapting paths and urls: http://vimeo.com/74646861
+* Push only theme, transfer only modified files: http://vimeo.com/74647529
+
 ## Installation
 
 That's easy:
