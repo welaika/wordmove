@@ -69,14 +69,15 @@ staging:
     host: "host"
 
   exclude:
-    - ".sass-cache"
-    - ".git"
-    - "bin"
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "bin/"
     - "tmp/*"
-    - "wp-content/*.sql"
     - "Gemfile*"
     - "Movefile"
     - "wp-config.php"
+    - "wp-content/*.sql"
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: "wp-content"
