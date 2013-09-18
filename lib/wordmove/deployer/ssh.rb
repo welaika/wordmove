@@ -14,7 +14,7 @@ module Wordmove
         super
 
         local_dump_path = local_wp_content_dir.path("dump.sql")
-        local_backup_path = local_wp_content_dir.path("remote-backup-#{Time.now.to_i}.sql")
+        local_backup_path = local_wp_content_dir.path("#{environment}-backup-#{Time.now.to_i}.sql")
         download_remote_db(local_backup_path)
 
         save_local_db(local_dump_path)
