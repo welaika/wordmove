@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wordmove (1.0.18)
+    wordmove (1.0.19)
       activesupport
       colored
       i18n
