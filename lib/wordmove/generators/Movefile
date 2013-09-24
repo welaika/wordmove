@@ -1,12 +1,12 @@
 local:
   vhost: "http://vhost.local"
-  wordpress_path: "/home/john/sites/your_site" # use an absolute path here
+  wordpress_path: "<%= wordpress_path %>" # use an absolute path here
 
   database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "127.0.0.1"
+    name: "<%= database.name %>"
+    user: "<%= database.user %>"
+    password: "<%= database.password %>"
+    host: "<%= database.host %>"
 
 staging:
   vhost: "http://remote.com"
