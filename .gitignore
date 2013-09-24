@@ -1,3 +1,4 @@
 tmp/*
 pkg/*
 .DS_Store
+.bundle

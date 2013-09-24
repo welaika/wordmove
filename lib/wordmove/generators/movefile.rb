@@ -1,9 +1,11 @@
 require 'thor/group'
+require 'wordmove/generators/movefile_adapter'
 
 module Wordmove
   module Generators
     class Movefile < Thor::Group
       include Thor::Actions
+      include MovefileAdapter
 
       def self.source_root
         File.dirname(__FILE__)
@@ -16,3 +18,4 @@ module Wordmove
     end
   end
 end
+
