@@ -1,7 +1,5 @@
 module Wordmove
-
-  class SqlMover
-
+  class SqlAdapter
     attr_accessor :sql_content
     attr_reader :sql_path, :source_config, :dest_config
 
@@ -15,7 +13,7 @@ module Wordmove
       @sql_content ||= File.open(sql_path).read
     end
 
-    def move!
+    def adapt!
       replace_vhost!
       replace_wordpress_path!
       write_sql!

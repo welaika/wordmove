@@ -2,7 +2,7 @@ require 'active_support/core_ext'
 require 'wordmove/core_ext'
 require 'wordmove/logger'
 require 'wordmove/wordpress_directory'
-require 'wordmove/sql_mover'
+require 'wordmove/sql_adapter'
 require 'escape'
 
 module Wordmove
@@ -177,7 +177,7 @@ module Wordmove
         unless options[:no_adapt]
           logger.task_step true, "adapt dump"
           unless simulate?
-            SqlMover.new(save_to_path, local, remote).move!
+            SqlAdapter.new(save_to_path, local, remote).adapt!
           end
         end
       end
