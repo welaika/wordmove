@@ -130,6 +130,15 @@ machine. Then in the remote host section in your Movefile:
 ### If you want to specify a passive FTP connection
 Add to the YAML config a `passive` flag set to `true`.
 
+### Problems with server's certificate
+If server's certificate is not signed by a known Certificate Authority, you can disable `lftp` check by adding
+`set ssl:verify-certificate no` to your `~/.lftprc` or `~/.lftp/rc`
+
+If host name used to connect to the server does not corresponds to the host name in its certificate, you can disable
+`lftp` check by adding `set ssl:check-hostname no` to your `~/.lftprc` or `~/.lftp/rc`
+
+More `lftp` [configuration flags here.](https://gist.github.com/gaubert/822090)
+
 ### How the heck you are able to sync the DB via FTP?
 We're glad you asked! We basically upload via FTP a PHP script that performs the various
 import/export operations. This script then gets executed via HTTP. Don't worry
