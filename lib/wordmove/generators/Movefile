@@ -17,6 +17,7 @@ staging:
     user: "user"
     password: "password"
     host: "host"
+    # port: "3308" # Use just in case you have exotic server config
 
   exclude:
     - ".git/"
