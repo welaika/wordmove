@@ -16,23 +16,13 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Wordmove::VERSION
 
-  gem.add_dependency "colored"
-  gem.add_dependency "rake"
-  gem.add_dependency "thor"
-  gem.add_dependency "activesupport"
-  gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", "~> 0.0.10"
+  gem.add_dependency "colored", "~> 1.0"
+  gem.add_dependency "rake", "~> 10.0"
+  gem.add_dependency "thor", "~> 0.0"
+  gem.add_dependency "activesupport", ">= 3.0", "< 5.0"
+  gem.add_dependency "i18n", "~> 0.6"
+  gem.add_dependency "photocopier", "~> 0.0"
 
-  gem.add_development_dependency "rspec"
-
-  gem.post_install_message = <<-EOF
-
-============================================================================
-Beware! From version 1.0, we have changed the wordmove flags' behaviour:
-they used to tell wordmove what to _skip_, now they tell what to _include_.
-
-Read `wordmove help` for more info.
-============================================================================
-
-  EOF
+  gem.add_development_dependency "rspec", "~> 2.0"
 end
+

@@ -1,13 +1,13 @@
 PATH
   remote: .
   specs:
-    wordmove (1.1.0)
-      activesupport
-      colored
-      i18n
-      photocopier (~> 0.0.10)
-      rake
-      thor
+    wordmove (1.1.1)
+      activesupport (>= 3.0, < 5.0)
+      colored (~> 1.0)
+      i18n (~> 0.6)
+      photocopier (~> 0.0)
+      rake (~> 10.0)
+      thor (~> 0.0)
 
 GEM
   remote: http://rubygems.org/
@@ -55,5 +55,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec
+  rspec (~> 2.0)
   wordmove!
