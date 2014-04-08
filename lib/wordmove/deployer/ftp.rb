@@ -76,6 +76,8 @@ module Wordmove
       end
 
       def escape_php(string)
+        return '' unless string
+
         # replaces \ with \\
         # replaces ' with \'
         string.gsub('\\','\\\\\\').gsub(/[']/, '\\\\\'')
