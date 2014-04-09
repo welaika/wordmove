@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
   gem.add_dependency "photocopier", "~> 0.0.10"
+  gem.add_dependency "escape"
 
   gem.add_development_dependency "rspec"
 
