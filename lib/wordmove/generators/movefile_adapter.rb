@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'ostruct'
 require 'wordmove/wordpress_directory'
 
@@ -52,7 +54,8 @@ module Wordmove
       end
 
       def wp_config
-        @wp_config ||= File.open(WordpressDirectory.default_path_for(:wp_config)).read
+        @wp_config ||= File.open(WordpressDirectory.default_path_for(:wp_config)).read.
+          encode('utf-8', invalid: :replace)
       end
 
       def wp_definitions
