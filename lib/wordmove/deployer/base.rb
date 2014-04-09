@@ -196,6 +196,7 @@ module Wordmove
       def mysql_import_command(dump_path, options)
         arguments = [ "mysql" ]
         arguments << "--host=#{options[:host]}" if options[:host].present?
+        arguments << "--port=#{options[:port]}" if options[:port].present?
         arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
