@@ -1,3 +1,4 @@
+require 'active_support'
 require 'active_support/core_ext'
 require 'wordmove/core_ext'
 require 'wordmove/logger'
