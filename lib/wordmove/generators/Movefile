@@ -23,6 +23,7 @@ staging:
     - ".git/"
     - ".gitignore"
     - ".sass-cache/"
+    - "node_modules/"
     - "bin/"
     - "tmp/*"
     - "Gemfile*"
