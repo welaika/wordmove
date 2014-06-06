@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "photocopier", "~> 0.0.10"
   gem.add_dependency "escape"
 
-  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "rspec", '< 3'
 
   gem.post_install_message = <<-EOF
 
