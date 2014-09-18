@@ -41,6 +41,8 @@ module Wordmove
     def serialized_replace!(source_field, dest_field)
       length_delta = source_field.length - dest_field.length
 
+      sql_content.force_encoding('UTF-8')
+
       sql_content.gsub!(/s:(\d+):([\\]*['"])(.*?)\2;/) do |match|
         length = $1.to_i
         delimiter = $2
