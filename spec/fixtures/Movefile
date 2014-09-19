@@ -7,7 +7,7 @@ local:
     password: "password"
     host: "host"
 remote:
-  vhost: "http://remote.com"
+  vhost: "http://example.com"
   wordpress_path: "/var/www/your_site"
   database:
     name: "database_name"
