@@ -1,6 +1,5 @@
 module Wordmove
   class SqlAdapter
-    attr_accessor :sql_content
     attr_reader :sql_path, :source_config, :dest_config
 
     def initialize(sql_path, source_config, dest_config)
@@ -9,14 +8,9 @@ module Wordmove
       @dest_config = dest_config
     end
 
-    def sql_content
-      @sql_content ||= File.open(sql_path).read
-    end
-
     def adapt!
       replace_vhost!
       replace_wordpress_path!
-      write_sql!
     end
 
     def replace_vhost!
@@ -41,26 +35,46 @@ module Wordmove
     def serialized_replace!(source_field, dest_field)
       length_delta = source_field.length - dest_field.length
 
-      sql_content.gsub!(/s:(\d+):([\\]*['"])(.*?)\2;/) do |match|
-        length = $1.to_i
-        delimiter = $2
-        string = $3
+      File.open("#{sql_path}.tmp", 'w') do |temp_output|
+        File.open(sql_path, 'r') do |file_replace|  
+          while line = file_replace.gets  
+            line.gsub!(/s:(\d+):([\\]*['"])(.*?)\2;/) do |match|
+              length = $1.to_i
+              delimiter = $2
+              string = $3
 
-        string.gsub!(/#{Regexp.escape(source_field)}/) do |match|
-          length -= length_delta
-          dest_field
-        end
+              string.gsub!(/#{Regexp.escape(source_field)}/) do |match|
+                length -= length_delta
+                dest_field
+              end
 
-        %(s:#{length}:#{delimiter}#{string}#{delimiter};)
-      end
+            %(s:#{length}:#{delimiter}#{string}#{delimiter};)
+
+           end # gsub
+
+           temp_output.write(line)
+
+          end # while
+        end  # file read
+      end # file write
+
+      File.rename("#{sql_path}.tmp", sql_path)
+
     end
 
     def simple_replace!(source_field, dest_field)
-      sql_content.gsub!(source_field, dest_field)
+      File.open("#{sql_path}.tmp", 'w') do |temp_output|
+        File.open(sql_path, 'r') do |file_replace|  
+          while line = file_replace.gets  
+            line.gsub!(source_field, dest_field)
+            temp_output.write(line)
+          end # while
+        end  # file read
+      end # file write
+
+      File.rename("#{sql_path}.tmp", sql_path)
+
     end
 
-    def write_sql!
-      File.open(sql_path, 'w') {|f| f.write(sql_content) }
-    end
   end
 end
