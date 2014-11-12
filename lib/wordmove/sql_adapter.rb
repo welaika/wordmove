@@ -8,6 +8,10 @@ module Wordmove
       @dest_config = dest_config
     end
 
+    def sql_content
+      @sql_content ||= File.open(sql_path).read
+    end
+
     def adapt!
       replace_vhost!
       replace_wordpress_path!
