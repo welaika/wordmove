@@ -20,21 +20,20 @@ module Wordmove
         save_local_db(local_dump_path)
         adapt_sql(local_dump_path, local_options, remote_options)
         import_remote_dump(local_dump_path)
-        run "rm #{local_dump_path}"
+        run "rm \"#{local_dump_path}\""
       end
 
       def pull_db
         super
 
         local_dump_path = local_wp_content_dir.path("dump.sql")
-        remote_dump_path = remote_wp_content_dir.path("dump.sql")
         local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
         save_local_db(local_backup_path)
 
         download_remote_db(local_dump_path)
         adapt_sql(local_dump_path, remote_options, local_options)
         run mysql_import_command(local_dump_path, local_options[:database])
-        run "rm #{local_dump_path}"
+        run "rm \"#{local_dump_path}\""
       end
 
       private

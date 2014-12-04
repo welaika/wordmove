@@ -192,7 +192,7 @@ module Wordmove
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
         arguments << options[:name]
-        Escape.shell_command(arguments) + " > #{save_to_path}"
+        Escape.shell_command(arguments) + " > \"#{save_to_path}\""
       end
 
       def mysql_import_command(dump_path, options)
@@ -202,7 +202,7 @@ module Wordmove
         arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
-        Escape.shell_command(arguments) + " < #{dump_path}"
+        Escape.shell_command(arguments) + " < \"#{dump_path}\""
       end
 
       def save_local_db(local_dump_path)
