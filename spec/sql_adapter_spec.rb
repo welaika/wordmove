@@ -37,6 +37,7 @@ describe Wordmove::SqlAdapter do
     it "should replace host, path and write to sql" do
       adapter.should_receive(:replace_vhost!).and_return(true)
       adapter.should_receive(:replace_wordpress_path!).and_return(true)
+      adapter.should_receive(:replace_domain!).and_return(true)
       adapter.should_receive(:write_sql!).and_return(true)
       adapter.adapt!
     end
