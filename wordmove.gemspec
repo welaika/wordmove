@@ -19,13 +19,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "colored"
-  spec.add_dependency "rake"
-  spec.add_dependency "thor"
-  spec.add_dependency "activesupport"
-  spec.add_dependency "i18n"
+  spec.add_dependency "colored", "~> 1.2"
+  spec.add_dependency "thor", "~> 0.19.1"
+  spec.add_dependency "activesupport", "~> 4.2.1"
   spec.add_dependency "photocopier", "~> 0.0.10"
-  spec.add_dependency "escape"
+  spec.add_dependency "escape", "~> 0.0.4"
 
   spec.required_ruby_version = "~> 2.0"
 
