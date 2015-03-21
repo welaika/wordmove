@@ -9,8 +9,7 @@ require 'open-uri'
 require 'active_support'
 require 'active_support/core_ext'
 
-require 'photocopier/ssh'
-require 'photocopier/ftp'
+require 'photocopier'
 
 require 'wordmove/cli'
 require 'wordmove/core_ext'
