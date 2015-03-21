@@ -1,32 +1,38 @@
-# -*- encoding: utf-8 -*-
-require File.expand_path('../lib/wordmove/version', __FILE__)
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'wordmove/version'
 
-Gem::Specification.new do |gem|
-  gem.authors       = ["Stefano Verna", "Ju Liu"]
-  gem.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com"]
-  gem.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
-  gem.summary       = %q{Wordmove, Capistrano for Wordpress}
-  gem.homepage      = "https://github.com/welaika/wordmove"
-  gem.license       = "MIT"
+Gem::Specification.new do |spec|
+  spec.name          = "wordmove"
+  spec.version       = Wordmove::VERSION
+  spec.authors       = ["Stefano Verna", "Ju Liu", "Fabrizio Monti"]
+  spec.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com", "fabrizio.monti@welaika.com"]
 
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  gem.files         = `git ls-files`.split("\n")
-  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  gem.name          = "wordmove"
-  gem.require_paths = ["lib"]
-  gem.version       = Wordmove::VERSION
+  spec.summary       = %q{Wordmove, Capistrano for Wordpress}
+  spec.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
+  spec.homepage      = "https://github.com/welaika/wordmove"
+  spec.license       = "MIT"
 
-  gem.add_dependency "colored"
-  gem.add_dependency "rake"
-  gem.add_dependency "thor"
-  gem.add_dependency "activesupport"
-  gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", "~> 0.0.10"
-  gem.add_dependency "escape"
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir        = "exe"
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
 
-  gem.add_development_dependency "rspec", '< 3'
+  spec.add_dependency "colored"
+  spec.add_dependency "rake"
+  spec.add_dependency "thor"
+  spec.add_dependency "activesupport"
+  spec.add_dependency "i18n"
+  spec.add_dependency "photocopier", "~> 0.0.10"
+  spec.add_dependency "escape"
 
-  gem.post_install_message = <<-EOF
+
+  spec.add_development_dependency "bundler", ">= 1.6.2"
+  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rspec", "< 3"
+
+  spec.post_install_message = <<-EOF
 
 ============================================================================
 Beware! From version 1.0, we have changed the wordmove flags' behaviour:
