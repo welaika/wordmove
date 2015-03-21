@@ -12,8 +12,8 @@ describe Wordmove::Deployer::Base do
 
     before do
       FileUtils.mkdir(TMPDIR)
-      klass.stub(:current_dir).and_return(TMPDIR)
-      klass.stub(:logger).and_return(double('logger').as_null_object)
+      allow(klass).to receive(:current_dir).and_return(TMPDIR)
+      allow(klass).to receive(:logger).and_return(double('logger').as_null_object)
     end
 
     after do
@@ -51,7 +51,7 @@ describe Wordmove::Deployer::Base do
         before do
           @test_dir = File.join(TMPDIR, "test")
           FileUtils.mkdir(@test_dir)
-          klass.stub(:current_dir).and_return(@test_dir)
+          allow(klass).to receive(:current_dir).and_return(@test_dir)
         end
 
         it 'goes up through the directory tree and finds it' do
@@ -62,7 +62,7 @@ describe Wordmove::Deployer::Base do
 
         context 'Movefile not found, met root node' do
           it 'raises an exception' do
-            klass.stub(:current_dir).and_return('/tmp')
+            allow(klass).to receive(:current_dir).and_return('/tmp')
             expect { klass.fetch_movefile }.to raise_error(StandardError)
           end
         end
