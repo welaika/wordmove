@@ -18,10 +18,8 @@ module Wordmove
           environment = (options[:environment] || available_enviroments.first).to_sym
 
           if options[environment][:ftp]
-            require 'wordmove/deployer/ftp'
             FTP.new(environment, options)
           elsif options[environment][:ssh]
-            require 'wordmove/deployer/ssh'
             SSH.new(environment, options)
           else
             raise StandardError, "No valid adapter found."
