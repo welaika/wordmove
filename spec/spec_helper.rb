@@ -1,24 +1,19 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'rubygems'
-require 'bundler/setup'
-
-require 'wordmove' # and any other gems you need
+require "pry-byebug"
+require "wordmove"
 require 'wordmove/logger'
-require 'active_support/core_ext'
+require 'active_support/all'
 require 'thor'
 
-RSpec.configure do |config|
-  def capture(stream)
-    begin
-      stream = stream.to_s
-      eval "$#{stream} = StringIO.new"
-      yield
-      result = eval("$#{stream}").string
-    ensure
-      eval("$#{stream} = #{stream.upcase}")
-    end
+Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
 
-    result
+RSpec.configure do |config|
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
   end
 end
