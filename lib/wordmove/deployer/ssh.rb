@@ -1,6 +1,3 @@
-require 'wordmove/deployer/base'
-require 'photocopier/ssh'
-
 module Wordmove
   module Deployer
     class SSH < Base

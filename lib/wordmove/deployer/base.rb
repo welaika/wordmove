@@ -1,12 +1,3 @@
-require 'active_support'
-require 'active_support/core_ext'
-require 'wordmove/core_ext'
-require 'wordmove/logger'
-require 'wordmove/wordpress_directory'
-require 'wordmove/sql_adapter'
-require 'escape'
-require 'yaml'
-
 module Wordmove
   module Deployer
 

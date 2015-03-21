@@ -1,6 +1,3 @@
-require 'ostruct'
-require 'wordmove/wordpress_directory'
-
 module Wordmove
   module Generators
     module MovefileAdapter

@@ -2,9 +2,6 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require "pry-byebug"
 require "wordmove"
-require 'wordmove/logger'
-require 'active_support/all'
-require 'thor'
 
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
 

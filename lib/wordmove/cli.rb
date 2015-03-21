@@ -1,7 +1,3 @@
-require 'thor'
-require 'wordmove/generators/movefile'
-require 'wordmove/deployer/base'
-
 module Wordmove
   class CLI < Thor
 

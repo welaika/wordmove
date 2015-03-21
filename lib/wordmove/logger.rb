@@ -1,8 +1,3 @@
-# encoding: utf-8
-
-require 'colored'
-require 'logger'
-
 module Wordmove
   class Logger < ::Logger
     MAX_LINE = 70

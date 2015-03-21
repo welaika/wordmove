@@ -1,6 +1,3 @@
-require 'thor/group'
-require 'wordmove/generators/movefile_adapter'
-
 module Wordmove
   module Generators
     class Movefile < Thor::Group

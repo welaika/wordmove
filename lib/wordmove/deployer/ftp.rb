@@ -1,8 +1,3 @@
-require 'wordmove/deployer/base'
-require 'photocopier/ftp'
-require 'erb'
-require 'open-uri'
-
 module Wordmove
   module Deployer
     class FTP < Base
