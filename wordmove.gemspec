@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor", "~> 0.19.1"
   spec.add_dependency "activesupport", "~> 4.2.1"
   spec.add_dependency "photocopier", "~> 1.0.0.pre"
-  spec.add_dependency "escape", "~> 0.0.4"
 
   spec.required_ruby_version = "~> 2.0"
 

@@ -17,7 +17,7 @@ module Wordmove
         save_local_db(local_dump_path)
         adapt_sql(local_dump_path, local_options, remote_options)
         import_remote_dump(local_dump_path)
-        run "rm \"#{local_dump_path}\""
+        run rm_command(local_dump_path)
       end
 
       def pull_db
@@ -30,7 +30,7 @@ module Wordmove
         download_remote_db(local_dump_path)
         adapt_sql(local_dump_path, remote_options, local_options)
         run mysql_import_command(local_dump_path, local_options[:database])
-        run "rm \"#{local_dump_path}\""
+        run rm_command(local_dump_path)
       end
 
       private

@@ -28,7 +28,7 @@ module Wordmove
         # remove dump remotely
         remote_delete(remote_dump_path)
         # and locally
-        run "rm \"#{local_dump_path}\""
+        run rm_command(local_dump_path)
       end
 
       def pull_db
@@ -45,7 +45,7 @@ module Wordmove
         run mysql_import_command(local_dump_path, local_options[:database])
 
         # and locally
-        run "rm \"#{local_dump_path}\""
+        run rm_command(local_dump_path)
       end
 
       private
@@ -115,7 +115,7 @@ module Wordmove
         # run import script
         import_url = "#{remote_wp_content_dir.url("import.php")}?shared_key=#{one_time_password}&start=1&foffset=0&totalqueries=0&fn=dump.sql"
         download(import_url, temp_path)
-        run "rm \"#{temp_path}\""
+        run rm_command(temp_path)
         # remove script remotely
         remote_delete(remote_import_script_path)
       end

@@ -174,24 +174,32 @@ module Wordmove
       end
 
       def mysql_dump_command(options, save_to_path)
-        arguments = [ "mysqldump" ]
-        arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--port=#{options[:port]}" if options[:port].present?
-        arguments << "--user=#{options[:user]}" if options[:user].present?
-        arguments << "--password=#{options[:password]}" if options[:password].present?
-        arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
-        arguments << options[:name]
-        Escape.shell_command(arguments) + " > \"#{save_to_path}\""
+        command = [ "mysqldump" ]
+        command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
+        command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
+        command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
+        command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
+        command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
+        command << Shellwords.escape(options[:name])
+        command << "> #{Shellwords.escape(save_to_path)}"
+        puts command.join(" ")
+        command.join(" ")
       end
 
       def mysql_import_command(dump_path, options)
-        arguments = [ "mysql" ]
-        arguments << "--host=#{options[:host]}" if options[:host].present?
-        arguments << "--port=#{options[:port]}" if options[:port].present?
-        arguments << "--user=#{options[:user]}" if options[:user].present?
-        arguments << "--password=#{options[:password]}" if options[:password].present?
-        arguments << "--database=#{options[:name]}"
-        Escape.shell_command(arguments) + " < \"#{dump_path}\""
+        command = [ "mysql" ]
+        command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
+        command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
+        command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
+        command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
+        command << "--database=#{Shellwords.escape(options[:name])}"
+        command << " < #{Shellwords.escape(dump_path)}"
+        puts command.join(" ")
+        command.join(" ")
+      end
+
+      def rm_command(path)
+        "rm #{Shellwords.escape(path)}"
       end
 
       def save_local_db(local_dump_path)
