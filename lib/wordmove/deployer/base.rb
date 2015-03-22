@@ -10,7 +10,7 @@ module Wordmove
         def deployer_for(cli_options)
           options = fetch_movefile(cli_options[:config])
           available_enviroments = extract_available_envs(options)
-          options.merge!(cli_options).recursive_symbolize_keys!
+          options.merge!(cli_options).deep_symbolize_keys!
 
           if available_enviroments.size > 1 && options[:environment].nil?
             raise "You need to specify an environment with --environment parameter"
