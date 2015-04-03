@@ -11,6 +11,7 @@ require 'active_support/core_ext'
 
 require 'photocopier'
 
+require 'wordmove/exceptions'
 require 'wordmove/cli'
 require 'wordmove/logger'
 require 'wordmove/sql_adapter'

@@ -13,7 +13,7 @@ module Wordmove
           options.merge!(cli_options).deep_symbolize_keys!
 
           if available_enviroments.size > 1 && options[:environment].nil?
-            raise "You need to specify an environment with --environment parameter"
+            raise UndefinedEnvironment, "You need to specify an environment with --environment parameter"
           end
           environment = (options[:environment] || available_enviroments.first).to_sym
 
@@ -22,7 +22,7 @@ module Wordmove
           elsif options[environment][:ssh]
             SSH.new(environment, options)
           else
-            raise StandardError, "No valid adapter found."
+            raise NoAdapterFound, "No valid adapter found."
           end
         end
 
@@ -36,7 +36,7 @@ module Wordmove
 
           if entries.empty?
             if last_dir?(start_dir)
-              raise StandardError, "Could not find a valid Movefile"
+              raise MovefileNotFound, "Could not find a valid Movefile"
             else
               return fetch_movefile(name, upper_dir(start_dir))
             end
@@ -133,7 +133,7 @@ module Wordmove
         logger.task_step true, command
         unless simulate?
           system(command)
-          raise "Return code reports an error" unless $?.success?
+          raise ShellCommandError, "Return code reports an error" unless $?.success?
         end
       end
 

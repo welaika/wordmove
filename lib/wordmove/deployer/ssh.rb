@@ -48,7 +48,7 @@ module Wordmove
         logger.task_step false, command
         unless simulate?
           stdout, stderr, exit_code = @copier.exec! command
-          raise "Error code #{exit_code} returned by command \"#{command}\": #{stderr}" unless exit_code.zero?
+          raise ShellCommandError, "Error code #{exit_code} returned by command \"#{command}\": #{stderr}" unless exit_code.zero?
         end
       end
 
