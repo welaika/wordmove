@@ -28,7 +28,8 @@ describe Wordmove::Deployer::Base do
 
     context "with unknown type of connection " do
       it "raises an exception" do
-
+        options.merge!({ "environment" => "missing_protocol" })
+        expect{described_class.deployer_for(options)}.to raise_error(Wordmove::NoAdapterFound)
       end
     end
   end

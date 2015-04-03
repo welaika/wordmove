@@ -37,3 +37,13 @@ production:
     password: "password"
     host: "production.mysite.example.com"
     passive: true
+
+missing_protocol:
+  vhost: "http://production.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
