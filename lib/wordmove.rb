@@ -1,6 +1,6 @@
 require 'thor'
 require 'thor/group'
-require 'colored'
+require 'colorize'
 require 'logger'
 require 'yaml'
 require 'ostruct'
