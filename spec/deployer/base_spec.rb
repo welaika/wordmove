@@ -1,6 +1,39 @@
 describe Wordmove::Deployer::Base do
 
-  context "::fetch_movefile" do
+  context ".deployer_for" do
+    let(:options) do 
+      { config: movefile_path_for("multi_environments") }
+    end
+
+    context "with more then one environment, but none chosen" do
+      it "raises an exception" do
+        expect{ described_class.deployer_for(options) }
+          .to raise_exception(Wordmove::UndefinedEnvironment)
+      end
+    end
+
+    context "with ftp remote connection" do
+      it "returns an instance of FTP deployer" do
+        options.merge!({ "environment" => "production" })
+        expect(described_class.deployer_for(options)).to be_a Wordmove::Deployer::FTP
+      end
+    end
+
+    context "with ssh remote connection" do
+      it "returns an instance of SSH deployer" do
+        options.merge!({ "environment" => "staging" })
+        expect(described_class.deployer_for(options)).to be_a Wordmove::Deployer::SSH
+      end
+    end
+
+    context "with unknown type of connection " do
+      it "raises an exception" do
+
+      end
+    end
+  end
+
+  context ".fetch_movefile" do
     TMPDIR = "/tmp/wordmove"
 
     let(:path) { File.join(TMPDIR, 'Movefile') }

@@ -1,0 +1,39 @@
+local:
+  vhost: "http://localhost:8080"
+  wordpress_path: "/home/welaika/sites/your_site"
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+staging:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+production:
+  vhost: "http://production.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ftp:
+    user: "user"
+    password: "password"
+    host: "production.mysite.example.com"
+    passive: true
