@@ -1,6 +1,3 @@
-require 'spec_helper'
-require 'wordmove/generators/movefile'
-
 describe Wordmove::Generators::Movefile do
 
   let(:movefile) { 'Movefile' }

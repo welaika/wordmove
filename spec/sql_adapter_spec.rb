@@ -1,6 +1,3 @@
-require 'wordmove/sql_adapter'
-require 'tempfile'
-
 describe Wordmove::SqlAdapter do
 
   let(:sql_path) { double }

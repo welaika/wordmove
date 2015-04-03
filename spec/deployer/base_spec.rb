@@ -1,6 +1,3 @@
-require 'wordmove/deployer/base'
-require 'tempfile'
-
 describe Wordmove::Deployer::Base do
   let(:klass) { Wordmove::Deployer::Base }
 
