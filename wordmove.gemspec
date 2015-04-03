@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency "simplecov", "~> 0.9"
   spec.add_development_dependency "pry-byebug", "~> 3.1"
+  spec.add_development_dependency "priscilla", "~> 1.0.3"
 
   spec.post_install_message = <<-EOF
 
