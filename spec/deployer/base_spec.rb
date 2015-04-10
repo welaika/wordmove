@@ -52,7 +52,7 @@ describe Wordmove::Deployer::Base do
 
     context "when Movefile is missing" do
       it 'raises an exception' do
-        expect { described_class.fetch_movefile }.to raise_error(StandardError)
+        expect { described_class.fetch_movefile }.to raise_error(Wordmove::MovefileNotFound)
       end
     end
 
@@ -93,7 +93,7 @@ describe Wordmove::Deployer::Base do
         context 'Movefile not found, met root node' do
           it 'raises an exception' do
             allow(described_class).to receive(:current_dir).and_return('/tmp')
-            expect { described_class.fetch_movefile }.to raise_error(StandardError)
+            expect { described_class.fetch_movefile }.to raise_error(Wordmove::MovefileNotFound)
           end
         end
 
