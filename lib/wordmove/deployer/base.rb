@@ -194,7 +194,7 @@ module Wordmove
         command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
         command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
         command << "--database=#{Shellwords.escape(options[:name])}"
-        command << " < #{Shellwords.escape(dump_path)}"
+        command << "< #{Shellwords.escape(dump_path)}"
         puts command.join(" ")
         command.join(" ")
       end
