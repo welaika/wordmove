@@ -103,10 +103,58 @@ describe Wordmove::Deployer::Base do
           end
 
           it 'raises an exception' do
-            expect { described_class.fetch_movefile }.to raise_error(StandardError)
+            expect { described_class.fetch_movefile }.to raise_error(Wordmove::MovefileNotFound)
           end
         end
       end
+    end
+  end
+
+  context "#mysql_dump_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "creates a valid mysqldump command" do
+      command = deployer.send(
+        :mysql_dump_command,
+        {
+          host: "localhost",
+          port: "8888",
+          user: "root",
+          password: "'\"$ciao",
+          charset: "utf8",
+          name: "database_name"
+        },
+        "./mysql dump.sql"
+      )
+      expect(command).to eq("mysqldump --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 database_name > ./mysql\\ dump.sql")
+    end
+  end
+
+  context "#rm_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "creates a valid shell rm command" do
+      expect(deployer.send(:rm_command, "/var/my dump.sql")).to eq("rm /var/my\\ dump.sql")
+    end
+  end
+
+  context "#mysql_import_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "creates a valid mysql import command" do
+      command = deployer.send(
+        :mysql_import_command,
+        "./my dump.sql",
+        {
+          host: "localhost",
+          port: "8888",
+          user: "root",
+          password: "'\"$ciao",
+          charset: "utf8",
+          name: "database_name"
+        }
+      )
+      expect(command).to eq("mysql --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 --database=database_name < ./my\\ dump.sql")
     end
   end
 end
