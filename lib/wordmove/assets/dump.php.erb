@@ -1,169 +1,211 @@
 <?php
 
+$shared_key = '<%= password %>';
+if ($_GET['shared_key'] != $shared_key) {
+  die();
+}
+
 /**
  * MySQL database dump.
  *
- * @author     David Grudl
+ * @author     David Grudl (http://davidgrudl.com)
  * @copyright  Copyright (c) 2008 David Grudl
  * @license    New BSD License
- * @link       http://phpfashion.com/
- * @version    0.9
+ * @version    1.0
  */
-
 class MySQLDump
 {
-  const MAX_SQL_SIZE = 1e6;
+	const MAX_SQL_SIZE = 1e6;
 
-  /** @var mysqli */
-  private $connection;
+	const NONE = 0;
+	const DROP = 1;
+	const CREATE = 2;
+	const DATA = 4;
+	const TRIGGERS = 8;
+	const ALL = 15; // DROP | CREATE | DATA | TRIGGERS
 
-  /**
-   * Connects to database.
-   * @param  mysqli connection
-  */
-  public function __construct(mysqli $connection)
-  {
-    $this->connection = $connection;
+	/** @var array */
+	public $tables = array(
+		'*' => self::ALL,
+	);
 
-    if ($this->connection->connect_errno) {
-      throw new Exception($this->connection->connect_error);
-    }
-  }
-
-  /**
-   * Sends dump to browser.
-   * @param  string filename
-   * @return void
-  */
-  public function send($file)
-  {
-    $this->write(fopen('php://output', 'wb'));
-  }
-
-  /**
-   * Writes dump to logical file.
-   * @param  resource
-   * @return void
-  */
-  public function write($handle)
-  {
-    if (!is_resource($handle) || get_resource_type($handle) !== 'stream') {
-      throw new Exception('Argument must be stream resource.');
-    }
-
-    if (!$this->connection->set_charset('utf8')) { // was added in MySQL 5.0.7 and PHP 5.0.5, fixed in PHP 5.1.5)
-      throw new Exception($this->connection->error);
-    }
-
-    $views = $tables = array();
-
-    $res = $this->connection->query('SHOW TABLES');
-    while ($row = $res->fetch_row()) {
-      $tables[] = $row[0];
-    }
-    $res->close();
-
-    $db = $this->connection->query('SELECT DATABASE()')->fetch_row();
-    fwrite($handle, "-- David Grudl MySQL Dump Utility\n"
-      . "-- Created at " . date('j.n.Y G:i') . "\n"
-      . (isset($_SERVER['HTTP_HOST']) ? "-- Host: $_SERVER[HTTP_HOST]\n" : '')
-      . "-- Server: " . $this->connection->server_info . "\n"
-      . "-- Codepage: " . $this->connection->character_set_name() . "\n"
-      . "-- Database: " . $db[0] . "\n"
-      . "-- Tables: " . implode(', ', $tables) . "\n"
-      . "\n"
-      . "SET NAMES utf8;\n"
-      . "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\n"
-      . "SET FOREIGN_KEY_CHECKS=0;\n");
-
-    foreach ($tables as $table)
-    {
-      $res = $this->connection->query("SHOW CREATE TABLE `$table`");
-      $row = $res->fetch_assoc();
-      $res->close();
-
-      if (isset($row['Create View'])) {
-        $views[$table] = $row['Create View'];
-        continue;
-      }
-
-      fwrite($handle, "-- --------------------------------------------------------\n\n");
-      fwrite($handle, "DROP TABLE IF EXISTS `$table`;\n\n");
-      fwrite($handle, $row['Create Table'] . ";\n\n");
-
-      $numeric = array();
-      $res = $this->connection->query("SHOW COLUMNS FROM `$table`");
-      $cols = array();
-      while ($row = $res->fetch_assoc()) {
-        $col = $row['Field'];
-        $cols[] = '`' . str_replace('`', '``', $col) . '`';
-        preg_match('/^([a-z]+)/', $row['Type'], $matches);
-        $type = strtolower($matches[1]);
-        $numeric[$col] = in_array($type, array('byte','counter','serial','int','long','currency','real','money','float','double','decimal','numeric','number'));
-      }
-      $cols = '(' . implode(', ', $cols) . ')';
-      $res->close();
+	/** @var mysqli */
+	private $connection;
 
 
-      $size = 0;
-      $res = $this->connection->query("SELECT * FROM `$table`", MYSQLI_USE_RESULT);
-      while ($row = $res->fetch_assoc()) {
-        $s = '(';
-        foreach ($row as $key => $value) {
-          if ($value === NULL) {
-            $s .= "NULL,\t";
-          } elseif ($numeric[$key]) {
-            $s .= $value . ",\t";
-          } else {
-            $s .= "'" . $this->connection->real_escape_string($value) . "',\t";
-          }
-        }
+	/**
+	 * Connects to database.
+	 * @param  mysqli connection
+	 */
+	public function __construct(mysqli $connection, $charset = 'utf8'
+	{
+		$this->connection = $connection;
 
-        if ($size == 0) {
-          $s = "INSERT INTO `$table` $cols VALUES\n$s";
-        } else {
-          $s = ",\n$s";
-        }
+		if ($connection->connect_errno) {
+			throw new Exception($connection->connect_error);
 
-        $len = strlen($s) - 1;
-        $s[$len - 1] = ')';
-        fwrite($handle, $s, $len);
+		} elseif (!$connection->set_charset($charset)) { // was added in MySQL 5.0.7 and PHP 5.0.5, fixed in PHP 5.1.5)
+			throw new Exception($connection->error);
+		}
+	}
 
-        $size += $len;
-        if ($size > self::MAX_SQL_SIZE) {
-          fwrite($handle, ";\n");
-          $size = 0;
-        }
-      }
 
-      if ($size) fwrite($handle, ";\n");
-      $res->close();
+	/**
+	 * Saves dump to the file.
+	 * @param  string filename
+	 * @return void
+	 */
+	public function save($file)
+	{
+		$handle = strcasecmp(substr($file, -3), '.gz') ? fopen($file, 'wb') : gzopen($file, 'wb');
+		if (!$handle) {
+			throw new Exception("ERROR: Cannot write file '$file'.");
+		}
+		$this->write($handle);
+	}
 
-      fwrite($handle, "\n\n");
-    }
 
-    foreach ($views as $view => $sql)
-    {
-      fwrite($handle, "-- --------------------------------------------------------\n\n");
-      fwrite($handle, "DROP VIEW IF EXISTS `$view`;\n\n$sql;\n\n");
-    }
+	/**
+	 * Writes dump to logical file.
+	 * @param  resource
+	 * @return void
+	 */
+	public function write($handle = NULL)
+	{
+		if ($handle === NULL) {
+			$handle = fopen('php://output', 'wb');
+		} elseif (!is_resource($handle) || get_resource_type($handle) !== 'stream') {
+			throw new Exception('Argument must be stream resource.');
+		}
 
-    fwrite($handle, "-- THE END\n");
-    fclose($handle);
-  }
-}
+		$tables = array();
 
-function get_connection($db_host, $db_user, $db_password, $db_name, $db_port, &$error = NULL) {
-  $db_connection = new mysqli($db_host, $db_user, $db_password, $db_name, $db_port);
-  if (!$db_connection || !$db_connection->select_db($db_name)) {
-    if ($db_connection) {
-      $error = mysqli_connect_error();
-    } else {
-      $error = "Unable to connect to mysql database";
-    }
-    return NULL;
-  }
-  return $db_connection;
+		$res = $this->connection->query('SHOW TABLES');
+		while ($row = $res->fetch_row()) {
+			$tables[] = $row[0];
+		}
+		$res->close();
+
+		$this->connection->query('LOCK TABLES `' . implode('` READ, `', $tables) . '` READ');
+
+		$db = $this->connection->query('SELECT DATABASE()')->fetch_row();
+		fwrite($handle, "-- Created at " . date('j.n.Y G:i') . " using David Grudl MySQL Dump Utility\n"
+			. (isset($_SERVER['HTTP_HOST']) ? "-- Host: $_SERVER[HTTP_HOST]\n" : '')
+			. "-- MySQL Server: " . $this->connection->server_info . "\n"
+			. "-- Database: " . $db[0] . "\n"
+			. "\n"
+			. "SET NAMES utf8;\n"
+			. "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\n"
+			. "SET FOREIGN_KEY_CHECKS=0;\n"
+		);
+
+		foreach ($tables as $table) {
+			$this->dumpTable($handle, $table);
+		}
+
+		fwrite($handle, "-- THE END\n");
+
+		$this->connection->query('UNLOCK TABLES');
+	}
+
+
+	/**
+	 * Dumps table to logical file.
+	 * @param  resource
+	 * @return void
+	 */
+	public function dumpTable($handle, $table)
+	{
+		$delTable = $this->delimite($table);
+		$res = $this->connection->query("SHOW CREATE TABLE $delTable");
+		$row = $res->fetch_assoc();
+		$res->close();
+
+		fwrite($handle, "-- --------------------------------------------------------\n\n");
+
+		$mode = isset($this->tables[$table]) ? $this->tables[$table] : $this->tables['*'];
+		$view = isset($row['Create View']);
+
+		if ($mode & self::DROP) {
+			fwrite($handle, 'DROP ' . ($view ? 'VIEW' : 'TABLE') . " IF EXISTS $delTable;\n\n");
+		}
+
+		if ($mode & self::CREATE) {
+			fwrite($handle, $row[$view ? 'Create View' : 'Create Table'] . ";\n\n");
+		}
+
+		if (!$view && ($mode & self::DATA)) {
+			$numeric = array();
+			$res = $this->connection->query("SHOW COLUMNS FROM $delTable");
+			$cols = array();
+			while ($row = $res->fetch_assoc()) {
+				$col = $row['Field'];
+				$cols[] = $this->delimite($col);
+				$numeric[$col] = (bool) preg_match('#^[^(]*(BYTE|COUNTER|SERIAL|INT|LONG$|CURRENCY|REAL|MONEY|FLOAT|DOUBLE|DECIMAL|NUMERIC|NUMBER)#i', $row['Type']);
+			}
+			$cols = '(' . implode(', ', $cols) . ')';
+			$res->close();
+
+
+			$size = 0;
+			$res = $this->connection->query("SELECT * FROM $delTable", MYSQLI_USE_RESULT);
+			while ($row = $res->fetch_assoc()) {
+				$s = '(';
+				foreach ($row as $key => $value) {
+					if ($value === NULL) {
+						$s .= "NULL,\t";
+					} elseif ($numeric[$key]) {
+						$s .= $value . ",\t";
+					} else {
+						$s .= "'" . $this->connection->real_escape_string($value) . "',\t";
+					}
+				}
+
+				if ($size == 0) {
+					$s = "INSERT INTO $delTable $cols VALUES\n$s";
+				} else {
+					$s = ",\n$s";
+				}
+
+				$len = strlen($s) - 1;
+				$s[$len - 1] = ')';
+				fwrite($handle, $s, $len);
+
+				$size += $len;
+				if ($size > self::MAX_SQL_SIZE) {
+					fwrite($handle, ";\n");
+					$size = 0;
+				}
+			}
+
+			$res->close();
+			if ($size) {
+				fwrite($handle, ";\n");
+			}
+			fwrite($handle, "\n");
+		}
+
+		if ($mode & self::TRIGGERS) {
+			$res = $this->connection->query("SHOW TRIGGERS LIKE '" . $this->connection->real_escape_string($table) . "'");
+			if ($res->num_rows) {
+				fwrite($handle, "DELIMITER ;;\n\n");
+				while ($row = $res->fetch_assoc()) {
+					fwrite($handle, "CREATE TRIGGER {$this->delimite($row['Trigger'])} $row[Timing] $row[Event] ON $delTable FOR EACH ROW\n$row[Statement];;\n\n");
+				}
+				fwrite($handle, "DELIMITER ;\n\n");
+			}
+			$res->close();
+		}
+
+		fwrite($handle, "\n");
+	}
+
+
+	private function delimite($s)
+	{
+		return '`' . str_replace('`', '``', $s) . '`';
+	}
+
 }
 
 $db_host = '<%= escape_php db[:host] %>';
@@ -174,13 +216,8 @@ if (!$db_port) {
 $db_user = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php db[:name] %>';
-$shared_key = '<%= password %>';
+$db_charset = '<%= escape_php db[:charset] %>';
 
-$mysql_error = '';
-
-if ($_GET['shared_key'] == $shared_key) {
-  $connection = get_connection($db_host, $db_user, $db_password, $db_name, $db_port, $mysql_error);
-  $dump = new MySQLDump($connection);
-  $dump->send('dump.mysql');
-}
-
+$connection = new mysqli($db_host, $db_user, $db_password, $db_name, $db_port);
+$dump = new MySQLDump($connection, $db_charset);
+$dump->save('dump.mysql');
