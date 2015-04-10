@@ -192,6 +192,7 @@ module Wordmove
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
         command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
+        command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
         command << "--database=#{Shellwords.escape(options[:name])}"
         command << " < #{Shellwords.escape(dump_path)}"
         puts command.join(" ")
