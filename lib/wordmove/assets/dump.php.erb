@@ -209,7 +209,7 @@ class MySQLDump
 }
 
 $db_host = '<%= escape_php db[:host] %>';
-$db_port = '<%= escape_php db[:port] %>';
+$db_port = '<%= db[:port] %>';
 if (!$db_port) {
   $db_port = ini_get("mysqli.default_port");
 }
