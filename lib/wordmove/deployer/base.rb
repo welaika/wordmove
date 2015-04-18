@@ -44,7 +44,7 @@ module Wordmove
 
           found = entries.first
           logger.task("Using Movefile: #{found}")
-          YAML::load(File.open(found))
+          YAML::load(ERB.new(File.read(found)).result)
         end
 
         def current_dir
