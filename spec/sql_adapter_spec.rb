@@ -16,9 +16,9 @@ describe Wordmove::SqlAdapter do
 
   context ".initialize" do
     it "should assign variables correctly on initialization" do
-      adapter.sql_path.should == sql_path
-      adapter.source_config.should == source_config
-      adapter.dest_config.should == dest_config
+      expect(adapter.sql_path).to eq(sql_path)
+      expect(adapter.source_config).to eq(source_config)
+      expect(adapter.dest_config).to eq(dest_config)
     end
   end
 
@@ -29,15 +29,15 @@ describe Wordmove::SqlAdapter do
     let(:sql_path) { sql.path }
 
     it "should read the sql file content" do
-      adapter.sql_content.should == 'DUMP'
+      expect(adapter.sql_content).to eq('DUMP')
     end
   end
 
   context ".adapt!" do
     it "should replace host, path and write to sql" do
-      adapter.should_receive(:replace_vhost!).and_return(true)
-      adapter.should_receive(:replace_wordpress_path!).and_return(true)
-      adapter.should_receive(:write_sql!).and_return(true)
+      expect(adapter).to receive(:replace_vhost!).and_return(true)
+      expect(adapter).to receive(:replace_wordpress_path!).and_return(true)
+      expect(adapter).to receive(:write_sql!).and_return(true)
       adapter.adapt!
     end
   end
@@ -48,7 +48,7 @@ describe Wordmove::SqlAdapter do
       let(:dest_config)   do { :vhost => "FUNK" } end
 
       it "should replace source vhost with dest vhost" do
-        adapter.should_receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
+        expect(adapter).to receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
         adapter.replace_vhost!
       end
     end
@@ -58,7 +58,7 @@ describe Wordmove::SqlAdapter do
       let(:dest_config)   do { :wordpress_path => "FUNK" } end
 
       it "should replace source vhost with dest wordpress paths" do
-        adapter.should_receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
+        expect(adapter).to receive(:replace_field!).with("DUMP", "FUNK").and_return(true)
         adapter.replace_wordpress_path!
       end
 
@@ -66,7 +66,7 @@ describe Wordmove::SqlAdapter do
         let(:source_config) do { :wordpress_absolute_path => "ABSOLUTE_DUMP", :wordpress_path => "DUMP" } end
 
         it "should replace the absolute path instead" do
-          adapter.should_receive(:replace_field!).with("ABSOLUTE_DUMP", "FUNK").and_return(true)
+          expect(adapter).to receive(:replace_field!).with("ABSOLUTE_DUMP", "FUNK").and_return(true)
           adapter.replace_wordpress_path!
         end
       end
@@ -75,8 +75,8 @@ describe Wordmove::SqlAdapter do
 
   context ".replace_field!" do
     it "should replace source vhost with dest vhost" do
-      adapter.should_receive(:serialized_replace!).ordered.with("DUMP", "FUNK").and_return(true)
-      adapter.should_receive(:simple_replace!).ordered.with("DUMP", "FUNK").and_return(true)
+      expect(adapter).to receive(:serialized_replace!).ordered.with("DUMP", "FUNK").and_return(true)
+      expect(adapter).to receive(:simple_replace!).ordered.with("DUMP", "FUNK").and_return(true)
       adapter.replace_field!("DUMP", "FUNK")
     end
   end
@@ -88,7 +88,7 @@ describe Wordmove::SqlAdapter do
 
     it "should replace source vhost with dest vhost" do
       adapter.serialized_replace!('http://dump.com', 'http://shrubbery.com')
-      adapter.sql_content.should == 'a:3:{i:0;s:25:"http://shrubbery.com/spam";i:1;s:6:"foobar";i:2;s:27:"http://shrubbery.com/foobar";}'
+      expect(adapter.sql_content).to eq('a:3:{i:0;s:25:"http://shrubbery.com/spam";i:1;s:6:"foobar";i:2;s:27:"http://shrubbery.com/foobar";}')
     end
 
     context "given empty strings" do
@@ -96,7 +96,7 @@ describe Wordmove::SqlAdapter do
 
       it "should leave them untouched" do
         adapter.serialized_replace!('foo', 'sausage')
-        adapter.sql_content.should == 's:0:"";s:7:"sausage";s:0:"";'
+        expect(adapter.sql_content).to eq('s:0:"";s:7:"sausage";s:0:"";')
       end
 
       context "considering escaping" do
@@ -104,7 +104,7 @@ describe Wordmove::SqlAdapter do
 
         it "should leave them untouched" do
           adapter.serialized_replace!('foo', 'sausage')
-          adapter.sql_content.should == 's:0:\"\";s:7:\"sausage\";s:0:\"\";'
+          expect(adapter.sql_content).to eq('s:0:\"\";s:7:\"sausage\";s:0:\"\";')
         end
       end
     end
@@ -114,7 +114,7 @@ describe Wordmove::SqlAdapter do
 
       it "should calculate the correct final length" do
         adapter.serialized_replace!('dump', 'sausage')
-        adapter.sql_content.should == 's:9:"sausage\"\"";'
+        expect(adapter.sql_content).to eq('s:9:"sausage\"\"";')
       end
     end
 
@@ -123,7 +123,7 @@ describe Wordmove::SqlAdapter do
 
       it "should handle replacing just as well" do
         adapter.serialized_replace!('http://dump.com', 'http://shrubbery.com')
-        adapter.sql_content.should == "a:3:{s:25:\\\"http://shrubbery.com/spam\\\";s:6:'foobar';s:27:'http://shrubbery.com/foobar';s:8:'sausages';}"
+        expect(adapter.sql_content).to eq("a:3:{s:25:\\\"http://shrubbery.com/spam\\\";s:6:'foobar';s:27:'http://shrubbery.com/foobar';s:8:'sausages';}")
       end
     end
 
@@ -132,7 +132,7 @@ describe Wordmove::SqlAdapter do
 
       it "should replace all occurences" do
         adapter.serialized_replace!('http://dump.com', 'http://shrubbery.com')
-        adapter.sql_content.should == 'a:1:{i:0;s:62:"ni http://shrubbery.com/spam ni http://shrubbery.com/foobar ni";}'
+        expect(adapter.sql_content).to eq('a:1:{i:0;s:62:"ni http://shrubbery.com/spam ni http://shrubbery.com/foobar ni";}')
       end
     end
   end
@@ -144,7 +144,7 @@ describe Wordmove::SqlAdapter do
 
     it "should replace source vhost with dest vhost" do
       adapter.simple_replace!("DUMP", "FUNK")
-      adapter.sql_content.should == "THE FUNK!"
+      expect(adapter.sql_content).to eq("THE FUNK!")
     end
   end
 
