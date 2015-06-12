@@ -70,7 +70,7 @@ module Wordmove
         @logger = self.class.logger
       end
 
-      def push_db;
+      def push_db
         logger.task "Pushing Database"
       end
 
