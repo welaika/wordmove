@@ -2,8 +2,8 @@
 require File.expand_path('../lib/wordmove/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Stefano Verna", "Ju Liu"]
-  gem.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com"]
+  gem.authors       = ["Stefano Verna", "Ju Liu", "weLaika"]
+  gem.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com", "info@welaika.com"]
   gem.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
   gem.summary       = %q{Wordmove, Capistrano for Wordpress}
   gem.homepage      = "https://github.com/welaika/wordmove"
@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "thor"
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", "~> 0.0.10"
+  gem.add_dependency "photocopier", ">= 1.0.0.pre2"
   gem.add_dependency "escape"
 
   gem.add_development_dependency "rspec", '< 3'
