@@ -1,5 +1,4 @@
 require 'wordmove/deployer/base'
-require 'photocopier/ssh'
 
 module Wordmove
   module Deployer

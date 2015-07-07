@@ -1,4 +1,6 @@
 require 'thor'
+require 'shellwords'
+require "photocopier"
 require 'wordmove/generators/movefile'
 require 'wordmove/deployer/base'
 

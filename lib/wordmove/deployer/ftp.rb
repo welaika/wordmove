@@ -1,5 +1,4 @@
 require 'wordmove/deployer/base'
-require 'photocopier/ftp'
 require 'erb'
 require 'open-uri'
 
