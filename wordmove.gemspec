@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "wordmove"
   spec.version       = Wordmove::VERSION
   spec.authors       = ["Stefano Verna", "Ju Liu", "Fabrizio Monti", "Alessandro Fazzi"]
-  spec.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com", "fabrizio.monti@welaika.com", "alessandro.fazzi@gmail.com"]
+  spec.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com", "fabrizio.monti@welaika.com", "alessandro.fazzi@welaika.com"]
 
   spec.summary       = %q{Wordmove, Capistrano for Wordpress}
   spec.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
