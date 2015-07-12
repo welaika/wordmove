@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "thor"
   gem.add_dependency "activesupport"
   gem.add_dependency "i18n"
-  gem.add_dependency "photocopier", ">= 1.0.0.pre2"
+  gem.add_dependency "photocopier", ">= 1.0.0.pre3"
   gem.add_dependency "escape"
 
   gem.add_development_dependency "rspec", '< 3'
