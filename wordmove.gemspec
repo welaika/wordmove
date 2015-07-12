@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "colorize", "~> 0.7.5"
   spec.add_dependency "thor", "~> 0.19.1"
   spec.add_dependency "activesupport", "~> 4.2.1"
-  spec.add_dependency "photocopier", "~> 1.0.0.pre2"
+  spec.add_dependency "photocopier", "~> 1.0.0.pre3"
 
   spec.required_ruby_version = "~> 2.0"
 
@@ -31,16 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency "simplecov", "~> 0.9"
   spec.add_development_dependency "pry-byebug", "~> 3.1"
-  spec.add_development_dependency "priscilla", "~> 1.0.3"
-
-  spec.post_install_message = <<-EOF
-
-============================================================================
-Beware! From version 1.0, we have changed the wordmove flags' behaviour:
-they used to tell wordmove what to _skip_, now they tell what to _include_.
-
-Read `wordmove help` for more info.
-============================================================================
-
-  EOF
+  spec.add_development_dependency "priscilla", "~> 1.0"
 end

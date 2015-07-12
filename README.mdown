@@ -104,6 +104,7 @@ staging:
   #   password: "password"
   #   host: "host"
   #   passive: true
+  #   scheme: "ftps" # default "ftp"
 
 # production: # multiple environments can be specified
 #   [...]
