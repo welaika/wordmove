@@ -52,7 +52,9 @@ module Wordmove
       end
 
       def wp_config
-        @wp_config ||= File.open(WordpressDirectory.default_path_for(:wp_config)).read
+        @wp_config ||= File.read(
+          WordpressDirectory.default_path_for(:wp_config)
+        ).encode('utf-8', invalid: :replace)
       end
 
       def wp_definitions
