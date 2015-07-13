@@ -1,5 +1,11 @@
 module Wordmove
   class CLI < Thor
+    map %w[--version -v] => :__print_version
+
+    desc "--version, -v", "Print the version"
+    def __print_version
+      puts Wordmove::VERSION
+    end
 
     desc "init", "Generates a brand new Movefile"
     def init
