@@ -1,6 +1,6 @@
 # Wordmove
 
-![logo](http://welaika.github.com/wordmove/assets/images/wordmove.png)
+![logo](https://raw.githubusercontent.com/welaika/wordmove/master/assets/images/wordmove.png)
 
 Wordmove is a nice little gem that lets you automatically mirror local Wordpress
 installations and DB data back and forth from your local development machine to
