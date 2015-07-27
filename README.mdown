@@ -1,5 +1,7 @@
 # Wordmove
 
+![logo](http://welaika.github.com/wordmove/assets/images/wordmove.png)
+
 Wordmove is a nice little gem that lets you automatically mirror local Wordpress
 installations and DB data back and forth from your local development machine to
 the remote staging server. SSH and FTP connections are both supported.
@@ -147,6 +149,9 @@ import/export operations. This script then gets executed via HTTP. Don't worry
 too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
+
+## Need more tools?
+Visit [Wordpress Tools](http://wptools.it).
 
 ## Credits
 
