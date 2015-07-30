@@ -7,6 +7,11 @@ local:
     user: "<%= database.user %>"
     password: "<%= database.password %>"
     host: "<%= database.host %>"
+    # Use just in case you have exotic server config
+    # port: "3308"
+    # socket: "/path/to/mysql.sock"
+    # mysql_path: "/path/to/mysql"
+    # mysqldump_path: "/path/to/mysqldump"
 
 staging:
   vhost: "http://example.com"
@@ -17,7 +22,11 @@ staging:
     user: "user"
     password: "password"
     host: "host"
-    # port: "3308" # Use just in case you have exotic server config
+    # Use just in case you have exotic server config
+    # port: "3308"
+    # socket: "/path/to/mysql.sock"
+    # mysql_path: "/path/to/mysql"
+    # mysqldump_path: "/path/to/mysqldump"
 
   exclude:
     - ".git/"
@@ -58,4 +67,3 @@ staging:
 
 # production: # multiple environments can be specified
 #   [...]
-

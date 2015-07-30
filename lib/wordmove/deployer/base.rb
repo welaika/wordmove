@@ -185,23 +185,35 @@ module Wordmove
       end
 
       def mysql_dump_command(options, save_to_path)
-        arguments = [ "mysqldump" ]
+        if options[:mysqldump_path].present?
+          arguments = [ "#{options[:mysqldump_path]}" ]
+        else
+          arguments = [ "mysqldump" ]
+        end
+
         arguments << "--host=#{options[:host]}" if options[:host].present?
         arguments << "--port=#{options[:port]}" if options[:port].present?
         arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--default-character-set=#{options[:charset]}" if options[:charset].present?
+        arguments << "--socket=#{options[:socket]}" if options[:socket].present?
         arguments << options[:name]
         Escape.shell_command(arguments) + " > \"#{save_to_path}\""
       end
 
       def mysql_import_command(dump_path, options)
-        arguments = [ "mysql" ]
+        if options[:mysql_path].present?
+          arguments = [ "#{options[:mysql_path]}" ]
+        else
+          arguments = [ "mysql" ]
+        end
+
         arguments << "--host=#{options[:host]}" if options[:host].present?
         arguments << "--port=#{options[:port]}" if options[:port].present?
         arguments << "--user=#{options[:user]}" if options[:user].present?
         arguments << "--password=#{options[:password]}" if options[:password].present?
         arguments << "--database=#{options[:name]}"
+        arguments << "--socket=#{options[:socket]}" if options[:socket].present?
         Escape.shell_command(arguments) + " < \"#{dump_path}\""
       end
 
