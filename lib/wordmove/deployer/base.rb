@@ -92,7 +92,7 @@ module Wordmove
       def remote_get_directory(directory); end
       def remote_put_directory(directory); end
 
-      %w(uploads themes plugins languages).each do |task|
+      %w(uploads themes plugins muplugins languages).each do |task|
         define_method "push_#{task}" do
           logger.task "Pushing #{task.titleize}"
           local_path = send("local_#{task}_dir").path

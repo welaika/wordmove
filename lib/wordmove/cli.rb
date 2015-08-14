@@ -11,17 +11,18 @@ module Wordmove
     end
 
     shared_options = {
-      :wordpress   => { :aliases => "-w", :type => :boolean },
-      :uploads     => { :aliases => "-u", :type => :boolean },
-      :themes      => { :aliases => "-t", :type => :boolean },
-      :plugins     => { :aliases => "-p", :type => :boolean },
-      :languages   => { :aliases => "-l", :type => :boolean },
-      :db          => { :aliases => "-d", :type => :boolean },
+      :wordpress     => { :aliases => "-w", :type => :boolean },
+      :uploads       => { :aliases => "-u", :type => :boolean },
+      :themes        => { :aliases => "-t", :type => :boolean },
+      :muplugins     => { :aliases => "-m", :type => :boolean },
+      :plugins       => { :aliases => "-p", :type => :boolean },
+      :languages     => { :aliases => "-l", :type => :boolean },
+      :db            => { :aliases => "-d", :type => :boolean },
 
-      :verbose     => { :aliases => "-v", :type => :boolean },
-      :simulate    => { :aliases => "-s", :type => :boolean },
-      :environment => { :aliases => "-e"                    },
-      :config      => { :aliases => "-c"                    },
+      :verbose       => { :aliases => "-v", :type => :boolean },
+      :simulate      => { :aliases => "-s", :type => :boolean },
+      :environment   => { :aliases => "-e"                    },
+      :config        => { :aliases => "-c"                    },
 
       :no_adapt    => { :type => :boolean                   },
       :all         => { :type => :boolean                   }
@@ -29,7 +30,7 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
-        %w(wordpress uploads themes plugins languages db).map(&:to_sym).each do |task|
+        %w(wordpress uploads themes plugins muplugins languages db).map(&:to_sym).each do |task|
           if options[task] || options[:all]
             yield task
           end
