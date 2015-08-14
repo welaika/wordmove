@@ -163,6 +163,7 @@ module Wordmove
 
       [ WordpressDirectory::PATH::WP_CONTENT,
         WordpressDirectory::PATH::PLUGINS,
+        WordpressDirectory::PATH::MUPLUGINS,
         WordpressDirectory::PATH::THEMES,
         WordpressDirectory::PATH::UPLOADS,
         WordpressDirectory::PATH::LANGUAGES
