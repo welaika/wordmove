@@ -35,6 +35,7 @@ staging:
   #   wp_content: "wp-content"
   #   uploads: "wp-content/uploads"
   #   plugins: "wp-content/plugins"
+  #   muplugins: "wp-content/mu-plugins"
   #   themes: "wp-content/themes"
   #   languages: "wp-content/languages"
   #   themes: "wp-content/themes"
@@ -58,4 +59,3 @@ staging:
 
 # production: # multiple environments can be specified
 #   [...]
-

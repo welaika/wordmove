@@ -86,6 +86,7 @@ staging:
   #   wp_content: "wp-content"
   #   uploads: "wp-content/uploads"
   #   plugins: "wp-content/plugins"
+  #   muplugins: "wp-content/mu-plugins"
   #   themes: "wp-content/themes"
   #   languages: "wp-content/languages"
   #   themes: "wp-content/themes"
@@ -180,4 +181,3 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
