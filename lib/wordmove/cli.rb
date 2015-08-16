@@ -11,6 +11,7 @@ module Wordmove
       uploads:     { aliases: "-u", type: :boolean },
       themes:      { aliases: "-t", type: :boolean },
       plugins:     { aliases: "-p", type: :boolean },
+      mu_plugins:     { aliases: "-m", type: :boolean },
       languages:   { aliases: "-l", type: :boolean },
       db:          { aliases: "-d", type: :boolean },
 
@@ -25,7 +26,7 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
-        %w(wordpress uploads themes plugins languages db).map(&:to_sym).each do |task|
+        %w(wordpress uploads themes plugins mu_plugins languages db).map(&:to_sym).each do |task|
           if options[task] || options[:all]
             yield task
           end
