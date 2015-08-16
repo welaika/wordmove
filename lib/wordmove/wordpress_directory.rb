@@ -4,6 +4,7 @@ class WordpressDirectory < Struct.new(:type, :options)
     WP_CONTENT = :wp_content
     WP_CONFIG  = :wp_config
     PLUGINS    = :plugins
+    MU_PLUGINS    = :mu_plugins
     THEMES     = :themes
     UPLOADS    = :uploads
     LANGUAGES  = :languages
@@ -13,6 +14,7 @@ class WordpressDirectory < Struct.new(:type, :options)
     PATH::WP_CONTENT => 'wp-content',
     PATH::WP_CONFIG  => 'wp-config.php',
     PATH::PLUGINS    => 'wp-content/plugins',
+    PATH::MU_PLUGINS    => 'wp-content/mu-plugins',
     PATH::THEMES     => 'wp-content/themes',
     PATH::UPLOADS    => 'wp-content/uploads',
     PATH::LANGUAGES  => 'wp-content/languages'
