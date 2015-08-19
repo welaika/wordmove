@@ -5,6 +5,7 @@ require 'wordmove/logger'
 require 'wordmove/wordpress_directory'
 require 'wordmove/sql_adapter'
 require 'escape'
+require 'erb'
 require 'yaml'
 
 module Wordmove
@@ -55,7 +56,7 @@ module Wordmove
 
           found = entries.first
           logger.task("Using Movefile: #{found}")
-          YAML::load(File.open(found))
+          YAML::load(ERB.new(File.read(found)).result)
         end
 
         def current_dir
