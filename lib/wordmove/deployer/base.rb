@@ -44,7 +44,12 @@ module Wordmove
 
           found = entries.first
           logger.task("Using Movefile: #{found}")
-          YAML::load(File.open(found))
+          begin
+            YAML::load(File.open(found))
+          rescue Psych::SyntaxError
+            puts "Your Movefile is not a valid YAML file. Please, check your Movefile with a YAML linter such as http://lmgtfy.com/?q=yaml+linter"
+            exit 1
+          end
         end
 
         def current_dir
