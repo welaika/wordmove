@@ -17,7 +17,7 @@ module Wordmove
       uploads:     { aliases: "-u", type: :boolean },
       themes:      { aliases: "-t", type: :boolean },
       plugins:     { aliases: "-p", type: :boolean },
-      mu_plugins:     { aliases: "-m", type: :boolean },
+      mu_plugins:  { aliases: "-m", type: :boolean },
       languages:   { aliases: "-l", type: :boolean },
       db:          { aliases: "-d", type: :boolean },
 
