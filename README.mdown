@@ -60,7 +60,7 @@ local:
     password: "password"
     host: "127.0.0.1"
 
-staging:
+production:
   vhost: "http://example.com"
   wordpress_path: "/var/www/your_site" # use an absolute path here
 
@@ -108,7 +108,7 @@ staging:
   #   passive: true
   #   scheme: "ftps" # default "ftp"
 
-# production: # multiple environments can be specified
+# staging: # multiple environments can be specified
 #   [...]
 ```
 
@@ -149,6 +149,16 @@ import/export operations. This script then gets executed via HTTP. Don't worry
 too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
+
+## Multi environment
+You can define multiple environments in your `Movefile`, such as production, staging, etc.
+Use `-e` with `pull` or `push` to run the command on the specified environment.
+
+For example:
+```
+wordmove push -e staging -d
+```
+will push your local database to the staging environment only
 
 ## Need more tools?
 Visit [Wordpress Tools](http://wptools.it).
