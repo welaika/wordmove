@@ -11,23 +11,30 @@ module Wordmove
         super
 
         local_dump_path = local_wp_content_dir.path("dump.sql")
-        local_backup_path = local_wp_content_dir.path("#{environment}-backup-#{Time.now.to_i}.sql")
-        download_remote_db(local_backup_path)
+        local_gzipped_dump_path = local_dump_path + '.gz'
+        local_gizipped_backup_path = local_wp_content_dir.path("#{environment}-backup-#{Time.now.to_i}.sql.gz")
+
+        download_remote_db(local_gizipped_backup_path)
 
         save_local_db(local_dump_path)
         adapt_sql(local_dump_path, local_options, remote_options)
-        import_remote_dump(local_dump_path)
-        run rm_command(local_dump_path)
+        run compress_command(local_dump_path)
+        import_remote_dump(local_gzipped_dump_path)
+        run rm_command(local_gzipped_dump_path)
       end
 
       def pull_db
         super
 
         local_dump_path = local_wp_content_dir.path("dump.sql")
+        local_gzipped_dump_path = local_dump_path + '.gz'
         local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
-        save_local_db(local_backup_path)
 
-        download_remote_db(local_dump_path)
+        save_local_db(local_backup_path)
+        run compress_command(local_backup_path)
+
+        download_remote_db(local_gzipped_dump_path)
+        run uncompress_command(local_gzipped_dump_path)
         adapt_sql(local_dump_path, remote_options, local_options)
         run mysql_import_command(local_dump_path, local_options[:database])
         run rm_command(local_dump_path)
@@ -52,22 +59,26 @@ module Wordmove
         end
       end
 
-      def download_remote_db(local_dump_path)
+      def download_remote_db(local_gizipped_dump_path)
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
         # dump remote db into file
         remote_run mysql_dump_command(remote_options[:database], remote_dump_path)
+        remote_run compress_command(remote_dump_path)
+        remote_dump_path += '.gz'
         # download remote dump
-        remote_get(remote_dump_path, local_dump_path)
+        remote_get(remote_dump_path, local_gizipped_dump_path)
         remote_delete(remote_dump_path)
       end
 
-      def import_remote_dump(local_dump_path)
+      def import_remote_dump(local_gizipped_dump_path)
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
-        remote_put(local_dump_path, remote_dump_path)
+        remote_gizipped_dump_path = remote_dump_path + '.gz'
+
+        remote_put(local_gizipped_dump_path, remote_gizipped_dump_path)
+        remote_run uncompress_command(remote_gizipped_dump_path)
         remote_run mysql_import_command(remote_dump_path, remote_options[:database])
         remote_delete(remote_dump_path)
       end
-
     end
   end
 end

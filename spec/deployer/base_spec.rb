@@ -1,7 +1,7 @@
 describe Wordmove::Deployer::Base do
 
   context ".deployer_for" do
-    let(:options) do 
+    let(:options) do
       { config: movefile_path_for("multi_environments") }
     end
 
@@ -157,5 +157,30 @@ describe Wordmove::Deployer::Base do
       expect(command).to eq("mysql --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 --database=database_name --execute=SOURCE\\ ./my\\ dump.sql")
     end
   end
-end
 
+  context "#compress_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "cerates a valid gzip command" do
+      command = deployer.send(
+        :compress_command,
+        "dummy file.sql"
+      )
+
+      expect(command).to eq("gzip --best dummy\\ file.sql")
+    end
+  end
+
+  context "#uncompress_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "cerates a valid gunzip command" do
+      command = deployer.send(
+        :uncompress_command,
+        "dummy file.sql"
+      )
+
+      expect(command).to eq("gunzip dummy\\ file.sql")
+    end
+  end
+end

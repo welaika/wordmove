@@ -175,7 +175,7 @@ module Wordmove
       end
 
       def mysql_dump_command(options, save_to_path)
-        command = [ "mysqldump" ]
+        command = ["mysqldump"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
@@ -188,7 +188,7 @@ module Wordmove
       end
 
       def mysql_import_command(dump_path, options)
-        command = [ "mysql" ]
+        command = ["mysql"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
@@ -196,6 +196,21 @@ module Wordmove
         command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
         command << "--database=#{Shellwords.escape(options[:name])}"
         command << "--execute=#{Shellwords.escape("SOURCE #{dump_path}")}"
+        puts command.join(" ")
+        command.join(" ")
+      end
+
+      def compress_command(path)
+        command = ["gzip"]
+        command << "--best"
+        command << Shellwords.escape(path)
+        puts command.join(" ")
+        command.join(" ")
+      end
+
+      def uncompress_command(path)
+        command = ["gunzip"]
+        command << Shellwords.escape(path)
         puts command.join(" ")
         command.join(" ")
       end
