@@ -168,6 +168,16 @@ Visit [Wordpress Tools](http://wptools.it).
 * The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl;
 * The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library;
 
+## Contribute
+
+In order to promote a simpler contribution workflow we have decided to fork the `master` branch and PR to the master
+`branch`.
+We will accordingly tag and release or pre-release versions to the rubygems.org repository.
+Do not consider the `dev` branch for your forks and PR.
+We will never more use version-named branches as in the past.
+
+Feel free to open an issue about contribution if more you need more info
+
 ## License
 
 (The MIT License)
