@@ -32,11 +32,19 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
-        %w(wordpress uploads themes plugins mu_plugins languages db).map(&:to_sym).each do |task|
-          if options[task] || options[:all]
-            yield task
-          end
+        wordpress_options.each do |task|
+          yield task if options[task] || options["all"]
         end
+      end
+
+      def wordpress_options
+        %w(wordpress uploads themes plugins mu_plugins languages db)
+      end
+
+      def ensure_wordpress_options_presence!(options)
+        return if (options.keys & (wordpress_options + ["all"])).present?
+        puts "No options given. See wordmove --help"
+        exit 1
       end
     end
 
@@ -45,6 +53,7 @@ module Wordmove
       method_option option, args
     end
     def pull
+      ensure_wordpress_options_presence!(options)
       deployer = Wordmove::Deployer::Base.deployer_for(options)
       handle_options(options) do |task|
         deployer.send("pull_#{task}")
@@ -56,6 +65,7 @@ module Wordmove
       method_option option, args
     end
     def push
+      ensure_wordpress_options_presence!(options)
       deployer = Wordmove::Deployer::Base.deployer_for(options)
       handle_options(options) do |task|
         deployer.send("push_#{task}")
