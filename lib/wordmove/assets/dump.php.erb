@@ -78,13 +78,19 @@ class MySQLDump
 			throw new Exception('Argument must be stream resource.');
 		}
 
-		$tables = array();
+		$tables = $views = array();
 
-		$res = $this->connection->query('SHOW TABLES');
+		$res = $this->connection->query('SHOW FULL TABLES');
 		while ($row = $res->fetch_row()) {
-			$tables[] = $row[0];
+			if ($row[1] === 'VIEW') {
+				$views[] = $row[0];
+			} else {
+				$tables[] = $row[0];
+			}
 		}
 		$res->close();
+
+		$tables = array_merge($tables, $views); // views must be last
 
 		$this->connection->query('LOCK TABLES `' . implode('` READ, `', $tables) . '` READ');
 
