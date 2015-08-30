@@ -1,3 +1,6 @@
+# 1.3.1
+- fix typo in dump.php.erb
+
 # 1.3.0
 - fix UTF-8 encoding issue when `wordmove init` with a wrong .sample file
 - fix problem with ftp password and special chars
