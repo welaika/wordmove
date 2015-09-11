@@ -8,7 +8,7 @@ local:
     password: "<%= database.password %>"
     host: "<%= database.host %>"
 
-staging:
+production:
   vhost: "http://example.com"
   wordpress_path: "/var/www/your_site" # use an absolute path here
 
@@ -55,7 +55,8 @@ staging:
   #   password: "password"
   #   host: "host"
   #   passive: true
+  #   scheme: "ftps" # default "ftp"
 
-# production: # multiple environments can be specified
+# staging: # multiple environments can be specified
 #   [...]
 
