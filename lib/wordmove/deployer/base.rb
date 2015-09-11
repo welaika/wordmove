@@ -186,8 +186,9 @@ module Wordmove
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
         command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
         command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
-        command << Shellwords.escape(options[:name])
         command << "--result-file=#{Shellwords.escape(save_to_path)}"
+        command << Shellwords.split(options[:mysqldump_options]) if options[:mysqldump_options].present?
+        command << Shellwords.escape(options[:name])
         puts command.join(" ")
         command.join(" ")
       end

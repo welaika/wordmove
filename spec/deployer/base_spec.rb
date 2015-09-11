@@ -122,11 +122,12 @@ describe Wordmove::Deployer::Base do
           user: "root",
           password: "'\"$ciao",
           charset: "utf8",
-          name: "database_name"
+          name: "database_name",
+          mysqldump_options: "--max_allowed_packet=1G --no-create-db"
         },
         "./mysql dump.sql"
       )
-      expect(command).to eq("mysqldump --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 database_name --result-file=./mysql\\ dump.sql")
+      expect(command).to eq("mysqldump --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 --result-file=./mysql\\ dump.sql --max_allowed_packet=1G --no-create-db database_name")
     end
   end
 
