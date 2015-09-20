@@ -172,16 +172,11 @@ module Wordmove
         end
       end
 
-      def mysql_dump_command(options, save_to_path)
-        command = [ "mysqldump" ]
-        command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
-        command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
-        command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
-        command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
-        command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
+      def mysql_dump_command(options, save_to_path, tables)
+        command = mysql_common_auth_for_command('mysqldump', options)
         command << Shellwords.escape(options[:name])
+        command << sanitize_fetched_tables(tables)
         command << "--result-file=#{Shellwords.escape(save_to_path)}"
-        puts command.join(" ")
         command.join(" ")
       end
 
@@ -191,6 +186,18 @@ module Wordmove
         command << "--execute=#{Shellwords.escape("SOURCE #{dump_path}")}"
         command.join(" ")
       end
+
+      def fetch_tables(options)
+        command = mysql_common_auth_for_command('mysql', options)
+        command << "--batch"
+        command << "--execute=#{Shellwords.escape("SHOW TABLES FROM #{options[:name]} LIKE \"#{options[:prefix]}%\";")}"
+        command = command.join(" ")
+      end
+
+      def sanitize_fetched_tables(stdout)
+        stdout.split.drop(2).join(" ")
+      end
+
       def mysql_common_auth_for_command(command, options)
         command = [command]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
@@ -208,7 +215,8 @@ module Wordmove
 
       def save_local_db(local_dump_path)
         # dump local mysql into file
-        run mysql_dump_command(local_options[:database], local_dump_path)
+        tables = %x(#{fetch_tables(local_options[:database])})
+        run mysql_dump_command(local_options[:database], local_dump_path, tables)
       end
 
       def remote_options
@@ -219,6 +227,5 @@ module Wordmove
         options[:local].clone
       end
     end
-
   end
 end
