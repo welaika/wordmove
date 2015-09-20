@@ -7,6 +7,7 @@ local:
     user: "<%= database.user %>"
     password: "<%= database.password %>"
     host: "<%= database.host %>"
+    prefix: "wp_"
 
 staging:
   vhost: "http://example.com"
@@ -17,6 +18,7 @@ staging:
     user: "user"
     password: "password"
     host: "host"
+    prefix: "wp_"
     # port: "3308" # Use just in case you have exotic server config
 
   exclude:
