@@ -44,11 +44,13 @@ module Wordmove
         end
       end
 
-      def remote_run(command)
+      def remote_run(command, return_stdout = false)
         logger.task_step false, command
         unless simulate?
           stdout, stderr, exit_code = @copier.exec! command
           raise ShellCommandError, "Error code #{exit_code} returned by command \"#{command}\": #{stderr}" unless exit_code.zero?
+
+          return stdout if return_stdout
         end
       end
 
