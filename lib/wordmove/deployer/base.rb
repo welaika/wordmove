@@ -1,6 +1,5 @@
 module Wordmove
   module Deployer
-
     class Base
       attr_reader :options
       attr_reader :logger

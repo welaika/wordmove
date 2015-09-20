@@ -67,7 +67,6 @@ module Wordmove
         remote_run mysql_import_command(remote_dump_path, remote_options[:database])
         remote_delete(remote_dump_path)
       end
-
     end
   end
 end
