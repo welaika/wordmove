@@ -186,16 +186,20 @@ module Wordmove
       end
 
       def mysql_import_command(dump_path, options)
-        command = [ "mysql" ]
+        command = mysql_common_auth_for_command('mysql', options)
+        command << "--database=#{Shellwords.escape(options[:name])}"
+        command << "--execute=#{Shellwords.escape("SOURCE #{dump_path}")}"
+        command.join(" ")
+      end
+      def mysql_common_auth_for_command(command, options)
+        command = [command]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
         command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
         command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
-        command << "--database=#{Shellwords.escape(options[:name])}"
-        command << "--execute=#{Shellwords.escape("SOURCE #{dump_path}")}"
-        puts command.join(" ")
-        command.join(" ")
+
+        command
       end
 
       def rm_command(path)
