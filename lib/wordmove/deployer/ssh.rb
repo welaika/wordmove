@@ -57,7 +57,8 @@ module Wordmove
       def download_remote_db(local_dump_path)
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
         # dump remote db into file
-        remote_run mysql_dump_command(remote_options[:database], remote_dump_path)
+        tables = remote_run(fetch_tables(remote_options[:database]), true)
+        remote_run mysql_dump_command(remote_options[:database], remote_dump_path, tables)
         # download remote dump
         remote_get(remote_dump_path, local_dump_path)
         remote_delete(remote_dump_path)
