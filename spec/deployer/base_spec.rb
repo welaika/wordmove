@@ -163,7 +163,7 @@ describe Wordmove::Deployer::Base do
         [
           "mysql --host=localhost --port=8888 --user=root",
           "--password=\\'\\\"\\$ciao --default-character-set=utf8",
-          "--database=database_name --execute=SOURCE\\ ./my\\ dump.sql"
+          "--database=database_name --execute=\"SET autocommit=0;SOURCE ./my dump.sql;COMMIT\""
         ].join(" ")
       )
     end
