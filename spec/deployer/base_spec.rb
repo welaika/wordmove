@@ -154,7 +154,7 @@ describe Wordmove::Deployer::Base do
           name: "database_name"
         }
       )
-      expect(command).to eq("mysql --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 --database=database_name --execute=SOURCE\\ ./my\\ dump.sql")
+      expect(command).to eq("mysql --host=localhost --port=8888 --user=root --password=\\'\\\"\\$ciao --default-character-set=utf8 --database=database_name --execute=\"SET autocommit=0;SOURCE ./my dump.sql;COMMIT\"")
     end
   end
 end
