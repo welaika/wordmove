@@ -1,7 +1,7 @@
 describe Wordmove::CLI do
   let(:cli) { described_class.new }
   let(:deployer) { double("deployer") }
-  let(:options) do {} end
+  let(:options) { {} }
 
   before do
     allow(Wordmove::Deployer::Base).to receive(:deployer_for).with(options).and_return(deployer)
@@ -15,7 +15,7 @@ describe Wordmove::CLI do
   end
 
   context "--all" do
-    let(:options) do { "all" => true } end
+    let(:options) { { "all" => true } }
     let(:ordered_components) { %w(wordpress uploads themes plugins languages db) }
 
     context "#pull" do
