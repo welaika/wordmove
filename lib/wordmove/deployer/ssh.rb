@@ -37,18 +37,19 @@ module Wordmove
 
       %w(get put get_directory put_directory delete).each do |command|
         define_method "remote_#{command}" do |*args|
-          logger.task_step false, "#{command}: #{args.join(" ")}"
-          unless simulate?
-            @copier.send(command, *args)
-          end
+          logger.task_step false, "#{command}: #{args.join(' ')}"
+          @copier.send(command, *args) unless simulate?
         end
       end
 
       def remote_run(command)
         logger.task_step false, command
         unless simulate?
-          stdout, stderr, exit_code = @copier.exec! command
-          raise ShellCommandError, "Error code #{exit_code} returned by command \"#{command}\": #{stderr}" unless exit_code.zero?
+          _stdout, stderr, exit_code = @copier.exec! command
+          raise(
+            ShellCommandError,
+            "Error code #{exit_code} returned by command \"#{command}\": #{stderr}"
+          ) unless exit_code.zero?
         end
       end
 
@@ -67,7 +68,6 @@ module Wordmove
         remote_run mysql_import_command(remote_dump_path, remote_options[:database])
         remote_delete(remote_dump_path)
       end
-
     end
   end
 end

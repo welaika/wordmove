@@ -1,6 +1,5 @@
 module Wordmove
   module Deployer
-
     class Base
       attr_reader :options
       attr_reader :logger
@@ -13,21 +12,20 @@ module Wordmove
           options.merge!(cli_options).deep_symbolize_keys!
 
           if available_enviroments.size > 1 && options[:environment].nil?
-            raise UndefinedEnvironment, "You need to specify an environment with --environment parameter"
+            raise(
+              UndefinedEnvironment,
+              "You need to specify an environment with --environment parameter"
+            )
           end
           environment = (options[:environment] || available_enviroments.first).to_sym
 
-          if options[environment][:ftp]
-            FTP.new(environment, options)
-          elsif options[environment][:ssh]
-            SSH.new(environment, options)
-          else
-            raise NoAdapterFound, "No valid adapter found."
-          end
+          return FTP.new(environment, options) if options[environment][:ftp]
+          return SSH.new(environment, options) if options[environment][:ssh]
+          raise NoAdapterFound, "No valid adapter found."
         end
 
         def extract_available_envs(options)
-          options.keys.map(&:to_sym) - [ :local ]
+          options.keys.map(&:to_sym) - [:local]
         end
 
         def fetch_movefile(name = nil, start_dir = current_dir)
@@ -35,16 +33,13 @@ module Wordmove
           entries = Dir["#{File.join(start_dir, name)}*"]
 
           if entries.empty?
-            if last_dir?(start_dir)
-              raise MovefileNotFound, "Could not find a valid Movefile"
-            else
-              return fetch_movefile(name, upper_dir(start_dir))
-            end
+            raise MovefileNotFound, "Could not find a valid Movefile" if last_dir?(start_dir)
+            return fetch_movefile(name, upper_dir(start_dir))
           end
 
           found = entries.first
           logger.task("Using Movefile: #{found}")
-          YAML::load(File.open(found))
+          YAML.load(File.open(found))
         end
 
         def current_dir
@@ -52,7 +47,7 @@ module Wordmove
         end
 
         def last_dir?(directory)
-          directory == "/" || File.exists?(File.join(directory, 'wp-config.php'))
+          directory == "/" || File.exist?(File.join(directory, 'wp-config.php'))
         end
 
         def upper_dir(directory)
@@ -79,6 +74,7 @@ module Wordmove
       end
 
       def remote_get_directory(directory); end
+
       def remote_put_directory(directory); end
 
       %w(uploads themes plugins languages).each do |task|
@@ -126,14 +122,14 @@ module Wordmove
       protected
 
       def paths_to_exclude
-        remote_options[:exclude] || Array.new
+        remote_options[:exclude] || []
       end
 
       def run(command)
         logger.task_step true, command
         unless simulate?
           system(command)
-          raise ShellCommandError, "Return code reports an error" unless $?.success?
+          raise ShellCommandError, "Return code reports an error" unless $CHILD_STATUS.success?
         end
       end
 
@@ -150,13 +146,14 @@ module Wordmove
         options[:simulate]
       end
 
-      [ WordpressDirectory::PATH::WP_CONTENT,
+      [
+        WordpressDirectory::PATH::WP_CONTENT,
         WordpressDirectory::PATH::PLUGINS,
         WordpressDirectory::PATH::THEMES,
         WordpressDirectory::PATH::UPLOADS,
         WordpressDirectory::PATH::LANGUAGES
       ].each do |type|
-        [ :remote, :local ].each do |location|
+        [:remote, :local].each do |location|
           define_method "#{location}_#{type}_dir" do
             options = send("#{location}_options")
             WordpressDirectory.new(type, options)
@@ -167,19 +164,21 @@ module Wordmove
       def adapt_sql(save_to_path, local, remote)
         unless options[:no_adapt]
           logger.task_step true, "adapt dump"
-          unless simulate?
-            SqlAdapter.new(save_to_path, local, remote).adapt!
-          end
+          SqlAdapter.new(save_to_path, local, remote).adapt! unless simulate?
         end
       end
 
       def mysql_dump_command(options, save_to_path)
-        command = [ "mysqldump" ]
+        command = ["mysqldump"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
-        command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
-        command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
+        if options[:password].present?
+          command << "--password=#{Shellwords.escape(options[:password])}"
+        end
+        if options[:charset].present?
+          command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
+        end
         command << Shellwords.escape(options[:name])
         command << "--result-file=#{Shellwords.escape(save_to_path)}"
         puts command.join(" ")
@@ -187,12 +186,16 @@ module Wordmove
       end
 
       def mysql_import_command(dump_path, options)
-        command = [ "mysql" ]
+        command = ["mysql"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
-        command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
-        command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
+        if options[:password].present?
+          command << "--password=#{Shellwords.escape(options[:password])}"
+        end
+        if options[:charset].present?
+          command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
+        end
         command << "--database=#{Shellwords.escape(options[:name])}"
         command << "--execute=#{Shellwords.escape("SOURCE #{dump_path}")}"
         puts command.join(" ")
@@ -216,6 +219,5 @@ module Wordmove
         options[:local].clone
       end
     end
-
   end
 end

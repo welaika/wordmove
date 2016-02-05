@@ -28,7 +28,7 @@ module Wordmove
       end
 
       def wp_config_exists?
-        File.exists?(WordpressDirectory.default_path_for(:wp_config))
+        File.exist?(WordpressDirectory.default_path_for(:wp_config))
       end
     end
 
@@ -78,8 +78,6 @@ module Wordmove
           end
         end
       end
-
     end
   end
 end
-

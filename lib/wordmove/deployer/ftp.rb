@@ -1,7 +1,6 @@
 module Wordmove
   module Deployer
     class FTP < Base
-
       def initialize(environment, options)
         super
         ftp_options = remote_options[:ftp]
@@ -52,22 +51,18 @@ module Wordmove
 
       %w(get get_directory put_directory delete).each do |command|
         define_method "remote_#{command}" do |*args|
-          logger.task_step false, "#{command}: #{args.join(" ")}"
-          unless simulate?
-            @copier.send(command, *args)
-          end
+          logger.task_step false, "#{command}: #{args.join(' ')}"
+          @copier.send(command, *args) unless simulate?
         end
       end
 
       def remote_put(thing, path)
-        if File.exists?(thing)
+        if File.exist?(thing)
           logger.task_step false, "copying #{thing} to #{path}"
         else
           logger.task_step false, "write #{path}"
         end
-        unless simulate?
-          @copier.put(thing, path)
-        end
+        @copier.put(thing, path) unless simulate?
       end
 
       def escape_php(string)
@@ -75,7 +70,7 @@ module Wordmove
 
         # replaces \ with \\
         # replaces ' with \'
-        string.gsub('\\','\\\\\\').gsub(/[']/, '\\\\\'')
+        string.gsub('\\', '\\\\\\').gsub(/[']/, '\\\\\'')
       end
 
       def generate_dump_script(db, password)
@@ -97,7 +92,7 @@ module Wordmove
         # upload the dump script
         remote_put(dump_script, remote_dump_script)
         # download the resulting dump (using the password)
-        dump_url = "#{remote_wp_content_dir.url("dump.php")}?shared_key=#{one_time_password}"
+        dump_url = "#{remote_wp_content_dir.url('dump.php')}?shared_key=#{one_time_password}"
         download(dump_url, local_dump_path)
         # remove it remotely
         remote_delete(remote_dump_script)
@@ -113,14 +108,16 @@ module Wordmove
         # upload import script
         remote_put(import_script, remote_import_script_path)
         # run import script
-        import_url = "#{remote_wp_content_dir.url("import.php")}?shared_key=#{one_time_password}&start=1&foffset=0&totalqueries=0&fn=dump.sql"
+        import_url = [
+          remote_wp_content_dir.url('import.php').to_s,
+          "?shared_key=#{one_time_password}",
+          "&start=1&foffset=0&totalqueries=0&fn=dump.sql"
+        ].join
         download(import_url, temp_path)
         run rm_command(temp_path)
         # remove script remotely
         remote_delete(remote_import_script_path)
       end
-
     end
   end
 end
-
