@@ -24,6 +24,5 @@ module Wordmove
       result = MAX_LINE - line.length
       result > 0 ? result : 0
     end
-
   end
 end

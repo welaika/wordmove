@@ -1,5 +1,4 @@
 describe Wordmove::Generators::Movefile do
-
   let(:movefile) { 'Movefile' }
   let(:tmpdir) { "/tmp/wordmove" }
 
@@ -20,16 +19,16 @@ describe Wordmove::Generators::Movefile do
     end
 
     it 'creates a Movefile' do
-      expect(File.exists?(movefile)).to be true
+      expect(File.exist?(movefile)).to be true
     end
 
     it 'fills local wordpress_path using shell path' do
-      yaml = YAML::load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['wordpress_path']).to eq(Dir.pwd)
     end
 
     it 'fills database configuration defaults' do
-      yaml = YAML::load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['database']['name']).to eq('database_name')
       expect(yaml['local']['database']['user']).to eq('user')
       expect(yaml['local']['database']['password']).to eq('password')
@@ -46,7 +45,7 @@ describe Wordmove::Generators::Movefile do
     end
 
     it 'fills database configuration from wp-config' do
-      yaml = YAML::load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['database']['name']).to eq('wordmove_db')
       expect(yaml['local']['database']['user']).to eq('wordmove_user')
       expect(yaml['local']['database']['password']).to eq('wordmove_password')

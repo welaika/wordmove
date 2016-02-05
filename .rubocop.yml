@@ -1,0 +1,35 @@
+Rails:
+  Enabled: true
+
+Rails/Output:
+  Enabled: false
+
+AllCops:
+  TargetRubyVersion: 2.2
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+  Exclude:
+    - 'bin/*'
+
+Metrics/LineLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/ClassLength:
+  Max: 200
+
+Style/StringLiterals:
+  Enabled: false
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 35

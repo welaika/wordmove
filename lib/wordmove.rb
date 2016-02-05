@@ -1,3 +1,5 @@
+require 'English'
+
 require 'thor'
 require 'thor/group'
 require 'colorize'

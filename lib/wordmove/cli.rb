@@ -1,6 +1,6 @@
 module Wordmove
   class CLI < Thor
-    map %w[--version -v] => :__print_version
+    map %w(--version -v) => :__print_version
 
     desc "--version, -v", "Print the version"
     def __print_version
@@ -32,9 +32,7 @@ module Wordmove
     no_tasks do
       def handle_options(options)
         %w(wordpress uploads themes plugins languages db).map(&:to_sym).each do |task|
-          if options[task] || options[:all]
-            yield task
-          end
+          yield task if options[task] || options[:all]
         end
       end
     end
@@ -60,6 +58,5 @@ module Wordmove
         deployer.send("push_#{task}")
       end
     end
-
   end
 end
