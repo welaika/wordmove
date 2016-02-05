@@ -84,6 +84,9 @@ production:
     user: "user"
 ```
 
+We warmly **recommend** to read the wiki article [Multiple environments explained
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
+
 ## Supports
 ### OS
 
