@@ -78,7 +78,7 @@ production:
     - "Movefile"
     - "wp-config.php"
     - "wp-content/*.sql"
-    
+
   ssh:
     host: "host"
     user: "user"
