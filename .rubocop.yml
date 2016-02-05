@@ -1,6 +1,9 @@
 Rails:
   Enabled: true
 
+Rails/Output:
+  Enabled: false
+
 AllCops:
   TargetRubyVersion: 2.2
   DisplayCopNames: true
@@ -15,6 +18,9 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Max: 15
 
+Metrics/ClassLength:
+  Max: 200
+
 Style/StringLiterals:
   Enabled: false
   EnforcedStyle: double_quotes
@@ -26,4 +32,4 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 18
+  Max: 35
