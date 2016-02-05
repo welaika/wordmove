@@ -84,7 +84,6 @@ production:
     user: "user"
 ```
 
-<<<<<<< dc191a1c1349dd85a6f05056436191130a8de180
 We warmly **recommend** to read the wiki article [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
 
@@ -123,42 +122,6 @@ will push your local database to the staging environment only.
 We warmly **recommend** to read the wiki article: [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
-=======
-## Supports
-### OS
-
-OS X and Linux are fully supported.
-
-See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wiki/Windows-(un)support-disclaimer)
-
-### SSH
-
-* You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
-* if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `Movefile`. Easy peasy.
-* writing the password inside the move file was and is somewhat supported, but we discourage this practice in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
-
-### FTP
-
-* You need to install `lftp` on your machine. See community wiki article: [Install lftp on OSX yosemite](https://github.com/welaika/wordmove/wiki/Install-lftp-on-OSX-yosemite)).
-* Use the relative FTP path as `production.wordpress_path`
-* Use the absolute FTP path as `production.wordpress_absolute_path` (you may need to recover this from the `__FILE__` [magic constant](http://php.net/manual/en/language.constants.predefined.php)
-* if you want to specify a passive FTP connection add to the YAML config a `production.ftp.passive` flag and set it to `true`.
-
-### Multistage
-
-You can define multiple environments in your `Movefile`, such as production, staging, etc.
-Use `-e` with `pull` or `push` to run the command on the specified environment.
-
-For example:
-```
-wordmove push -e staging -d
-```
-will push your local database to the staging environment only.
-
-We warmly **recommend** to read the wiki article: [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
-
->>>>>>> updated readme
 ## Notes
 ### How the heck you are able to sync the DB via FTP?
 
