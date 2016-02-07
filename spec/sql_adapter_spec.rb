@@ -41,6 +41,42 @@ describe Wordmove::SqlAdapter do
     end
   end
 
+  context ".replace_vhost!" do
+    let(:sql) do
+      Tempfile.new('sql').tap do |d|
+        d.write(File.read(fixture_path_for('dump.sql')))
+        d.close
+      end
+    end
+    let(:sql_path) { sql.path }
+
+    context "with port" do
+      let(:source_config) { { vhost: 'localhost:8080' } }
+      let(:dest_config) { { vhost: 'foo.bar:8181' } }
+
+      it "should replace domain and port" do
+        adapter.replace_vhost!
+        adapter.write_sql!
+
+        expect(File.read(sql)).to match('foo.bar:8181')
+        expect(File.read(sql)).to_not match('localhost:8080')
+      end
+    end
+
+    context "without port" do
+      let(:source_config) { { vhost: 'localhost' } }
+      let(:dest_config) { { vhost: 'foo.bar' } }
+
+      it "should replace domain leving port unaltered" do
+        adapter.replace_vhost!
+        adapter.write_sql!
+
+        expect(File.read(sql)).to match('foo.bar:8080')
+        expect(File.read(sql)).to_not match('localhost:8080')
+      end
+    end
+  end
+
   describe "replace single fields" do
     context ".replace_vhost!" do
       let(:source_config) { { vhost: "DUMP" } }
