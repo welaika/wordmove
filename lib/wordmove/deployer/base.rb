@@ -180,7 +180,7 @@ module Wordmove
           command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
         end
         command << Shellwords.escape(options[:name])
-        command << "--result-file=#{Shellwords.escape(save_to_path)}"
+        command << "--result-file=\"#{save_to_path}\""
         puts command.join(" ")
         command.join(" ")
       end
