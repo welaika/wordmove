@@ -194,7 +194,7 @@ module Wordmove
         command << "--password=#{Shellwords.escape(options[:password])}" if options[:password].present?
         command << "--default-character-set=#{Shellwords.escape(options[:charset])}" if options[:charset].present?
         command << "--database=#{Shellwords.escape(options[:name])}"
-        command << "--execute=\"SET autocommit=0;SOURCE " + dump_path.gsub("\\","/") + ";COMMIT\""
+        command << "--execute=\"SET autocommit=0;SOURCE #{dump_path};COMMIT\""
         puts command.join(" ")
         command.join(" ")
       end
