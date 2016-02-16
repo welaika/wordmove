@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "priscilla", "~> 1.0"
   spec.add_development_dependency "rubocop", "~> 0.37.0"
+  spec.add_development_dependency "gem-release"
 
   spec.post_install_message = <<-RAINBOW
     Starting from 1.4.0 Wordmove will compress SQL dumps both in remote and locale environments.
