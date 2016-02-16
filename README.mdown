@@ -138,11 +138,12 @@ Visit [Wordpress Tools](http://wptools.it).
 
 ## Contribute
 
-In order to promote a simpler contribution workflow we have decided to fork the `master` branch and PR to the master
-`branch`.
+In order to promote a simpler contribution workflow we have decided to fork and PR the `master` branch.
 We will accordingly tag and release or pre-release versions to the rubygems.org repository.
 Do not consider the `dev` branch for your forks and PR.
-We will never more use version-named branches as in the past.
+We will never more use version-named branches as in the past, but we'll tag release on `master` and pre-release on `dev`.
+
+### Please, **read the full [contributor guide](https://github.com/welaika/wordmove/wiki/Contributor-Guide)**.
 
 Feel free to open an issue about contribution if more you need more info
 
