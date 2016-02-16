@@ -11,8 +11,6 @@ module Wordmove
       def copy_movefile
         template "Movefile"
       end
-
     end
   end
 end
-

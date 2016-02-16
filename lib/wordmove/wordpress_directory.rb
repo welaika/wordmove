@@ -1,5 +1,4 @@
-class WordpressDirectory < Struct.new(:type, :options)
-
+WordpressDirectory = Struct.new(:type, :options) do
   module PATH
     WP_CONTENT = :wp_content
     WP_CONFIG  = :wp_config
@@ -18,7 +17,7 @@ class WordpressDirectory < Struct.new(:type, :options)
     PATH::THEMES     => 'wp-content/themes',
     PATH::UPLOADS    => 'wp-content/uploads',
     PATH::LANGUAGES  => 'wp-content/languages'
-  }
+  }.freeze
 
   def self.default_path_for(sym)
     DEFAULT_PATHS[sym]
@@ -40,5 +39,4 @@ class WordpressDirectory < Struct.new(:type, :options)
            end
     File.join(path, *args)
   end
-
 end

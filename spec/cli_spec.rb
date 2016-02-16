@@ -1,7 +1,7 @@
 describe Wordmove::CLI do
   let(:cli) { described_class.new }
   let(:deployer) { double("deployer") }
-  let(:options) do {} end
+  let(:options) { {} }
 
   before do
     allow(Wordmove::Deployer::Base).to receive(:deployer_for).with(options).and_return(deployer)

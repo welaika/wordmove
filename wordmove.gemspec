@@ -7,14 +7,22 @@ Gem::Specification.new do |spec|
   spec.name          = "wordmove"
   spec.version       = Wordmove::VERSION
   spec.authors       = ["Stefano Verna", "Ju Liu", "Fabrizio Monti", "Alessandro Fazzi"]
-  spec.email         = ["stefano.verna@welaika.com", "ju.liu@welaika.com", "fabrizio.monti@welaika.com", "alessandro.fazzi@welaika.com"]
+  spec.email         = [
+    "stefano.verna@welaika.com",
+    "ju.liu@welaika.com",
+    "fabrizio.monti@welaika.com",
+    "alessandro.fazzi@welaika.com"
+  ]
 
-  spec.summary       = %q{Wordmove, Capistrano for Wordpress}
-  spec.description   = %q{Wordmove deploys your WordPress websites at the speed of light.}
+  spec.summary       = "Wordmove, Capistrano for Wordpress"
+  spec.description   = "Wordmove deploys your WordPress websites at the speed of light."
   spec.homepage      = "https://github.com/welaika/wordmove"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = `git ls-files -z`
+                       .split("\x0")
+                       .reject { |f| f.match(%r{^(test|spec|features)/}) }
+
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
@@ -32,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov", "~> 0.9"
   spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "priscilla", "~> 1.0"
+  spec.add_development_dependency "rubocop", "~> 0.37.0"
 
   spec.post_install_message = <<-RAINBOW
     Starting from 1.4.0 Wordmove will compress SQL dumps both in remote and locale environments.
