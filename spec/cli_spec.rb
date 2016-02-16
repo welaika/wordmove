@@ -15,7 +15,7 @@ describe Wordmove::CLI do
   end
 
   context "--all" do
-    let(:options) do { "all" => true } end
+    let(:options) { { "all" => true } }
     let(:ordered_components) { %w(wordpress uploads themes plugins mu_plugins languages db) }
 
     context "#pull" do

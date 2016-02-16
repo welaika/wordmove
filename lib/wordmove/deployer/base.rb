@@ -180,9 +180,10 @@ module Wordmove
         if options[:charset].present?
           command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
         end
-        command << Shellwords.escape(options[:name])
         command << "--result-file=#{Shellwords.escape(save_to_path)}"
-        command << Shellwords.split(options[:mysqldump_options]) if options[:mysqldump_options].present?
+        if options[:mysqldump_options].present?
+          command << Shellwords.split(options[:mysqldump_options])
+        end
         command << Shellwords.escape(options[:name])
         puts command.join(" ")
         command.join(" ")
