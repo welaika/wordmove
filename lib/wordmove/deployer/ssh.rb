@@ -12,10 +12,10 @@ module Wordmove
 
         local_dump_path = local_wp_content_dir.path("dump.sql")
         local_gzipped_dump_path = local_dump_path + '.gz'
-        local_gizipped_backup_path = local_wp_content_dir
+        local_gzipped_backup_path = local_wp_content_dir
                                      .path("#{environment}-backup-#{Time.now.to_i}.sql.gz")
 
-        download_remote_db(local_gizipped_backup_path)
+        download_remote_db(local_gzipped_backup_path)
 
         save_local_db(local_dump_path)
         adapt_sql(local_dump_path, local_options, remote_options)
