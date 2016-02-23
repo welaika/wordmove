@@ -1,20 +1,20 @@
-WordpressDirectory = Struct.new(:type, :options) do
-  module PATH
-    WP_CONTENT = :wp_content
-    WP_CONFIG  = :wp_config
-    PLUGINS    = :plugins
-    THEMES     = :themes
-    UPLOADS    = :uploads
-    LANGUAGES  = :languages
+require 'wordmove/wordpress_directory/path'
+
+class WordpressDirectory
+  attr_accessor :type, :options
+
+  def initialize(type, options)
+    @type = type
+    @options = options
   end
 
   DEFAULT_PATHS = {
-    PATH::WP_CONTENT => 'wp-content',
-    PATH::WP_CONFIG  => 'wp-config.php',
-    PATH::PLUGINS    => 'wp-content/plugins',
-    PATH::THEMES     => 'wp-content/themes',
-    PATH::UPLOADS    => 'wp-content/uploads',
-    PATH::LANGUAGES  => 'wp-content/languages'
+    Path::WP_CONTENT => 'wp-content',
+    Path::WP_CONFIG  => 'wp-config.php',
+    Path::PLUGINS    => 'wp-content/plugins',
+    Path::THEMES     => 'wp-content/themes',
+    Path::UPLOADS    => 'wp-content/uploads',
+    Path::LANGUAGES  => 'wp-content/languages'
   }.freeze
 
   def self.default_path_for(sym)
