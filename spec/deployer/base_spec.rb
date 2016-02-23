@@ -186,13 +186,13 @@ describe Wordmove::Deployer::Base do
   context "#uncompress_command" do
     let(:deployer) { described_class.new(:dummy_env) }
 
-    it "cerates a valid gunzip command" do
+    it "creates a valid gzip deflate command" do
       command = deployer.send(
         :uncompress_command,
         "dummy file.sql"
       )
 
-      expect(command).to eq("gunzip dummy\\ file.sql")
+      expect(command).to eq("gzip -d dummy\\ file.sql")
     end
   end
 end

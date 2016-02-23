@@ -45,8 +45,8 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = <<-RAINBOW
     Starting from 1.4.0 Wordmove will compress SQL dumps both in remote and locale environments.
-    If something will broke, please check if gzip and gunzip executables are present locally and
-    remotely. We are considering obviuos they are installed in any web environment.
+    If something will broke, please check if gzip executable is present locally and
+    remotely. We are considering obvious it's installed in any web environment.
     Open an issue on github at your needs.
   RAINBOW
 end
