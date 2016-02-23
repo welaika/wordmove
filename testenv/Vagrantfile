@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.define "workplace" do |workplace|
+    workplace.vm.box_check_update = false
+    workplace.vm.box = "ubuntu/trusty64"
+    workplace.vm.network "private_network", ip: "192.168.50.91"
+    workplace.vm.provision "shell", inline: <<-WKSHELL
+      sudo apt-get install -y ruby2.0
+      sudo apt-get install -y git-core
+      sudo apt-get install -y rake
+      git clone https://github.com/welaika/wordmove.git
+      cd wordmove; gem2.0 build wordmove.gemspec
+      sudo bash -c 'cd /home/vagrant/wordmove; gem2.0 uninstall wordmove'
+      sudo bash -c 'cd /home/vagrant/wordmove; gem2.0 install wordmove*.gem'
+      curl 'http://192.168.50.91/wordpress/wp-admin/install.php?step=2' -d weblog_title='WordMove Test' -d user_name='admin' -d admin_password='admin' -d pass1-text='admin' -d admin_password2='admin' -d admin_email='admin@admin.org' -d Submit='Install WordPress'
+    WKSHELL
+    workplace.vm.provision "file", source: "Movefile", destination: "Movefile"
+  end
+
+  config.vm.define "prodplace" do |prodplace|
+    prodplace.vm.box_check_update = false
+    prodplace.vm.box = "ubuntu/trusty64"
+    prodplace.vm.network "private_network", ip: "192.168.50.92"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password dbpass'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password dbpass'
+    sudo apt-get install -y mysql-server
+    sudo apt-get install -y apache2
+    sudo apt-get install -y unzip
+    sudo apt-get install -y php5-common php5-cli php5-fpm libssh2-php
+    sudo apt-get install -y curl php5-curl php5-gd php5-mcrypt php5-mysql php5-gd
+    sudo apt-get install -y libapache2-mod-php5
+    sudo apt-get install -y links
+    sudo a2enmod rewrite
+    mysql -e "CREATE DATABASE wordpress_db" -u root --password=dbpass
+    cd /var/www/html; sudo curl -O 'https://wordpress.org/latest.zip'
+    cd /var/www/html; sudo unzip latest.zip
+    sudo echo "" > /var/www/html/wordpress/wp-config.php
+    echo "<?php" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_NAME', 'wordpress_db');" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_USER', 'root');" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_PASSWORD', 'dbpass');" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_HOST', 'localhost');" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_CHARSET', 'utf8');" >> /var/www/html/wordpress/wp-config.php
+    echo "define('DB_COLLATE', '');" >> /var/www/html/wordpress/wp-config.php
+    curl "https://api.wordpress.org/secret-key/1.1/salt/" >> /var/www/html/wordpress/wp-config.php
+    echo "define('WP_DEBUG', false);" >> /var/www/html/wordpress/wp-config.php
+    echo '$table_prefix  = "wp_";' >> /var/www/html/wordpress/wp-config.php
+    echo "if ( !defined('ABSPATH') ) define('ABSPATH', dirname(__FILE__) . '/');" >> /var/www/html/wordpress/wp-config.php
+    echo "require_once(ABSPATH . 'wp-settings.php');" >> /var/www/html/wordpress/wp-config.php
+    sudo chown www-data:www-data /var/www/html/wordpress
+    sudo chmod -R 777 /var/www/html/wordpress  # lazy... just make everything writable by everyone
+    sudo service apache2 restart
+  SHELL
+end

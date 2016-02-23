@@ -1,0 +1,35 @@
+local:
+  vhost: "http://192.168.50.91"
+  wordpress_path: "/var/www/html/wordpress"
+
+  database:
+    name: "wordpress_db"
+    user: "root"
+    password: "dbpass"
+    host: "127.0.0.1"
+
+production:
+  vhost: "http://192.168.50.92"
+  wordpress_path: "/var/www/html/wordpress"
+
+  database:
+    name: "wordpress_db"
+    user: "root"
+    password: "dbpass"
+    host: "127.0.0.1"
+
+  exclude:
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "bin/"
+    - "tmp/*"
+    - "Gemfile*"
+    - "Movefile"
+    - "wp-config.php"
+    - "wp-content/*.sql"
+
+  ssh:
+    host: "192.168.50.92"
+    user: "vagrant"
+    password: "vagrant"
