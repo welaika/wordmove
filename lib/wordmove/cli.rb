@@ -46,6 +46,10 @@ module Wordmove
         puts "No options given. See wordmove --help"
         exit 1
       end
+
+      def logger
+        Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+      end
     end
 
     desc "pull", "Pulls WP data from remote host to the local machine"
@@ -54,7 +58,12 @@ module Wordmove
     end
     def pull
       ensure_wordpress_options_presence!(options)
-      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      begin
+        deployer = Wordmove::Deployer::Base.deployer_for(options)
+      rescue MovefileNotFound => e
+        logger.error(e.message)
+        exit 1
+      end
       handle_options(options) do |task|
         deployer.send("pull_#{task}")
       end
@@ -66,7 +75,12 @@ module Wordmove
     end
     def push
       ensure_wordpress_options_presence!(options)
-      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      begin
+        deployer = Wordmove::Deployer::Base.deployer_for(options)
+      rescue MovefileNotFound => e
+        logger.error(e.message)
+        exit 1
+      end
       handle_options(options) do |task|
         deployer.send("push_#{task}")
       end
