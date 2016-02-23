@@ -130,7 +130,7 @@ describe Wordmove::Deployer::Base do
           [
             "mysqldump --host=localhost",
             "--port=8888 --user=root --password=\\'\\\"\\$ciao",
-            "--default-character-set=utf8 database_name --result-file=./mysql\\ dump.sql"
+            "--default-character-set=utf8 database_name --result-file=\"./mysql dump.sql\""
           ].join(' ')
         )
       )
