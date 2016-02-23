@@ -18,6 +18,10 @@ module Wordmove
       end
     end
 
+    def error(msg)
+      puts "ERROR: ".red + msg.black
+    end
+
     private
 
     def padding_length(line)

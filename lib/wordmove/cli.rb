@@ -17,6 +17,7 @@ module Wordmove
       uploads:     { aliases: "-u", type: :boolean },
       themes:      { aliases: "-t", type: :boolean },
       plugins:     { aliases: "-p", type: :boolean },
+      mu_plugins:  { aliases: "-m", type: :boolean },
       languages:   { aliases: "-l", type: :boolean },
       db:          { aliases: "-d", type: :boolean },
 
@@ -31,9 +32,23 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
-        %w(wordpress uploads themes plugins languages db).map(&:to_sym).each do |task|
-          yield task if options[task] || options[:all]
+        wordpress_options.each do |task|
+          yield task if options[task] || options["all"]
         end
+      end
+
+      def wordpress_options
+        %w(wordpress uploads themes plugins mu_plugins languages db)
+      end
+
+      def ensure_wordpress_options_presence!(options)
+        return if (options.keys & (wordpress_options + ["all"])).present?
+        puts "No options given. See wordmove --help"
+        exit 1
+      end
+
+      def logger
+        Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
       end
     end
 
@@ -42,7 +57,13 @@ module Wordmove
       method_option option, args
     end
     def pull
-      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      ensure_wordpress_options_presence!(options)
+      begin
+        deployer = Wordmove::Deployer::Base.deployer_for(options)
+      rescue MovefileNotFound => e
+        logger.error(e.message)
+        exit 1
+      end
       handle_options(options) do |task|
         deployer.send("pull_#{task}")
       end
@@ -53,7 +74,13 @@ module Wordmove
       method_option option, args
     end
     def push
-      deployer = Wordmove::Deployer::Base.deployer_for(options)
+      ensure_wordpress_options_presence!(options)
+      begin
+        deployer = Wordmove::Deployer::Base.deployer_for(options)
+      rescue MovefileNotFound => e
+        logger.error(e.message)
+        exit 1
+      end
       handle_options(options) do |task|
         deployer.send("push_#{task}")
       end

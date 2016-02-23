@@ -121,18 +121,19 @@ describe Wordmove::Deployer::Base do
           user: "root",
           password: "'\"$ciao",
           charset: "utf8",
-          name: "database_name"
+          name: "database_name",
+          mysqldump_options: "--max_allowed_packet=1G --no-create-db"
         },
         "./mysql dump.sql"
       )
-      expect(command).to(
-        eq(
-          [
-            "mysqldump --host=localhost",
-            "--port=8888 --user=root --password=\\'\\\"\\$ciao",
-            "--default-character-set=utf8 database_name --result-file=\"./mysql dump.sql\""
-          ].join(' ')
-        )
+
+      expect(command).to eq(
+        [
+          "mysqldump --host=localhost",
+          "--port=8888 --user=root --password=\\'\\\"\\$ciao",
+          "--default-character-set=utf8 --result-file=\"./mysql dump.sql\"",
+          "--max_allowed_packet=1G --no-create-db database_name"
+        ].join(' ')
       )
     end
   end
@@ -166,6 +167,32 @@ describe Wordmove::Deployer::Base do
           "--database=database_name --execute=\"SET autocommit=0;SOURCE ./my dump.sql;COMMIT\""
         ].join(" ")
       )
+    end
+  end
+
+  context "#compress_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "cerates a valid gzip command" do
+      command = deployer.send(
+        :compress_command,
+        "dummy file.sql"
+      )
+
+      expect(command).to eq("gzip --best --force dummy\\ file.sql")
+    end
+  end
+
+  context "#uncompress_command" do
+    let(:deployer) { described_class.new(:dummy_env) }
+
+    it "creates a valid gunzip command" do
+      command = deployer.send(
+        :uncompress_command,
+        "dummy file.sql"
+      )
+
+      expect(command).to eq("gzip -d --force dummy\\ file.sql")
     end
   end
 end

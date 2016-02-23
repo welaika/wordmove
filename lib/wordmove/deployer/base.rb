@@ -77,7 +77,7 @@ module Wordmove
 
       def remote_put_directory(directory); end
 
-      %w(uploads themes plugins languages).each do |task|
+      %w(uploads themes plugins mu_plugins languages).each do |task|
         define_method "push_#{task}" do
           logger.task "Pushing #{task.titleize}"
           local_path = send("local_#{task}_dir").path
@@ -179,8 +179,11 @@ module Wordmove
         if options[:charset].present?
           command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
         end
-        command << Shellwords.escape(options[:name])
         command << "--result-file=\"#{save_to_path}\""
+        if options[:mysqldump_options].present?
+          command << Shellwords.split(options[:mysqldump_options])
+        end
+        command << Shellwords.escape(options[:name])
         puts command.join(" ")
         command.join(" ")
       end
@@ -198,6 +201,24 @@ module Wordmove
         end
         command << "--database=#{Shellwords.escape(options[:name])}"
         command << "--execute=\"SET autocommit=0;SOURCE #{dump_path};COMMIT\""
+        puts command.join(" ")
+        command.join(" ")
+      end
+
+      def compress_command(path)
+        command = ["gzip"]
+        command << "--best"
+        command << "--force"
+        command << Shellwords.escape(path)
+        puts command.join(" ")
+        command.join(" ")
+      end
+
+      def uncompress_command(path)
+        command = ["gzip"]
+        command << "-d"
+        command << "--force"
+        command << Shellwords.escape(path)
         puts command.join(" ")
         command.join(" ")
       end

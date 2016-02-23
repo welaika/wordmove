@@ -67,6 +67,7 @@ production:
     password: "password"
     host: "host"
     # port: "3308" # Use just in case you have exotic server config
+    # mysqldump_options: "--max_allowed_packet=50MB" # Only available if using SSH
 
   exclude:
     - ".git/"
@@ -173,4 +174,3 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

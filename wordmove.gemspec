@@ -41,4 +41,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "priscilla", "~> 1.0"
   spec.add_development_dependency "rubocop", "~> 0.37.0"
+  spec.add_development_dependency "gem-release"
+
+  spec.post_install_message = <<-RAINBOW
+    Starting from 1.4.0 Wordmove will compress SQL dumps both in remote and locale environments.
+    If something will broke, please check if gzip executable is present locally and
+    remotely. We are considering obvious it's installed in any web environment.
+    Open an issue on github at your needs.
+  RAINBOW
 end
