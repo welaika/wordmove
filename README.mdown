@@ -120,7 +120,6 @@ wordmove push -e staging -d
 ```
 will push your local database to the staging environment only.
 
->>>>>>> updated readme
 We warmly **recommend** to read the wiki article: [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
