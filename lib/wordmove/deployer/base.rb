@@ -216,7 +216,8 @@ module Wordmove
       end
 
       def uncompress_command(path)
-        command = ["gunzip"]
+        command = ["gzip"]
+        command << "-d"
         command << "--force"
         command << Shellwords.escape(path)
         puts command.join(" ")

@@ -192,7 +192,7 @@ describe Wordmove::Deployer::Base do
         "dummy file.sql"
       )
 
-      expect(command).to eq("gunzip --force dummy\\ file.sql")
+      expect(command).to eq("gzip -d --force dummy\\ file.sql")
     end
   end
 end
