@@ -147,11 +147,11 @@ module Wordmove
       end
 
       [
-        WordpressDirectory::PATH::WP_CONTENT,
-        WordpressDirectory::PATH::PLUGINS,
-        WordpressDirectory::PATH::THEMES,
-        WordpressDirectory::PATH::UPLOADS,
-        WordpressDirectory::PATH::LANGUAGES
+        WordpressDirectory::Path::WP_CONTENT,
+        WordpressDirectory::Path::PLUGINS,
+        WordpressDirectory::Path::THEMES,
+        WordpressDirectory::Path::UPLOADS,
+        WordpressDirectory::Path::LANGUAGES
       ].each do |type|
         [:remote, :local].each do |location|
           define_method "#{location}_#{type}_dir" do
