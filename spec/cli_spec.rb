@@ -14,6 +14,22 @@ describe Wordmove::CLI do
     end
   end
 
+  context "#pull" do
+    context "without a movefile" do
+      it "it rescues from a MovefileNotFound exception" do
+        expect { cli.invoke(:pull, []) }.to raise_error SystemExit
+      end
+    end
+  end
+
+  context "#push" do
+    context "without a movefile" do
+      it "it rescues from a MovefileNotFound exception" do
+        expect { cli.invoke(:pull, []) }.to raise_error SystemExit
+      end
+    end
+  end
+
   context "--all" do
     let(:options) { { "all" => true } }
     let(:ordered_components) { %w(wordpress uploads themes plugins mu_plugins languages db) }
