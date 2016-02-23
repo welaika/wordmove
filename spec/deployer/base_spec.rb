@@ -179,7 +179,7 @@ describe Wordmove::Deployer::Base do
         "dummy file.sql"
       )
 
-      expect(command).to eq("gzip --best dummy\\ file.sql")
+      expect(command).to eq("gzip --best --force dummy\\ file.sql")
     end
   end
 
@@ -192,7 +192,7 @@ describe Wordmove::Deployer::Base do
         "dummy file.sql"
       )
 
-      expect(command).to eq("gzip -d dummy\\ file.sql")
+      expect(command).to eq("gzip -d --force dummy\\ file.sql")
     end
   end
 end
