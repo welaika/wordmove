@@ -78,6 +78,10 @@ production:
     - "Movefile"
     - "wp-config.php"
     - "wp-content/*.sql"
+    
+  ssh:
+    host: "host"
+    user: "user"
 ```
 
 We warmly **recommend** to read the wiki article [Multiple environments explained
