@@ -18,8 +18,8 @@ module Wordmove
       end
     end
 
-    def error(msg)
-      puts "ERROR: ".red + msg.black
+    def error(message)
+      puts "    error".red + " | ".black + message
     end
 
     def debug(message)
