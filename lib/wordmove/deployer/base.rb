@@ -184,7 +184,6 @@ module Wordmove
           command << Shellwords.split(options[:mysqldump_options])
         end
         command << Shellwords.escape(options[:name])
-        puts command.join(" ")
         command.join(" ")
       end
 
@@ -201,7 +200,6 @@ module Wordmove
         end
         command << "--database=#{Shellwords.escape(options[:name])}"
         command << "--execute=\"SET autocommit=0;SOURCE #{dump_path};COMMIT\""
-        puts command.join(" ")
         command.join(" ")
       end
 
