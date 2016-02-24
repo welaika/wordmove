@@ -25,6 +25,7 @@ module Wordmove
       simulate:    { aliases: "-s", type: :boolean },
       environment: { aliases: "-e" },
       config:      { aliases: "-c" },
+      debug:       { type: :boolean },
 
       no_adapt:    { type: :boolean },
       all:         { type: :boolean }
