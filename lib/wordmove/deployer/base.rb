@@ -207,7 +207,7 @@ module Wordmove
         command = ["gzip"]
         command << "--best"
         command << "--force"
-        command << Shellwords.escape(path)
+        command << "\"#{path}\""
         puts command.join(" ")
         command.join(" ")
       end
@@ -216,13 +216,13 @@ module Wordmove
         command = ["gzip"]
         command << "-d"
         command << "--force"
-        command << Shellwords.escape(path)
+        command << "\"#{path}\""
         puts command.join(" ")
         command.join(" ")
       end
 
       def rm_command(path)
-        "rm #{Shellwords.escape(path)}"
+        File.delete(path)
       end
 
       def save_local_db(local_dump_path)

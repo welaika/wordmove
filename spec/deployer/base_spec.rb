@@ -139,10 +139,15 @@ describe Wordmove::Deployer::Base do
   end
 
   context "#rm_command" do
+    before do
+      @test_dir = "/tmp/wordmove.delete"
+      FileUtils.mkdir(@test_dir)
+      FileUtils.touch(File.join(@test_dir, "my dump.sql"))
+    end
     let(:deployer) { described_class.new(:dummy_env) }
 
     it "creates a valid shell rm command" do
-      expect(deployer.send(:rm_command, "/var/my dump.sql")).to eq("rm /var/my\\ dump.sql")
+      expect(deployer.send(:rm_command, File.join(@test_dir, "my dump.sql"))).to eq(1)
     end
   end
 
@@ -179,7 +184,7 @@ describe Wordmove::Deployer::Base do
         "dummy file.sql"
       )
 
-      expect(command).to eq("gzip --best --force dummy\\ file.sql")
+      expect(command).to eq("gzip --best --force \"dummy file.sql\"")
     end
   end
 
@@ -192,7 +197,7 @@ describe Wordmove::Deployer::Base do
         "dummy file.sql"
       )
 
-      expect(command).to eq("gzip -d --force dummy\\ file.sql")
+      expect(command).to eq("gzip -d --force \"dummy file.sql\"")
     end
   end
 end
