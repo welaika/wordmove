@@ -22,6 +22,10 @@ module Wordmove
       puts "ERROR: ".red + msg.black
     end
 
+    def debug(message)
+      puts "    debug".magenta + " | ".black + message
+    end
+
     private
 
     def padding_length(line)

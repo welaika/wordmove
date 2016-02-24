@@ -44,7 +44,11 @@ module Wordmove
         run mysql_import_command(local_dump_path, local_options[:database])
 
         # and locally
-        run rm_command(local_dump_path)
+        if options[:debug]
+          logger.debug "Remote dump located at: #{local_dump_path}"
+        else
+          run rm_command(local_dump_path)
+        end
       end
 
       private
@@ -99,7 +103,7 @@ module Wordmove
       end
 
       def import_remote_dump
-        temp_path = local_wp_content_dir.path("temp.txt")
+        temp_path = local_wp_content_dir.path("log.html")
         remote_import_script_path = remote_wp_content_dir.path("import.php")
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
@@ -114,7 +118,11 @@ module Wordmove
           "&start=1&foffset=0&totalqueries=0&fn=dump.sql"
         ].join
         download(import_url, temp_path)
-        run rm_command(temp_path)
+        if options[:debug]
+          logger.debug "Operation log located at: #{temp_path}"
+        else
+          run rm_command(temp_path)
+        end
         # remove script remotely
         remote_delete(remote_import_script_path)
       end
