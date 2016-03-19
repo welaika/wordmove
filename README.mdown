@@ -59,6 +59,14 @@ local:
     user: "user"
     password: "password"
     host: "127.0.0.1"
+    
+  # paths: # you can customize wordpress internal paths
+  #   wp_content: "wp-content"
+  #   uploads: "wp-content/uploads"
+  #   plugins: "wp-content/plugins"
+  #   themes: "wp-content/themes"
+  #   languages: "wp-content/languages"
+  #   themes: "wp-content/themes"
 
 production:
   vhost: "http://example.com"
@@ -111,6 +119,9 @@ production:
 # staging: # multiple environments can be specified
 #   [...]
 ```
+
+## Altering WordPress paths
+If you have changed the name of your wp-content folder to something else. You must state this in the Wordmove file for every environment.
 
 ## SSH support
 
