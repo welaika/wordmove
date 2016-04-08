@@ -223,7 +223,7 @@ module Wordmove
       end
 
       def local_delete(path)
-        logger.task_step true, "delete '#{path}'"
+        logger.task_step true, "delete: '#{path}'"
         File.delete(path)
       end
 
