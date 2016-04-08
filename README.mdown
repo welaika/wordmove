@@ -57,6 +57,13 @@ local:
     password: "password"
     host: "127.0.0.1"
 
+  # paths: # you can customize wordpress internal paths
+  #   wp_content: "wp-content"
+  #   uploads: "wp-content/uploads"
+  #   plugins: "wp-content/plugins"
+  #   themes: "wp-content/themes"
+  #   languages: "wp-content/languages"
+
 production:
   vhost: "http://example.com"
   wordpress_path: "/var/www/your_site" # use an absolute path here
@@ -89,6 +96,7 @@ We warmly **recommend** to read the wiki article [Multiple environments explaine
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
 
 ## Supports
+
 ### OS
 
 OS X and Linux are fully supported.
@@ -125,6 +133,7 @@ We warmly **recommend** to read the wiki article: [Multiple environments explain
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
 ## Notes
+
 ### How the heck you are able to sync the DB via FTP?
 
 We're glad you asked! We basically upload via FTP a PHP script that performs the various
