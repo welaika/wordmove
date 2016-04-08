@@ -12,18 +12,18 @@ module Wordmove
 
     def task_step(local_step, title)
       if local_step
-        puts "    local".cyan + " | ".black + title
+        puts "    local".cyan + " | ".black + title.to_s
       else
-        puts "   remote".yellow + " | ".black + title
+        puts "   remote".yellow + " | ".black + title.to_s
       end
     end
 
     def error(message)
-      puts "    error".red + " | ".black + message
+      puts "    error".red + " | ".black + message.to_s
     end
 
     def debug(message)
-      puts "    debug".magenta + " | ".black + message
+      puts "    debug".magenta + " | ".black + message.to_s
     end
 
     private
