@@ -138,19 +138,6 @@ describe Wordmove::Deployer::Base do
     end
   end
 
-  context "#rm_command" do
-    before do
-      @test_dir = "/tmp/wordmove.delete"
-      FileUtils.mkdir(@test_dir)
-      FileUtils.touch(File.join(@test_dir, "my dump.sql"))
-    end
-    let(:deployer) { described_class.new(:dummy_env) }
-
-    it "creates a valid shell rm command" do
-      expect(deployer.send(:rm_command, File.join(@test_dir, "my dump.sql"))).to eq(1)
-    end
-  end
-
   context "#mysql_import_command" do
     let(:deployer) { described_class.new(:dummy_env) }
 

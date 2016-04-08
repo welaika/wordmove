@@ -21,7 +21,7 @@ module Wordmove
         adapt_sql(local_dump_path, local_options, remote_options)
         run compress_command(local_dump_path)
         import_remote_dump(local_gzipped_dump_path)
-        run rm_command(local_gzipped_dump_path)
+        local_delete(local_gzipped_dump_path)
       end
 
       def pull_db
@@ -38,7 +38,7 @@ module Wordmove
         run uncompress_command(local_gzipped_dump_path)
         adapt_sql(local_dump_path, remote_options, local_options)
         run mysql_import_command(local_dump_path, local_options[:database])
-        run rm_command(local_dump_path)
+        local_delete(local_dump_path)
       end
 
       private

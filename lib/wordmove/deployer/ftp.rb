@@ -27,7 +27,7 @@ module Wordmove
         # remove dump remotely
         remote_delete(remote_dump_path)
         # and locally
-        run rm_command(local_dump_path)
+        local_delete(local_dump_path)
       end
 
       def pull_db
@@ -47,7 +47,7 @@ module Wordmove
         if options[:debug]
           logger.debug "Remote dump located at: #{local_dump_path}"
         else
-          run rm_command(local_dump_path)
+          local_delete(local_dump_path)
         end
       end
 
@@ -121,7 +121,7 @@ module Wordmove
         if options[:debug]
           logger.debug "Operation log located at: #{temp_path}"
         else
-          run rm_command(temp_path)
+          local_delete(temp_path)
         end
         # remove script remotely
         remote_delete(remote_import_script_path)
