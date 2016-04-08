@@ -142,6 +142,11 @@ too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
 
+### Yanked versions
+
+Wordmove `1.3.1` has been removed from `rubygems` due to a bug with FTP deploying system. If you are
+using this version, please update soon (`gem update wordmove`).
+
 ## Need more tools?
 Visit [Wordpress Tools](http://wptools.it).
 

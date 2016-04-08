@@ -1,11 +1,30 @@
-# 1.4.0
+# 2.0.0
+
+## Features
 - Implemented compression of sql files before and after transfers
 - Implemented compression of sql backup files inside wp-content
-- Implemented support to mu-plugins directory. Thanks connormckelvey
-- Update `dump.php` library to support database VIEWS
+- Implemented support to mu-plugins directory
+- Updated `dump.php` library to support database VIEWS
+- Added `--debug` option: do not automatically delete FTP dumps file so you can inspect errors (if any)
+- Better support for large dbs import
+- Allow ruby code in `Movefile` (`erb`)
+- Added ability to pass mysqldump options via `mysqldump_options` in `Movefile`
 
 
-# 1.3.1
+## Bugfixes
+- Ignore php error for `date()` while dumping database via FTP
+- Better escape for Windows paths
+- Show a warning if no `Movefile` found
+- Fix ruby warnings for `PATH` module
+- Fix FTP dump bug introduced in `1.3.1`
+
+## Thanks to
+
+@amchoukir @ChuckMac @connormckelvey @delphaber @dsgnr @esad @inamoth @JimmY2K
+@kenchan0130 @matjack1 @miya0001 @Mte90 @mukkoo @pioneerskiees @spanndemic
+@StefanoOrdine @tiojoca @xrmx
+
+# 1.3.1 (yanked)
 - Fix typo in dump.php.erb
 
 # 1.3.0

@@ -6,12 +6,15 @@ require 'wordmove/version'
 Gem::Specification.new do |spec|
   spec.name          = "wordmove"
   spec.version       = Wordmove::VERSION
-  spec.authors       = ["Stefano Verna", "Ju Liu", "Fabrizio Monti", "Alessandro Fazzi"]
-  spec.email         = [
+  spec.authors       = [
+    "Stefano Verna", "Ju Liu", "Fabrizio Monti", "Alessandro Fazzi", "Filippo Gangi Dino"
+  ]
+  spec.email = [
     "stefano.verna@welaika.com",
     "ju.liu@welaika.com",
     "fabrizio.monti@welaika.com",
-    "alessandro.fazzi@welaika.com"
+    "alessandro.fazzi@welaika.com",
+    "filippo.gangidino@welaika.com"
   ]
 
   spec.summary       = "Wordmove, Capistrano for Wordpress"
@@ -44,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "gem-release"
 
   spec.post_install_message = <<-RAINBOW
-    Starting from 1.4.0 Wordmove will compress SQL dumps both in remote and locale environments.
+    Starting from 2.0.0 Wordmove will compress SQL dumps both in remote and locale environments.
     If something will broke, please check if gzip executable is present locally and
     remotely. We are considering obvious it's installed in any web environment.
     Open an issue on github at your needs.
