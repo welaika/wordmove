@@ -16,10 +16,13 @@ Metrics/LineLength:
   Max: 100
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
 
 Metrics/ClassLength:
   Max: 200
+
+Metrics/CyclomaticComplexity:
+  Max: 10
 
 Style/StringLiterals:
   Enabled: false
@@ -32,4 +35,4 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 35
+  Max: 40
