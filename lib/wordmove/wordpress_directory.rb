@@ -12,6 +12,7 @@ class WordpressDirectory
     Path::WP_CONTENT => 'wp-content',
     Path::WP_CONFIG  => 'wp-config.php',
     Path::PLUGINS    => 'wp-content/plugins',
+    Path::MU_PLUGINS => 'wp-content/mu-plugins',
     Path::THEMES     => 'wp-content/themes',
     Path::UPLOADS    => 'wp-content/uploads',
     Path::LANGUAGES  => 'wp-content/languages'

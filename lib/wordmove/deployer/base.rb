@@ -149,6 +149,7 @@ module Wordmove
       [
         WordpressDirectory::Path::WP_CONTENT,
         WordpressDirectory::Path::PLUGINS,
+        WordpressDirectory::Path::MU_PLUGINS,
         WordpressDirectory::Path::THEMES,
         WordpressDirectory::Path::UPLOADS,
         WordpressDirectory::Path::LANGUAGES
