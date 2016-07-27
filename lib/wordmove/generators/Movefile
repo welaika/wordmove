@@ -19,6 +19,7 @@ production:
     host: "host"
     # port: "3308" # Use just in case you have exotic server config
     # mysqldump_options: "--max_allowed_packet=1G" # Only available if using SSH
+    # exclude: "table1,table2,table3"
 
   exclude:
     - ".git/"

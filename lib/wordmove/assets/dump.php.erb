@@ -105,7 +105,10 @@ class MySQLDump
 			. "SET FOREIGN_KEY_CHECKS=0;\n"
 		);
 
+    $exclude = array_map('trim', explode(',', '<%= escape_php db[:exclude] %>'));
 		foreach ($tables as $table) {
+      if(in_array($table, $exclude))
+        continue;
 			$this->dumpTable($handle, $table);
 		}
 
