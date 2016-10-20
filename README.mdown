@@ -11,6 +11,7 @@ the remote staging server.
 Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
+[![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 
 ## Installation
 
