@@ -167,6 +167,10 @@ We will never more use version-named branches as in the past, but we'll tag rele
 
 Feel free to open an issue about contribution if more you need more info
 
+## Author
+
+made with ❤️ and ☕️ by [weLaika](http://dev.welaika.com)
+
 ## License
 
 (The MIT License)
