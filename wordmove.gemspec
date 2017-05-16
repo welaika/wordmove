@@ -30,21 +30,20 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "colorize", "~> 0.7.5"
-  spec.add_runtime_dependency "thor", "~> 0.19.1"
-  spec.add_runtime_dependency "activesupport", "~> 4.2", ">= 4.2.1"
+  spec.add_runtime_dependency "colorize", "~> 0.8.1"
+  spec.add_runtime_dependency "thor", "~> 0.19.4"
+  spec.add_runtime_dependency "activesupport", '~> 5.1', '>= 5.1.1'
   spec.add_runtime_dependency "photocopier", "~> 1.1", ">= 1.1.0"
 
-  spec.required_ruby_version = "~> 2.0"
+  spec.required_ruby_version = "~> 2.4.0"
 
-  spec.add_development_dependency "bundler", "~> 1.6", ">= 1.6.2"
+  spec.add_development_dependency "bundler", "~> 1.14.6", ">= 1.14.6"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.3"
   spec.add_development_dependency "simplecov", "~> 0.9"
   spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "priscilla", "~> 1.0"
   spec.add_development_dependency "rubocop", "~> 0.37.0"
-  spec.add_development_dependency "gem-release"
 
   spec.post_install_message = <<-RAINBOW
     Starting from 2.0.0 Wordmove will compress SQL dumps both in remote and locale environments.
