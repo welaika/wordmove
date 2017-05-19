@@ -16,7 +16,14 @@ module Wordmove
     def adapt!
       replace_vhost!
       replace_wordpress_path!
+      replace_charset!
       write_sql!
+    end
+
+    def replace_charset!
+      source_charset = source_config[:database][:charset]
+      dest_charset = dest_config[:database][:charset]
+      replace_field!(source_charset, dest_charset)
     end
 
     def replace_vhost!
