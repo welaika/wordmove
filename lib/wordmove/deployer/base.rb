@@ -162,13 +162,6 @@ module Wordmove
         end
       end
 
-      def adapt_sql(save_to_path, local, remote)
-        unless options[:no_adapt]
-          logger.task_step true, "adapt dump"
-          SqlAdapter.new(save_to_path, local, remote).adapt! unless simulate?
-        end
-      end
-
       def mysql_dump_command(options, save_to_path)
         command = ["mysqldump"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?

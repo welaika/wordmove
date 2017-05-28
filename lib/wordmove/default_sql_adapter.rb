@@ -1,5 +1,5 @@
 module Wordmove
-  class SqlAdapter
+  class DefaultSqlAdapter
     attr_accessor :sql_content
     attr_reader :sql_path, :source_config, :dest_config
 
