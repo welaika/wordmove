@@ -34,6 +34,13 @@ describe Wordmove::Generators::Movefile do
       expect(yaml['local']['database']['password']).to eq('password')
       expect(yaml['local']['database']['host']).to eq('127.0.0.1')
     end
+
+    it 'creates a Movifile having a "global.sql_adapter" key' do
+      yaml = YAML.load(ERB.new(File.read(movefile)).result)
+      expect(yaml['global']).to be_present
+      expect(yaml['global']['sql_adapter']).to be_present
+      expect(yaml['global']['sql_adapter']).to eq('wordmove')
+    end
   end
 
   context "database configuration" do

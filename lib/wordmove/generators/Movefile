@@ -1,3 +1,6 @@
+global:
+  sql_adapter: "wordmove"
+
 local:
   vhost: "http://vhost.local"
   wordpress_path: "<%= wordpress_path %>" # use an absolute path here
