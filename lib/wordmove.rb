@@ -26,6 +26,8 @@ require 'wordmove/generators/movefile'
 require 'wordmove/deployer/base'
 require 'wordmove/deployer/ftp'
 require 'wordmove/deployer/ssh'
+require 'wordmove/deployer/ssh/regex_sql_adapter'
+require 'wordmove/deployer/ssh/wpcli_sql_adapter'
 
 module Wordmove
 end
