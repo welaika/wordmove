@@ -1,3 +1,5 @@
+global:
+  sql_adapter: "default"
 local:
   vhost: "http://vhost.local"
   wordpress_path: "~/dev/sites/your_site"

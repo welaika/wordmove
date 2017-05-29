@@ -1,3 +1,6 @@
+global:
+  sql_adapter: "default"
+
 local:
   vhost: "http://localhost:8080"
   wordpress_path: "/home/welaika/sites/your_site"
