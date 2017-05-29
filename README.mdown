@@ -4,7 +4,7 @@
 
 Wordmove is a gem that lets you automatically mirror local Wordpress
 installations and DB data back and forth from your local development machine to
-the remote staging server.
+the remote server.
 
 **SSH** connections are fully supported, while [FTP support is planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) when new features will be introduced.
 
@@ -22,6 +22,19 @@ gem install wordmove
 ```
 
 
+
+## Peer dependencies
+
+Wordmove just acts as automation glue bewtween tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
+
+| Program | Actions                      | Mandatory?                      |
+| ------- | ---------------------------- | ------------------------------- |
+| rsync   | Push and pull files and dirs | Yes for SSH connections         |
+| mysql   | Import and dump database     | Yes                             |
+| wp-cli  | DB adapt                     | Nope: experimental and optional |
+| lftp    | all                          | Yes, for FTP connections        |
+| ssh     | all                          | Yes, for SSH connections        |
+
 ## Usage
 
 ```
@@ -35,7 +48,7 @@ Tasks:
 
 Move inside the Wordpress folder and use `wordmove init` to generate a new `Movefile` and edit it with your settings. Read the next paragraph for more info.
 
-See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.
+**See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.**
 
 ### Screencasts
 
@@ -48,6 +61,9 @@ See the wiki article: [Usage and flags explained](https://github.com/welaika/wor
 You can configure Wordmove creating a `Movefile`. That's just a YAML file with local and remote host infos:
 
 ```
+global:
+  sql_adapter: "default"
+
 local:
   vhost: "http://vhost.local"
   wordpress_path: "/home/john/sites/your_site" # use an absolute path here
@@ -93,8 +109,8 @@ production:
     user: "user"
 ```
 
-We warmly **recommend** to read the wiki article [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
+**We warmly recommend to read the wiki article [Multiple environments explained**
+**](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.**
 
 ## Supports
 
@@ -108,7 +124,7 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 
 * You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
 * if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `Movefile`. Easy peasy.
-* writing the password inside the move file was and is somewhat supported, but we discourage this practice in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
+* writing the password inside the move file was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
 
 ### FTP
 
