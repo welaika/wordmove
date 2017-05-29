@@ -33,7 +33,7 @@ production:
     - "Gemfile*"
     - "Movefile"
     - "wp-config.php"
-    - "wp-content/*.sql"
+    - "wp-content/*.sql.gz"
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: "wp-content"
