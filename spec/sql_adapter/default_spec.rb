@@ -1,9 +1,9 @@
-describe Wordmove::DefaultSqlAdapter do
+describe Wordmove::SqlAdapter::Default do
   let(:sql_path) { double }
   let(:source_config) { double }
   let(:dest_config) { double }
   let(:adapter) do
-    Wordmove::DefaultSqlAdapter.new(
+    Wordmove::SqlAdapter::Default.new(
       sql_path,
       source_config,
       dest_config

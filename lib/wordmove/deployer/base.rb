@@ -20,7 +20,7 @@ module Wordmove
           environment = (options[:environment] || available_enviroments.first).to_sym
 
           return FTP.new(environment, options) if options[environment][:ftp]
-          return Ssh::RegexSqlAdapter.new(environment, options) if options[environment][:ssh]
+          return Ssh::DefaultSqlAdapter.new(environment, options) if options[environment][:ssh]
           raise NoAdapterFound, "No valid adapter found."
         end
 

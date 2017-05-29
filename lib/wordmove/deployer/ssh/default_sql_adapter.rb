@@ -1,7 +1,7 @@
 module Wordmove
   module Deployer
     module Ssh
-      class RegexSqlAdapter < SSH
+      class DefaultSqlAdapter < SSH
         private
 
         def backup_remote_db!
@@ -39,7 +39,7 @@ module Wordmove
           return if options[:no_adapt]
 
           logger.task_step true, "Adapt dump"
-          DefaultSqlAdapter.new(save_to_path, local, remote).adapt! unless simulate?
+          SqlAdapter::Default.new(save_to_path, local, remote).adapt! unless simulate?
         end
       end
     end
