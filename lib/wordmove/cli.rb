@@ -1,6 +1,6 @@
 module Wordmove
   class CLI < Thor
-    map %w(--version -v) => :__print_version
+    map %w[--version -v] => :__print_version
 
     desc "--version, -v", "Print the version"
     def __print_version
@@ -39,7 +39,7 @@ module Wordmove
       end
 
       def wordpress_options
-        %w(wordpress uploads themes plugins mu_plugins languages db)
+        %w[wordpress uploads themes plugins mu_plugins languages db]
       end
 
       def ensure_wordpress_options_presence!(options)

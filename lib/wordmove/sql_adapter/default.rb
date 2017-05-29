@@ -33,10 +33,10 @@ module Wordmove
       end
 
       def replace_field!(source_field, dest_field)
-        if source_field && dest_field
-          serialized_replace!(source_field, dest_field)
-          simple_replace!(source_field, dest_field)
-        end
+        return false unless source_field && dest_field
+
+        serialized_replace!(source_field, dest_field)
+        simple_replace!(source_field, dest_field)
       end
 
       def serialized_replace!(source_field, dest_field)

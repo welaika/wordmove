@@ -32,7 +32,7 @@ describe Wordmove::CLI do
 
   context "--all" do
     let(:options) { { "all" => true } }
-    let(:ordered_components) { %w(wordpress uploads themes plugins mu_plugins languages db) }
+    let(:ordered_components) { %w[wordpress uploads themes plugins mu_plugins languages db] }
 
     context "#pull" do
       it "invokes commands in the right order" do

@@ -53,7 +53,7 @@ module Wordmove
 
       private
 
-      %w(get get_directory put_directory delete).each do |command|
+      %w[get get_directory put_directory delete].each do |command|
         define_method "remote_#{command}" do |*args|
           logger.task_step false, "#{command}: #{args.join(' ')}"
           @copier.send(command, *args) unless simulate?

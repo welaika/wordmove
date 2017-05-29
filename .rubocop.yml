@@ -1,5 +1,5 @@
 Rails:
-  Enabled: true
+  Enabled: false
 
 Rails/Output:
   Enabled: false
@@ -21,7 +21,16 @@ Metrics/MethodLength:
 Metrics/ClassLength:
   Max: 200
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'spec/factories/*.rb'
+    - '*.gemspec'
+
 Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
   Max: 10
 
 Style/StringLiterals:

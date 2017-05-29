@@ -23,12 +23,12 @@ describe Wordmove::Generators::Movefile do
     end
 
     it 'fills local wordpress_path using shell path' do
-      yaml = YAML.load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['wordpress_path']).to eq(Dir.pwd)
     end
 
     it 'fills database configuration defaults' do
-      yaml = YAML.load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['database']['name']).to eq('database_name')
       expect(yaml['local']['database']['user']).to eq('user')
       expect(yaml['local']['database']['password']).to eq('password')
@@ -36,7 +36,7 @@ describe Wordmove::Generators::Movefile do
     end
 
     it 'creates a Movifile having a "global.sql_adapter" key' do
-      yaml = YAML.load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['global']).to be_present
       expect(yaml['global']['sql_adapter']).to be_present
       expect(yaml['global']['sql_adapter']).to eq('wordmove')
@@ -52,7 +52,7 @@ describe Wordmove::Generators::Movefile do
     end
 
     it 'fills database configuration from wp-config' do
-      yaml = YAML.load(ERB.new(File.read(movefile)).result)
+      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['local']['database']['name']).to eq('wordmove_db')
       expect(yaml['local']['database']['user']).to eq('wordmove_user')
       expect(yaml['local']['database']['password']).to eq('wordmove_password')

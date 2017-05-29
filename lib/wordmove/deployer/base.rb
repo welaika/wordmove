@@ -33,7 +33,7 @@ module Wordmove
         end
 
         def extract_available_envs(options)
-          options.keys.map(&:to_sym) - [:local]
+          options.keys.map(&:to_sym) - %i[local global]
         end
 
         def fetch_movefile(name = nil, start_dir = current_dir)
@@ -47,7 +47,7 @@ module Wordmove
 
           found = entries.first
           logger.task("Using Movefile: #{found}")
-          YAML.load(ERB.new(File.read(found)).result)
+          YAML.safe_load(ERB.new(File.read(found)).result)
         end
 
         def current_dir
@@ -85,7 +85,7 @@ module Wordmove
 
       def remote_put_directory(directory); end
 
-      %w(uploads themes plugins mu_plugins languages).each do |task|
+      %w[uploads themes plugins mu_plugins languages].each do |task|
         define_method "push_#{task}" do
           logger.task "Pushing #{task.titleize}"
           local_path = send("local_#{task}_dir").path
@@ -135,18 +135,19 @@ module Wordmove
 
       def run(command)
         logger.task_step true, command
-        unless simulate?
-          system(command)
-          raise ShellCommandError, "Return code reports an error" unless $CHILD_STATUS.success?
-        end
+        return true if simulate?
+
+        system(command)
+        raise ShellCommandError, "Return code reports an error" unless $CHILD_STATUS.success?
       end
 
       def download(url, local_path)
         logger.task_step true, "download #{url} > #{local_path}"
-        unless simulate?
-          open(local_path, 'w') do |file|
-            file << open(url).read
-          end
+
+        return true if simulate?
+
+        open(local_path, 'w') do |file|
+          file << open(url).read
         end
       end
 
@@ -162,7 +163,7 @@ module Wordmove
         WordpressDirectory::Path::UPLOADS,
         WordpressDirectory::Path::LANGUAGES
       ].each do |type|
-        [:remote, :local].each do |location|
+        %i[remote local].each do |location|
           define_method "#{location}_#{type}_dir" do
             options = send("#{location}_options")
             WordpressDirectory.new(type, options)
