@@ -203,7 +203,7 @@ describe Wordmove::Deployer::Base do
   context "#extract_available_envs" do
     let(:movefile) { movefile_path_for("multi_environments") }
 
-    it "retrieves only remote environments" do
+    it "retrieves only remote environments: no local and no global" do
       expected_envs = %i[staging production missing_protocol]
       options = described_class.fetch_movefile(movefile)
       expect(described_class.extract_available_envs(options))
