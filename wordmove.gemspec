@@ -48,6 +48,10 @@ Gem::Specification.new do |spec|
     Starting from 2.0.0 Wordmove will compress SQL dumps both in remote and locale environments.
     If something will broke, please check if gzip executable is present locally and
     remotely. We are considering obvious it's installed in any web environment.
-    Open an issue on github at your needs.
+
+    Starting from 2.1.0 you'll need to add the global section in your Movefile:
+        global:
+            sql_adapter: "default"
+    Or you can spawn a new one with `wordmove init` (backup the old one!)
   RAINBOW
 end
