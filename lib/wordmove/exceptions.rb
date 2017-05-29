@@ -4,4 +4,5 @@ module Wordmove
   class MovefileNotFound < StandardError; end
   class ShellCommandError < StandardError; end
   class ImplementInSubclassError < StandardError; end
+  class UnmetPeerDependencyError < StandardError; end
 end
