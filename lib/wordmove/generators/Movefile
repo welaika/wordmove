@@ -1,5 +1,5 @@
 global:
-  sql_adapter: "wordmove"
+  sql_adapter: "default"
 
 local:
   vhost: "http://vhost.local"
