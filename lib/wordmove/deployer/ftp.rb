@@ -98,8 +98,9 @@ module Wordmove
         # download the resulting dump (using the password)
         dump_url = "#{remote_wp_content_dir.url('dump.php')}?shared_key=#{one_time_password}"
         download(dump_url, local_dump_path)
-        # remove it remotely
+        # cleanup remotely
         remote_delete(remote_dump_script)
+        remote_delete(remote_wp_content_dir.path("dump.mysql"))
       end
 
       def import_remote_dump
@@ -125,6 +126,13 @@ module Wordmove
         end
         # remove script remotely
         remote_delete(remote_import_script_path)
+      end
+
+      def adapt_sql(save_to_path, local, remote)
+        return if options[:no_adapt]
+
+        logger.task_step true, "Adapt dump"
+        SqlAdapter::Default.new(save_to_path, local, remote).adapt! unless simulate?
       end
     end
   end
