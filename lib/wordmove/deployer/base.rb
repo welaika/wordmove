@@ -226,7 +226,7 @@ module Wordmove
 
       def local_delete(path)
         logger.task_step true, "delete: '#{path}'"
-        File.delete(path)
+        File.delete(path) unless simulate?
       end
 
       def save_local_db(local_dump_path)
