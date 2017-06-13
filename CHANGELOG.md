@@ -1,3 +1,13 @@
+# 2.1.3
+
+- bugfix #402
+
+# 2.1.0
+
+## Features
+
+- SqlAdapter::Wpcli
+
 # 2.0.0
 
 ## Features

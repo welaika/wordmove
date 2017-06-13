@@ -43,11 +43,11 @@ error_reporting(E_ALL);
 
 // Database configuration
 
-$db_port = '<%= db[:port] %>';
+$db_port = '<%= escape_php db[:port] %>';
 if (!$db_port) {
   $db_port = ini_get("mysqli.default_port");
 }
-$db_server = '<%= escape_php db[:host] %>:' . $db_port;
+$db_server = '<%= escape_php db[:host] %>';
 $db_username = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php db[:name] %>';
@@ -400,7 +400,7 @@ if (!$error && isset($_REQUEST["delete"]) && $_REQUEST["delete"]!=basename($_SER
 // Connect to the database, set charset and execute pre-queries
 
 if (!$error && !TESTMODE)
-{ $mysqli = new mysqli($db_server, $db_username, $db_password, $db_name);
+{ $mysqli = new mysqli($db_server, $db_username, $db_password, $db_name, $db_port);
 
   if (mysqli_connect_error())
   { echo ("<p class=\"error\">Database connection failed due to ".mysqli_connect_error()."</p>\n");
