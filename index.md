@@ -4,13 +4,14 @@
 
 Wordmove is a gem that lets you automatically mirror local Wordpress
 installations and DB data back and forth from your local development machine to
-the remote staging server.
+the remote server.
 
 **SSH** connections are fully supported, while [FTP support is planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) when new features will be introduced.
 
 Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
+[![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 
 ## Installation
 
@@ -20,6 +21,19 @@ That's easy:
 gem install wordmove
 ```
 
+
+
+## Peer dependencies
+
+Wordmove just acts as automation glue bewtween tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
+
+| Program | Actions                      | Mandatory?                      |
+| ------- | ---------------------------- | ------------------------------- |
+| rsync   | Push and pull files and dirs | Yes for SSH connections         |
+| mysql   | Import and dump database     | Yes                             |
+| wp-cli  | DB adapt                     | Nope: experimental and optional |
+| lftp    | all                          | Yes, for FTP connections        |
+| ssh     | all                          | Yes, for SSH connections        |
 
 ## Usage
 
@@ -34,7 +48,7 @@ Tasks:
 
 Move inside the Wordpress folder and use `wordmove init` to generate a new `Movefile` and edit it with your settings. Read the next paragraph for more info.
 
-See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.
+**See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.**
 
 ### Screencasts
 
@@ -47,6 +61,9 @@ See the wiki article: [Usage and flags explained](https://github.com/welaika/wor
 You can configure Wordmove creating a `Movefile`. That's just a YAML file with local and remote host infos:
 
 ```
+global:
+  sql_adapter: "default"
+
 local:
   vhost: "http://vhost.local"
   wordpress_path: "/home/john/sites/your_site" # use an absolute path here
@@ -56,6 +73,13 @@ local:
     user: "user"
     password: "password"
     host: "127.0.0.1"
+
+  # paths: # you can customize wordpress internal paths
+  #   wp_content: "wp-content"
+  #   uploads: "wp-content/uploads"
+  #   plugins: "wp-content/plugins"
+  #   themes: "wp-content/themes"
+  #   languages: "wp-content/languages"
 
 production:
   vhost: "http://example.com"
@@ -67,6 +91,7 @@ production:
     password: "password"
     host: "host"
     # port: "3308" # Use just in case you have exotic server config
+    # mysqldump_options: "--max_allowed_packet=50MB" # Only available if using SSH
 
   exclude:
     - ".git/"
@@ -78,12 +103,17 @@ production:
     - "Movefile"
     - "wp-config.php"
     - "wp-content/*.sql"
+
+  ssh:
+    host: "host"
+    user: "user"
 ```
 
-We warmly **recommend** to read the wiki article [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
+**We warmly recommend to read the wiki article [Multiple environments explained**
+**](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.**
 
 ## Supports
+
 ### OS
 
 OS X and Linux are fully supported.
@@ -94,7 +124,7 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 
 * You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
 * if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `Movefile`. Easy peasy.
-* writing the password inside the move file was and is somewhat supported, but we discourage this practice in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
+* writing the password inside the move file was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
 
 ### FTP
 
@@ -120,6 +150,7 @@ We warmly **recommend** to read the wiki article: [Multiple environments explain
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
 ## Notes
+
 ### How the heck you are able to sync the DB via FTP?
 
 We're glad you asked! We basically upload via FTP a PHP script that performs the various
@@ -127,6 +158,11 @@ import/export operations. This script then gets executed via HTTP. Don't worry
 too much about security though: the script is deleted just after the usage,
 and can only be executed by `wordmove`, as each time it requires a pre-shared
 one-time-password to be run.
+
+### Yanked versions
+
+Wordmove `1.3.1` has been removed from `rubygems` due to a bug with FTP deploying system. If you are
+using this version, please update soon (`gem update wordmove`).
 
 ## Need more tools?
 Visit [Wordpress Tools](http://wptools.it).
@@ -146,6 +182,10 @@ We will never more use version-named branches as in the past, but we'll tag rele
 ### Please, **read the full [contributor guide](https://github.com/welaika/wordmove/wiki/Contributor-Guide)**.
 
 Feel free to open an issue about contribution if more you need more info
+
+## Author
+
+made with ❤️ and ☕️ by [weLaika](http://dev.welaika.com)
 
 ## License
 
@@ -169,4 +209,3 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
