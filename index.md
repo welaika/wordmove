@@ -1,0 +1,172 @@
+# Wordmove
+
+![logo](https://raw.githubusercontent.com/welaika/wordmove/master/assets/images/wordmove.png)
+
+Wordmove is a gem that lets you automatically mirror local Wordpress
+installations and DB data back and forth from your local development machine to
+the remote staging server.
+
+**SSH** connections are fully supported, while [FTP support is planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) when new features will be introduced.
+
+Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
+
+[![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
+
+## Installation
+
+That's easy:
+
+```
+gem install wordmove
+```
+
+
+## Usage
+
+```
+> wordmove help
+Tasks:
+  wordmove help [TASK]  # Describe available tasks or one specific task
+  wordmove init         # Generates a brand new Movefile
+  wordmove pull         # Pulls WP data from remote host to the local machine
+  wordmove push         # Pushes WP data from local machine to remote host
+```
+
+Move inside the Wordpress folder and use `wordmove init` to generate a new `Movefile` and edit it with your settings. Read the next paragraph for more info.
+
+See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.
+
+### Screencasts
+
+* Push all WordPress, including database and uploads: http://vimeo.com/74648079
+* Pull database and uploads, adapting paths and urls: http://vimeo.com/74646861
+* Push only theme, transfer only modified files: http://vimeo.com/74647529
+
+## Movefile
+
+You can configure Wordmove creating a `Movefile`. That's just a YAML file with local and remote host infos:
+
+```
+local:
+  vhost: "http://vhost.local"
+  wordpress_path: "/home/john/sites/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "127.0.0.1"
+
+production:
+  vhost: "http://example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+    # port: "3308" # Use just in case you have exotic server config
+
+  exclude:
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "bin/"
+    - "tmp/*"
+    - "Gemfile*"
+    - "Movefile"
+    - "wp-config.php"
+    - "wp-content/*.sql"
+```
+
+We warmly **recommend** to read the wiki article [Multiple environments explained
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.
+
+## Supports
+### OS
+
+OS X and Linux are fully supported.
+
+See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wiki/Windows-(un)support-disclaimer)
+
+### SSH
+
+* You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
+* if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `Movefile`. Easy peasy.
+* writing the password inside the move file was and is somewhat supported, but we discourage this practice in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
+
+### FTP
+
+* You need to install `lftp` on your machine. See community wiki article: [Install lftp on OSX yosemite](https://github.com/welaika/wordmove/wiki/Install-lftp-on-OSX-yosemite)).
+* Use the relative FTP path as `production.wordpress_path`
+* Use the absolute FTP path as `production.wordpress_absolute_path` (you may need to recover this from the `__FILE__` [magic constant](http://php.net/manual/en/language.constants.predefined.php)
+* if you want to specify a passive FTP connection add to the YAML config a `production.ftp.passive` flag and set it to `true`.
+
+FTP support is [planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) at some point of future development.
+
+### Multistage
+
+You can define multiple environments in your `Movefile`, such as production, staging, etc.
+Use `-e` with `pull` or `push` to run the command on the specified environment.
+
+For example:
+```
+wordmove push -e staging -d
+```
+will push your local database to the staging environment only.
+
+We warmly **recommend** to read the wiki article: [Multiple environments explained
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
+
+## Notes
+### How the heck you are able to sync the DB via FTP?
+
+We're glad you asked! We basically upload via FTP a PHP script that performs the various
+import/export operations. This script then gets executed via HTTP. Don't worry
+too much about security though: the script is deleted just after the usage,
+and can only be executed by `wordmove`, as each time it requires a pre-shared
+one-time-password to be run.
+
+## Need more tools?
+Visit [Wordpress Tools](http://wptools.it).
+
+## Credits
+
+* The dump script is the [`MYSQL-dump` PHP package](https://github.com/dg/MySQL-dump) by David Grudl
+* The import script used is the [BigDump](http://www.ozerov.de/bigdump/) library
+
+## Contribute
+
+In order to promote a simpler contribution workflow we have decided to fork and PR the `master` branch.
+We will accordingly tag and release or pre-release versions to the rubygems.org repository.
+Do not consider the `dev` branch for your forks and PR.
+We will never more use version-named branches as in the past, but we'll tag release on `master` and pre-release on `dev`.
+
+### Please, **read the full [contributor guide](https://github.com/welaika/wordmove/wiki/Contributor-Guide)**.
+
+Feel free to open an issue about contribution if more you need more info
+
+## License
+
+(The MIT License)
+
+Copyright © 2013-2015 weLaika
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the ‘Software’), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
