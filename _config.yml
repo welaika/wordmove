@@ -1,5 +1,5 @@
 title: Wordmove
-description: Capistrano for Wordpress
+description: Multi-stage command line deploy/mirroring for Wordpress
 google_analytics: 
 show_downloads: true
 theme: jekyll-theme-cayman
