@@ -34,7 +34,7 @@ module Wordmove
     no_tasks do
       def handle_options(options)
         wordpress_options.each do |task|
-          yield task if options[task] || options["all"]
+          yield task if options[task] || (options["all"] && options[task] != false)
         end
       end
 

@@ -51,5 +51,19 @@ describe Wordmove::CLI do
         cli.invoke(:push, [], options)
       end
     end
+
+    context "excluding one of the components" do
+      it "does not invoke the escluded component" do
+        excluded_component = ordered_components.pop
+        options[excluded_component] = false
+
+        ordered_components.each do |component|
+          expect(deployer).to receive("push_#{component}")
+        end
+        expect(deployer).to_not receive("push_#{excluded_component}")
+
+        cli.invoke(:push, [], options)
+      end
+    end
   end
 end
