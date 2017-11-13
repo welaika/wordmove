@@ -60,7 +60,7 @@ Move inside the Wordpress folder and use `wordmove init` to generate a new `Move
 
 You can configure Wordmove creating a `Movefile`. That's just a YAML file with local and remote host infos:
 
-```
+```yaml
 global:
   sql_adapter: "default"
 
