@@ -38,7 +38,7 @@ module Wordmove
 
         def fetch_movefile(name = nil, start_dir = current_dir)
           name ||= "Movefile"
-          entries = Dir["#{File.join(start_dir, name)}*"]
+          entries = Dir["#{File.join(start_dir, name)}{,.yml}"]
 
           if entries.empty?
             raise MovefileNotFound, "Could not find a valid Movefile" if last_dir?(start_dir)
