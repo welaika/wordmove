@@ -32,6 +32,9 @@ production:
     - "tmp/*"
     - "Gemfile*"
     - "Movefile"
+    - "movefile"
+    - "movefile.yml"
+    - "movefile.yaml"
     - "wp-config.php"
     - "wp-content/*.sql.gz"
 

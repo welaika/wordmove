@@ -7,7 +7,7 @@ module Wordmove
       puts Wordmove::VERSION
     end
 
-    desc "init", "Generates a brand new Movefile"
+    desc "init", "Generates a brand new movefile.yml"
     def init
       Wordmove::Generators::Movefile.start
     end

@@ -1,5 +1,5 @@
 describe Wordmove::Generators::Movefile do
-  let(:movefile) { 'Movefile' }
+  let(:movefile) { 'movefile.yml' }
   let(:tmpdir) { "/tmp/wordmove" }
 
   before do

@@ -21,5 +21,3 @@ remote:
     password: "password"
     host: "host"
     port: 30000
-
-
