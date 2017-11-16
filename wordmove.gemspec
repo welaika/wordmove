@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = "~> 2.4.0"
 
-  spec.add_development_dependency "bundler", ">= 1.14.6"
+  spec.add_development_dependency "bundler", "~> 1.14", ">= 1.14.6"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.3"
   spec.add_development_dependency "simplecov", "~> 0.9"
@@ -45,13 +45,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.49.0"
 
   spec.post_install_message = <<-RAINBOW
-    Starting from 2.0.0 Wordmove will compress SQL dumps both in remote and locale environments.
-    If something will broke, please check if gzip executable is present locally and
-    remotely. We are considering obvious it's installed in any web environment.
-
-    Starting from 2.1.0 you'll need to add the global section in your Movefile:
+    Starting from 2.1.0 you'll need to add the global section in your movefile.yaml:
         global:
             sql_adapter: "default"
     Or you can spawn a new one with `wordmove init` (backup the old one!)
+
+    Starting from 2.2.0 the default name of the config file is `movefile.yaml`.
   RAINBOW
 end

@@ -48,7 +48,7 @@ describe Wordmove::Deployer::Base do
   context ".fetch_movefile" do
     TMPDIR = "/tmp/wordmove".freeze
 
-    let(:path) { File.join(TMPDIR, 'Movefile') }
+    let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:yaml) { "name: Waldo\njob: Hider" }
 
     before do
@@ -78,8 +78,28 @@ describe Wordmove::Deployer::Base do
         expect(result['job']).to eq('Hider')
       end
 
-      context "when Movefile has extensions" do
-        let(:path) { File.join(TMPDIR, 'Movefile.yml') }
+      context "when movefile has no extensions" do
+        let(:path) { File.join(TMPDIR, 'movefile') }
+
+        it 'finds it aswell' do
+          result = described_class.fetch_movefile
+          expect(result['name']).to eq('Waldo')
+          expect(result['job']).to eq('Hider')
+        end
+      end
+
+      context "when Movefile has no extensions and has first capital" do
+        let(:path) { File.join(TMPDIR, 'Movefile') }
+
+        it 'finds it aswell' do
+          result = described_class.fetch_movefile
+          expect(result['name']).to eq('Waldo')
+          expect(result['job']).to eq('Hider')
+        end
+      end
+
+      context "when movefile.yaml has long extension" do
+        let(:path) { File.join(TMPDIR, 'movefile.yaml') }
 
         it 'finds it aswell' do
           result = described_class.fetch_movefile
