@@ -45,11 +45,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.49.0"
 
   spec.post_install_message = <<-RAINBOW
-    Starting from 2.1.0 you'll need to add the global section in your movefile.yaml:
+    Starting from 2.1.0 you'll need to add the global section in your movefile.yml:
         global:
             sql_adapter: "default"
     Or you can spawn a new one with `wordmove init` (backup the old one!)
 
-    Starting from 2.2.0 the default name of the config file is `movefile.yaml`.
+    Starting from 2.2.0 the default name of the config file is `movefile.yml`.
   RAINBOW
 end
