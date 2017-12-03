@@ -1,27 +1,22 @@
 type: map
 mapping:
   vhost:
-    type: str
     pattern: /^http:\/\//
   wordpress_path:
-    type: str
   database:
     type: map
     mapping:
       name:
-        type: str
+        required: true
       user:
-        type: str
+        required: true
       password:
-        type: str
+        required: true
       host:
-        type: str
+        required: true
       mysqldump_options:
-        type: str
         required: false
       port:
-        type: str
         required: false
       charset:
-        type: str
         required: false
