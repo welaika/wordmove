@@ -12,6 +12,12 @@ module Wordmove
       Wordmove::Generators::Movefile.start
     end
 
+    desc "doctor", "Do some configuration and environment checks"
+    def doctor
+      the_doctor = Wordmove::MovefileDoctor.new
+      the_doctor.validate!
+    end
+
     shared_options = {
       wordpress:   { aliases: "-w", type: :boolean },
       uploads:     { aliases: "-u", type: :boolean },

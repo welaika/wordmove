@@ -1,0 +1,88 @@
+type: map
+mapping:
+  vhost:
+    type: str
+    pattern: /^http:\/\//
+    required: true
+  wordpress_path:
+    type: str
+    required: true
+  wordpress_absolute_path:
+    type: str
+    required: false
+  database:
+    type: map
+    required: true
+    mapping:
+      name:
+        type: str
+        required: true
+      user:
+        type: str
+        required: true
+      password:
+        type: str
+        required: true
+      host:
+        type: str
+        required: true
+      mysqldump_options:
+        type: str
+        required: false
+      port:
+        type: str
+        required: false
+      charset:
+        type: str
+        required: false
+  exclude:
+    type: seq
+    required: false
+    sequence:
+      - type: str
+  paths:
+    type: map
+    required: false
+    mapping:
+      wp_content:
+      wp_config:
+      uploads:
+      plugins:
+      mu_plugins:
+      themes:
+      languages:
+  ssh:
+    type: map
+    required: false
+    mapping:
+      host:
+        required: true
+      user:
+        required: true
+      password:
+        required: false
+      port:
+        type: int
+      rsync_options:
+      gateway:
+        type: map
+        required: false
+        mapping:
+          host:
+            required: true
+          user:
+            required: true
+          password:
+  ftp:
+    type: map
+    required: false
+    mapping:
+      user:
+        required: true
+      password:
+        required: true
+      host:
+        required: true
+      passive:
+        type: bool
+      scheme:

@@ -16,3 +16,12 @@ mapping:
         type: str
       host:
         type: str
+      mysqldump_options:
+        type: str
+        required: false
+      port:
+        type: str
+        required: false
+      charset:
+        type: str
+        required: false

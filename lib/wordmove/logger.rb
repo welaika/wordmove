@@ -22,6 +22,10 @@ module Wordmove
       puts "    error".red + " | ".black + message.to_s
     end
 
+    def success(message)
+      puts "    success".green + " | ".black + message.to_s
+    end
+
     def debug(message)
       puts "    debug".magenta + " | ".black + message.to_s
     end
