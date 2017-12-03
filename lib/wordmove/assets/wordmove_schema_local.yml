@@ -1,0 +1,18 @@
+type: map
+mapping:
+  vhost:
+    type: str
+    pattern: /^http:\/\//
+  wordpress_path:
+    type: str
+  database:
+    type: map
+    mapping:
+      name:
+        type: str
+      user:
+        type: str
+      password:
+        type: str
+      host:
+        type: str

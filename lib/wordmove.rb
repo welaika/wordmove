@@ -16,6 +16,8 @@ require 'photocopier'
 require 'wordmove/exceptions'
 require 'wordmove/cli'
 require 'wordmove/logger'
+require 'wordmove/movefile'
+require 'wordmove/movefile/doctor'
 require 'wordmove/sql_adapter/default'
 require 'wordmove/sql_adapter/wpcli'
 require "wordmove/version"

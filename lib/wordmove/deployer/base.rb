@@ -37,32 +37,12 @@ module Wordmove
         end
 
         def fetch_movefile(name = nil, start_dir = current_dir)
-          entries = if name.nil?
-                      Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
-                    else
-                      Dir["#{File.join(start_dir, name)}{,.yml,.yaml}"]
-                    end
-
-          if entries.empty?
-            raise MovefileNotFound, "Could not find a valid Movefile" if last_dir?(start_dir)
-            return fetch_movefile(name, upper_dir(start_dir))
-          end
-
-          found = entries.first
-          logger.task("Using Movefile: #{found}")
-          YAML.safe_load(ERB.new(File.read(found)).result, [], [], true)
+          movefile = Wordmove::Movefile.new
+          movefile.fetch name, start_dir
         end
 
         def current_dir
           '.'
-        end
-
-        def last_dir?(directory)
-          directory == "/" || File.exist?(File.join(directory, 'wp-config.php'))
-        end
-
-        def upper_dir(directory)
-          File.expand_path(File.join(directory, '..'))
         end
 
         def logger
