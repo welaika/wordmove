@@ -14,8 +14,7 @@ module Wordmove
 
     desc "doctor", "Do some configuration and environment checks"
     def doctor
-      the_doctor = Wordmove::MovefileDoctor.new
-      the_doctor.validate!
+      Wordmove::Doctor.start
     end
 
     shared_options = {
