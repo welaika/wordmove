@@ -17,12 +17,12 @@ module Wordmove
           nil
         end
 
-        movefile.logger.task "Validating movefile section #{key}"
+        movefile.logger.task "Validating movefile section: #{key}"
         validate_section(key)
       end
 
       root_keys.each do |remote|
-        movefile.logger.task "Validating movefile section #{remote}"
+        movefile.logger.task "Validating movefile section: #{remote}"
         validate_remote_section(remote)
       end
     end
