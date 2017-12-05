@@ -37,7 +37,7 @@ module Wordmove
       def mysql_server_doctor
         command = ["mysql"]
         command << "-u #{config['user']}"
-        command << "-p#{config['password']}"
+        command << "-p#{config['password']}" unless config['password'].blank?
         command << "-h #{config['host']}"
         command << "-e'QUIT'"
         command = command.join(" ")
