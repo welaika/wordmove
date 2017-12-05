@@ -58,7 +58,7 @@ mapping:
       host:
         required: true
       user:
-        required: true
+        required: false # If host is configured in ~/.ssh/config
       password:
         required: false
       port:
