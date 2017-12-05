@@ -29,7 +29,7 @@ module Wordmove
 
         errors = validator.validate(contents[key])
 
-        if errors && errors.empty?
+        if errors&.empty?
           movefile.logger.success "Formal validation passed"
 
           return true

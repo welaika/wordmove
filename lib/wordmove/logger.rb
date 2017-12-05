@@ -34,7 +34,7 @@ module Wordmove
 
     def padding_length(line)
       result = MAX_LINE - line.length
-      result > 0 ? result : 0
+      result.positive? ? result : 0
     end
   end
 end
