@@ -1,7 +1,7 @@
 module Wordmove
   module SqlAdapter
     class Default
-      attr_accessor :sql_content
+      attr_writer :sql_content
       attr_reader :sql_path, :source_config, :dest_config
 
       def initialize(sql_path, source_config, dest_config)

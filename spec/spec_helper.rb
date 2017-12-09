@@ -21,7 +21,7 @@ Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f 
 # @see https://github.com/rails/rails/commit/481e49c64f790e46f4aff3ed539ed227d2eb46cb
 def silence_stream(stream)
   old_stream = stream.dup
-  stream.reopen(RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
+  stream.reopen(RbConfig::CONFIG['host_os'].match?(/mswin|mingw/) ? 'NUL:' : '/dev/null')
   stream.sync = true
   yield
 ensure

@@ -39,11 +39,13 @@ Wordmove just acts as automation glue bewtween tools you already have and love. 
 
 ```
 > wordmove help
-Tasks:
-  wordmove help [TASK]  # Describe available tasks or one specific task
-  wordmove init         # Generates a brand new movefile.yml
-  wordmove pull         # Pulls WP data from remote host to the local machine
-  wordmove push         # Pushes WP data from local machine to remote host
+Commands:
+  wordmove --version, -v    # Print the version
+  wordmove doctor           # Do some local configuration and environment checks
+  wordmove help [TASK]      # Describe available tasks or one specific task
+  wordmove init             # Generates a brand new movefile.yml
+  wordmove pull             # Pulls WP data from remote host to the local machine
+  wordmove push             # Pushes WP data from local machine to remote host
 ```
 
 Move inside the Wordpress folder and use `wordmove init` to generate a new `movefile.yml` and edit it with your settings. Read the next paragraph for more info.
@@ -194,7 +196,7 @@ made with ❤️ and ☕️ by [weLaika](http://dev.welaika.com)
 
 (The MIT License)
 
-Copyright © 2013-2015 weLaika
+Copyright © 2013-2018 weLaika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the ‘Software’), to deal in

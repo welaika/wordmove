@@ -22,6 +22,10 @@ module Wordmove
       puts "    error".red + " | ".black + message.to_s
     end
 
+    def success(message)
+      puts "    success".green + " | ".black + message.to_s
+    end
+
     def debug(message)
       puts "    debug".magenta + " | ".black + message.to_s
     end
@@ -30,7 +34,7 @@ module Wordmove
 
     def padding_length(line)
       result = MAX_LINE - line.length
-      result > 0 ? result : 0
+      result.positive? ? result : 0
     end
   end
 end

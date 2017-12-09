@@ -14,6 +14,13 @@ describe Wordmove::CLI do
     end
   end
 
+  context "#doctor" do
+    it "delagates the command to Doctor class" do
+      expect(Wordmove::Doctor).to receive(:start)
+      cli.invoke(:doctor, [], options)
+    end
+  end
+
   context "#pull" do
     context "without a movefile" do
       it "it rescues from a MovefileNotFound exception" do
