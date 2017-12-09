@@ -5,6 +5,8 @@ module Wordmove
       movefile
       mysql
       wpcli
+      rsync
+      ssh
     end
 
     def self.movefile
@@ -22,11 +24,15 @@ module Wordmove
       wpcli_doctor.check!
     end
 
-    def self.rsync; end
+    def self.rsync
+      rsync_doctor = Wordmove::Doctor::Rsync.new
+      rsync_doctor.check!
+    end
 
-    def self.ssh; end
-
-    def self.lftp; end
+    def self.ssh
+      ssh_doctor = Wordmove::Doctor::Ssh.new
+      ssh_doctor.check!
+    end
 
     # rubocop:disable Metrics/MethodLength
     def self.banner
