@@ -3,7 +3,7 @@ describe Wordmove::Doctor::Mysql do
   let(:movefile_dir) { "spec/fixtures/movefiles" }
   let(:doctor) { described_class.new(movefile_name, movefile_dir) }
 
-  context ".new!" do
+  context ".new" do
     it "implements #check! method" do
       expect_any_instance_of(described_class).to receive(:check!)
 
