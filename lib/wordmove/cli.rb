@@ -12,7 +12,7 @@ module Wordmove
       Wordmove::Generators::Movefile.start
     end
 
-    desc "doctor", "Do some configuration and environment checks"
+    desc "doctor", "Do some local configuration and environment checks"
     def doctor
       Wordmove::Doctor.start
     end
