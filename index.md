@@ -12,6 +12,7 @@ Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
+[![Gem Version](https://badge.fury.io/rb/wordmove.svg)](https://rubygems.org/gems/wordmove)
 
 ## Installation
 
@@ -39,14 +40,16 @@ Wordmove just acts as automation glue bewtween tools you already have and love. 
 
 ```
 > wordmove help
-Tasks:
-  wordmove help [TASK]  # Describe available tasks or one specific task
-  wordmove init         # Generates a brand new Movefile
-  wordmove pull         # Pulls WP data from remote host to the local machine
-  wordmove push         # Pushes WP data from local machine to remote host
+Commands:
+  wordmove --version, -v    # Print the version
+  wordmove doctor           # Do some local configuration and environment checks
+  wordmove help [TASK]      # Describe available tasks or one specific task
+  wordmove init             # Generates a brand new movefile.yml
+  wordmove pull             # Pulls WP data from remote host to the local machine
+  wordmove push             # Pushes WP data from local machine to remote host
 ```
 
-Move inside the Wordpress folder and use `wordmove init` to generate a new `Movefile` and edit it with your settings. Read the next paragraph for more info.
+Move inside the Wordpress folder and use `wordmove init` to generate a new `movefile.yml` and edit it with your settings. Read the next paragraph for more info.
 
 **See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.**
 
@@ -56,11 +59,11 @@ Move inside the Wordpress folder and use `wordmove init` to generate a new `Move
 * Pull database and uploads, adapting paths and urls: http://vimeo.com/74646861
 * Push only theme, transfer only modified files: http://vimeo.com/74647529
 
-## Movefile
+## movefile.yml
 
-You can configure Wordmove creating a `Movefile`. That's just a YAML file with local and remote host infos:
+You can configure Wordmove creating a `movefile.yml`. That's just a YAML file with local and remote host infos:
 
-```
+```yaml
 global:
   sql_adapter: "default"
 
@@ -101,6 +104,9 @@ production:
     - "tmp/*"
     - "Gemfile*"
     - "Movefile"
+    - "movefile"
+    - "movefile.yml"
+    - "movefile.yaml"
     - "wp-config.php"
     - "wp-content/*.sql"
 
@@ -109,8 +115,8 @@ production:
     user: "user"
 ```
 
-**We warmly recommend to read the wiki article [Multiple environments explained**
-**](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/Movefile-configurations-explained) to understand about the supported configurations.**
+**We warmly recommend to read the wiki article [Multiple environments explained
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained) to understand about the supported configurations.**
 
 ## Supports
 
@@ -123,7 +129,7 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 ### SSH
 
 * You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
-* if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `Movefile`. Easy peasy.
+* if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `movefile.yml`. Easy peasy.
 * writing the password inside the move file was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
 
 ### FTP
@@ -137,7 +143,7 @@ FTP support is [planned to be discontinued](https://github.com/welaika/wordmove/
 
 ### Multistage
 
-You can define multiple environments in your `Movefile`, such as production, staging, etc.
+You can define multiple environments in your `movefile.yml`, such as production, staging, etc.
 Use `-e` with `pull` or `push` to run the command on the specified environment.
 
 For example:
@@ -191,7 +197,7 @@ made with ❤️ and ☕️ by [weLaika](http://dev.welaika.com)
 
 (The MIT License)
 
-Copyright © 2013-2015 weLaika
+Copyright © 2013-2018 weLaika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the ‘Software’), to deal in
