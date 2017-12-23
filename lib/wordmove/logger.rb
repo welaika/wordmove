@@ -4,10 +4,10 @@ module Wordmove
 
     def task(title)
       prefix = "▬" * 2
-      title = " ✓ #{title} "
+      title = " #{title} "
       padding = "▬" * padding_length(title)
 
-      puts "\n" + prefix + title.green + padding
+      puts "\n" + prefix + title.light_white + padding
     end
 
     def task_step(local_step, title)
@@ -19,15 +19,15 @@ module Wordmove
     end
 
     def error(message)
-      puts "    error".red + " | ".black + message.to_s
+      puts "    ✗ error".red + " | ".black + message.to_s
     end
 
     def success(message)
-      puts "    success".green + " | ".black + message.to_s
+      puts "    ✓ success".green + " | ".black + message.to_s
     end
 
     def debug(message)
-      puts "    debug".magenta + " | ".black + message.to_s
+      puts "    ⚠ debug".magenta + " | ".black + message.to_s
     end
 
     private

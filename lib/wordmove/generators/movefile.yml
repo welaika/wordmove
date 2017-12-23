@@ -1,68 +1,68 @@
 global:
-  sql_adapter: "default"
+  sql_adapter: default
 
 local:
-  vhost: "http://vhost.local"
-  wordpress_path: "<%= wordpress_path %>" # use an absolute path here
+  vhost: http://vhost.local
+  wordpress_path: <%= wordpress_path %> # use an absolute path here
 
   database:
-    name: "<%= database.name %>"
-    user: "<%= database.user %>"
-    password: "<%= database.password %>"
-    host: "<%= database.host %>"
+    name: <%= database.name %>
+    user: <%= database.user %>
+    password: "<%= database.password %>" # could be blank, so always use quotes around
+    host: <%= database.host %>
 
 production:
-  vhost: "http://example.com"
-  wordpress_path: "/var/www/your_site" # use an absolute path here
+  vhost: http://example.com
+  wordpress_path: /var/www/your_site # use an absolute path here
 
   database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "host"
-    # port: "3308" # Use just in case you have exotic server config
-    # mysqldump_options: "--max_allowed_packet=1G" # Only available if using SSH
+    name: database_name
+    user: user
+    password: password
+    host: host
+    # port: 3308 # Use just in case you have exotic server config
+    # mysqldump_options: --max_allowed_packet=1G # Only available if using SSH
 
   exclude:
-    - ".git/"
-    - ".gitignore"
-    - ".sass-cache/"
-    - "node_modules/"
-    - "bin/"
-    - "tmp/*"
-    - "Gemfile*"
-    - "Movefile"
-    - "movefile"
-    - "movefile.yml"
-    - "movefile.yaml"
-    - "wp-config.php"
-    - "wp-content/*.sql.gz"
+    - .git/
+    - .gitignore
+    - .sass-cache/
+    - node_modules/
+    - bin/
+    - tmp/*
+    - Gemfile*
+    - Movefile
+    - movefile
+    - movefile.yml
+    - movefile.yaml
+    - wp-config.php
+    - wp-content/*.sql.gz
 
   # paths: # you can customize wordpress internal paths
-  #   wp_content: "wp-content"
-  #   uploads: "wp-content/uploads"
-  #   plugins: "wp-content/plugins"
-  #   mu_plugins: "wp-content/mu-plugins"
-  #   themes: "wp-content/themes"
-  #   languages: "wp-content/languages"
+  #   wp_content: wp-content
+  #   uploads: wp-content/uploads
+  #   plugins: wp-content/plugins
+  #   mu_plugins: wp-content/mu-plugins
+  #   themes: wp-content/themes
+  #   languages: wp-content/languages
 
   # ssh:
-  #   host: "host"
-  #   user: "user"
-  #   password: "password" # password is optional, will use public keys if available.
+  #   host: host
+  #   user: user
+  #   password: password # password is optional, will use public keys if available.
   #   port: 22 # Port is optional
-  #   rsync_options: "--verbose" # Additional rsync options, optional
+  #   rsync_options: --verbose # Additional rsync options, optional
   #   gateway: # Gateway is optional
-  #     host: "host"
-  #     user: "user"
-  #     password: "password" # password is optional, will use public keys if available.
+  #     host: host
+  #     user: user
+  #     password: password # password is optional, will use public keys if available.
 
   # ftp:
-  #   user: "user"
-  #   password: "password"
-  #   host: "host"
+  #   user: user
+  #   password: password
+  #   host: host
   #   passive: true
-  #   scheme: "ftps" # default "ftp"
+  #   scheme: ftps # default ftp
 
 # staging: # multiple environments can be specified
 #   [...]

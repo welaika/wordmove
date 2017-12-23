@@ -2,14 +2,13 @@ type: map
 mapping:
   vhost:
     type: str
-    pattern: /^http:\/\//
+    pattern: /^https?:\/\//
     required: true
   wordpress_path:
     type: str
     required: true
   wordpress_absolute_path:
     type: str
-    required: false
   database:
     type: map
     required: true
@@ -28,21 +27,16 @@ mapping:
         required: true
       mysqldump_options:
         type: str
-        required: false
       port:
-        type: str
-        required: false
+        type: int
       charset:
         type: str
-        required: false
   exclude:
     type: seq
-    required: false
     sequence:
       - type: str
   paths:
     type: map
-    required: false
     mapping:
       wp_content:
       wp_config:
@@ -53,20 +47,17 @@ mapping:
       languages:
   ssh:
     type: map
-    required: false
     mapping:
       host:
         required: true
       user:
         required: false # If host is configured in ~/.ssh/config
       password:
-        required: false
       port:
         type: int
       rsync_options:
       gateway:
         type: map
-        required: false
         mapping:
           host:
             required: true
@@ -75,7 +66,6 @@ mapping:
           password:
   ftp:
     type: map
-    required: false
     mapping:
       user:
         required: true

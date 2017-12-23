@@ -4,12 +4,18 @@ module Wordmove
       attr_reader :config, :logger
 
       def initialize(movefile_name = nil, movefile_dir = '.')
-        @config = Wordmove::Movefile.new.fetch(movefile_name, movefile_dir)["local"]["database"]
         @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
+        begin
+          @config = Wordmove::Movefile.new.fetch(movefile_name, movefile_dir)["local"]["database"]
+        rescue Psych::SyntaxError
+          return
+        end
       end
 
       def check!
         logger.task "Checking local database commands and connection"
+
+        return logger.error "Can't connect to mysql using your movefile.yml" if config.nil?
 
         mysql_client_doctor
         mysqldump_doctor
