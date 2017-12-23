@@ -6,11 +6,21 @@ module Wordmove
 
       def initialize(name = nil, dir = '.')
         @movefile = Wordmove::Movefile.new
-        @contents = movefile.fetch(name, dir)
-        @root_keys = contents.keys
+
+        begin
+          @contents = movefile.fetch(name, dir)
+          @root_keys = contents.keys
+        rescue Psych::SyntaxError
+          movefile.logger.error "Your movefile is not parsable due to a syntax error"\
+                                "so we can't continue to validate it."
+          movefile.logger.debug "You could try to use https://yamlvalidator.com/ to"\
+                                "get a clue about the problem."
+        end
       end
 
       def validate!
+        return false unless root_keys
+
         MANDATORY_SECTIONS.each do |key|
           movefile.logger.task "Validating movefile section: #{key}"
           validate_mandatory_section(key)

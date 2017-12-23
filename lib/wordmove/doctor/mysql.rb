@@ -5,7 +5,11 @@ module Wordmove
 
       def initialize(movefile_name = nil, movefile_dir = '.')
         @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
-        @config = Wordmove::Movefile.new.fetch(movefile_name, movefile_dir)["local"]["database"]
+        begin
+          @config = Wordmove::Movefile.new.fetch(movefile_name, movefile_dir)["local"]["database"]
+        rescue Psych::SyntaxError
+          return
+        end
       end
 
       def check!
