@@ -5,6 +5,7 @@ mapping:
   wordpress_path:
   database:
     type: map
+    required: true
     mapping:
       name:
         required: true
@@ -15,8 +16,5 @@ mapping:
       host:
         required: true
       mysqldump_options:
-        required: false
       port:
-        required: false
       charset:
-        required: false
