@@ -2,7 +2,7 @@ type: map
 mapping:
   vhost:
     type: str
-    pattern: /^http:\/\//
+    pattern: /^https?:\/\//
     required: true
   wordpress_path:
     type: str
