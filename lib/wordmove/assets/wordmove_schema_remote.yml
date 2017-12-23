@@ -28,7 +28,7 @@ mapping:
       mysqldump_options:
         type: str
       port:
-        type: str
+        type: int
       charset:
         type: str
   exclude:
