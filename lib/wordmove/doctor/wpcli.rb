@@ -20,7 +20,7 @@ module Wordmove
       private
 
       def in_path?
-        system('which wp')
+        system('which wp', out: File::NULL)
       end
 
       def up_to_date?
