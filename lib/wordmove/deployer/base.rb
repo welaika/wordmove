@@ -7,17 +7,9 @@ module Wordmove
 
       class << self
         def deployer_for(cli_options)
-          options = fetch_movefile(cli_options[:config])
-          available_enviroments = extract_available_envs(options)
-          options.merge!(cli_options).deep_symbolize_keys!
-
-          if available_enviroments.size > 1 && options[:environment].nil?
-            raise(
-              UndefinedEnvironment,
-              "You need to specify an environment with --environment parameter"
-            )
-          end
-          environment = (options[:environment] || available_enviroments.first).to_sym
+          movefile = Wordmove::Movefile.new(cli_options[:config])
+          options = movefile.fetch.merge! cli_options
+          environment = movefile.environment(cli_options)
 
           return FTP.new(environment, options) if options[environment][:ftp]
 
@@ -30,15 +22,6 @@ module Wordmove
           end
 
           raise NoAdapterFound, "No valid adapter found."
-        end
-
-        def extract_available_envs(options)
-          options.keys.map(&:to_sym) - %i[local global]
-        end
-
-        def fetch_movefile(name = nil, start_dir = current_dir)
-          movefile = Wordmove::Movefile.new
-          movefile.fetch name, start_dir
         end
 
         def current_dir

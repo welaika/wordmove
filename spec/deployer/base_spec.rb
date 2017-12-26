@@ -45,20 +45,6 @@ describe Wordmove::Deployer::Base do
     end
   end
 
-  context ".fecth_movefile" do
-    let(:movefile) { double('movefile') }
-
-    before do
-      allow(Wordmove::Movefile).to receive(:new).and_return(movefile)
-    end
-
-    it "calls Wordmove::Movefile .fetch method" do
-      expect(movefile).to receive(:fetch)
-
-      described_class.fetch_movefile
-    end
-  end
-
   context "#mysql_dump_command" do
     let(:deployer) { described_class.new(:dummy_env) }
 
@@ -135,17 +121,6 @@ describe Wordmove::Deployer::Base do
       )
 
       expect(command).to eq("gzip -d --force \"dummy file.sql\"")
-    end
-  end
-
-  context "#extract_available_envs" do
-    let(:movefile) { movefile_path_for("multi_environments") }
-
-    it "retrieves only remote environments: no local and no global" do
-      expected_envs = %i[staging production missing_protocol]
-      options = described_class.fetch_movefile(movefile)
-      expect(described_class.extract_available_envs(options))
-        .to eq(expected_envs)
     end
   end
 end

@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Wordmove::CLI do
   let(:cli) { described_class.new }
   let(:deployer) { double("deployer") }
@@ -38,7 +40,7 @@ describe Wordmove::CLI do
   end
 
   context "--all" do
-    let(:options) { { "all" => true } }
+    let(:options) { { all: true, config: movefile_path_for('Movefile') } }
     let(:ordered_components) { %w[wordpress uploads themes plugins mu_plugins languages db] }
 
     context "#pull" do

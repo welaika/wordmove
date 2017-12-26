@@ -12,6 +12,7 @@ describe Wordmove::Movefile do
 
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:yaml) { "name: Waldo\njob: Hider" }
+    let(:movefile) { described_class.new(nil, path) }
 
     before do
       FileUtils.mkdir(TMPDIR)
@@ -36,8 +37,8 @@ describe Wordmove::Movefile do
 
       it 'finds a Movefile in current dir' do
         result = movefile.fetch
-        expect(result['name']).to eq('Waldo')
-        expect(result['job']).to eq('Hider')
+        expect(result[:name]).to eq('Waldo')
+        expect(result[:job]).to eq('Hider')
       end
 
       context "when movefile has no extensions" do
@@ -45,8 +46,8 @@ describe Wordmove::Movefile do
 
         it 'finds it aswell' do
           result = movefile.fetch
-          expect(result['name']).to eq('Waldo')
-          expect(result['job']).to eq('Hider')
+          expect(result[:name]).to eq('Waldo')
+          expect(result[:job]).to eq('Hider')
         end
       end
 
@@ -55,8 +56,8 @@ describe Wordmove::Movefile do
 
         it 'finds it aswell' do
           result = movefile.fetch
-          expect(result['name']).to eq('Waldo')
-          expect(result['job']).to eq('Hider')
+          expect(result[:name]).to eq('Waldo')
+          expect(result[:job]).to eq('Hider')
         end
       end
 
@@ -65,8 +66,8 @@ describe Wordmove::Movefile do
 
         it 'finds it aswell' do
           result = movefile.fetch
-          expect(result['name']).to eq('Waldo')
-          expect(result['job']).to eq('Hider')
+          expect(result[:name]).to eq('Waldo')
+          expect(result[:job]).to eq('Hider')
         end
       end
 
@@ -74,23 +75,26 @@ describe Wordmove::Movefile do
         before do
           @test_dir = File.join(TMPDIR, "test")
           FileUtils.mkdir(@test_dir)
-          allow(movefile).to receive(:current_dir).and_return(@test_dir)
         end
 
         it 'goes up through the directory tree and finds it' do
+          movefile = described_class.new(nil, @test_dir)
           result = movefile.fetch
-          expect(result['name']).to eq('Waldo')
-          expect(result['job']).to eq('Hider')
+          expect(result[:name]).to eq('Waldo')
+          expect(result[:job]).to eq('Hider')
         end
 
         context 'Movefile not found, met root node' do
+          let(:movefile) { described_class.new(nil, '/tmp') }
+
           it 'raises an exception' do
-            allow(movefile).to receive(:current_dir).and_return('/tmp')
             expect { movefile.fetch }.to raise_error(Wordmove::MovefileNotFound)
           end
         end
 
         context 'Movefile not found, found wp-config.php' do
+          let(:movefile) { described_class.new(nil, '/tmp') }
+
           before do
             FileUtils.touch(File.join(@test_dir, "wp-config.php"))
           end
