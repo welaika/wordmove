@@ -37,7 +37,7 @@ module Wordmove
       def validate_section(key)
         validator = validator_for(key)
 
-        errors = validator.validate(contents[key])
+        errors = validator.validate(contents[key].deep_stringify_keys)
 
         if errors&.empty?
           movefile.logger.success "Formal validation passed"
