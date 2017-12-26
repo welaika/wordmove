@@ -70,9 +70,14 @@ module Wordmove
         logger.error(e.message)
         exit 1
       end
+
+      Wordmove::Hook.run(:pull, :before, options)
+
       handle_options(options) do |task|
         deployer.send("pull_#{task}")
       end
+
+      Wordmove::Hook.run(:pull, :after, options)
     end
 
     desc "push", "Pushes WP data from local machine to remote host"
@@ -87,9 +92,14 @@ module Wordmove
         logger.error(e.message)
         exit 1
       end
+
+      Wordmove::Hook.run(:push, :before, options)
+
       handle_options(options) do |task|
         deployer.send("push_#{task}")
       end
+
+      Wordmove::Hook.run(:push, :after, options)
     end
   end
 end
