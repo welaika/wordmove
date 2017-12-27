@@ -160,7 +160,7 @@ describe Wordmove::Hook::Config do
       expect(config.empty?).to be true
     end
 
-    it "returns false if the is at least one hook registered" do
+    it "returns false if there is at least one hook registered" do
       allow(config).to receive(:local_hooks).and_return([])
 
       expect(config.empty?).to be false
