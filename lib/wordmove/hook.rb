@@ -96,7 +96,7 @@ module Wordmove
           logger.task_step false, "Remote output: #{stdout}"
           if exit_code.zero?
             logger.success ""
-            return true
+            next
           end
 
           logger.error "Error code #{exit_code} returned by remote command `#{command}`: #{stderr}"
