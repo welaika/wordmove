@@ -83,21 +83,49 @@ mapping:
         type: map
         mapping:
           before:
-            type: seq
-            sequence:
-              - type: str
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
           after:
-            type: seq
-            sequence:
-              - type: str
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
       pull:
         type: map
         mapping:
           before:
-            type: seq
-            sequence:
-              - type: str
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
           after:
-            type: seq
-            sequence:
-              - type: str
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
