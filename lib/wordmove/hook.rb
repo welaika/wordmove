@@ -53,9 +53,11 @@ module Wordmove
       private
 
       def empty_step?
-        return [] unless options
-        return [] if options[action].nil?
-        return [] if options[action][step].nil?
+        return true unless options
+        return true if options[action].nil?
+        return true if options[action][step].nil?
+
+        false
       end
     end
 
