@@ -74,7 +74,7 @@ module Wordmove
           return true if simulate
 
           stdout_return = `#{command}`
-          logger.task_step true, "Local output: #{stdout_return}"
+          logger.task_step true, "Output: #{stdout_return}"
         end
       end
     end
@@ -94,7 +94,7 @@ module Wordmove
 
           stdout, stderr, exit_code = copier.exec! command
 
-          logger.task_step false, "Remote output: #{stdout}"
+          logger.task_step false, "Output: #{stdout}"
           if exit_code.zero?
             logger.success ""
             next
