@@ -73,7 +73,8 @@ module Wordmove
           logger.task_step true, "Exec command: #{command}"
           return true if simulate
 
-          system(command)
+          stdout_return = `#{command}`
+          logger.task_step true, "Local output: #{stdout_return}"
         end
       end
     end
