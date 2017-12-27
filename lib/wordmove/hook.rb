@@ -73,8 +73,14 @@ module Wordmove
           logger.task_step true, "Exec command: #{command}"
           return true if simulate
 
-          stdout_return = `#{command}`
+          stdout_return = `#{command} 2>&1`
           logger.task_step true, "Output: #{stdout_return}"
+
+          if $CHILD_STATUS.exitstatus.zero?
+            logger.success ""
+          else
+            logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
+          end
         end
       end
     end
@@ -94,13 +100,13 @@ module Wordmove
 
           stdout, stderr, exit_code = copier.exec! command
 
-          logger.task_step false, "Output: #{stdout}"
           if exit_code.zero?
+            logger.task_step false, "Output: #{stdout}"
             logger.success ""
-            next
+          else
+            logger.task_step false, "Output: #{stderr}"
+            logger.error "Error code #{exit_code}"
           end
-
-          logger.error "Error code #{exit_code} returned by remote command `#{command}`: #{stderr}"
         end
       end
     end
