@@ -29,25 +29,25 @@ ssh_with_hooks:
     push:
       before:
         local:
-          - echo "Calling hook push before local"
+          - 'echo "Calling hook push before local"'
         remote:
-          - echo "Calling hook push before remote"
+          - 'echo "Calling hook push before remote"'
       after:
         local:
-          - echo "Calling hook push after local"
+          - 'echo "Calling hook push after local"'
         remote:
-          - echo "Calling hook push after remote"
+          - 'echo "Calling hook push after remote"'
     pull:
       before:
         local:
-          - echo "Calling hook pull before local"
+          - 'echo "Calling hook pull before local"'
         remote:
-          - echo "Calling hook pull before remote"
+          - 'echo "Calling hook pull before remote"'
       after:
         local:
-          - echo "Calling hook pull after local"
+          - 'echo "Calling hook pull after local"'
         remote:
-          - echo "Calling hook pull after remote"
+          - 'echo "Calling hook pull after remote"'
 
 ftp_with_hooks:
   vhost: "http://production.mysite.example.com"
