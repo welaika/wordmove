@@ -22,12 +22,12 @@ module Wordmove
       end
 
       found = entries.first
-      logger.task("Using Movefile: #{found}") if verbose
+      logger.task("Using Movefile: #{found}") if verbose == true
       YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
     end
 
     def environment(cli_options = {})
-      options = fetch
+      options = fetch(false)
       available_enviroments = extract_available_envs(options)
       options.merge!(cli_options).deep_symbolize_keys!
 
