@@ -13,14 +13,14 @@ describe Wordmove::Deployer::Base do
 
     context "with ftp remote connection" do
       it "returns an instance of FTP deployer" do
-        options["environment"] = "production"
+        options[:environment] = "production"
         expect(described_class.deployer_for(options)).to be_a Wordmove::Deployer::FTP
       end
     end
 
     context "with ssh remote connection" do
       it "returns an instance of Ssh::Default deployer" do
-        options["environment"] = "staging"
+        options[:environment] = "staging"
 
         expect(described_class.deployer_for(options))
           .to be_a Wordmove::Deployer::Ssh::DefaultSqlAdapter
@@ -29,7 +29,7 @@ describe Wordmove::Deployer::Base do
       context "when Movefile is configured with 'wpcli' sql_adapter" do
         it "returns an instance of Ssh::WpcliSqlAdapter deployer" do
           options[:config] = movefile_path_for('multi_environments_wpcli_sql_adapter')
-          options["environment"] = "staging"
+          options[:environment] = "staging"
 
           expect(described_class.deployer_for(options))
             .to be_a Wordmove::Deployer::Ssh::WpcliSqlAdapter
@@ -55,7 +55,7 @@ describe Wordmove::Deployer::Base do
 
     context "with unknown type of connection " do
       it "raises an exception" do
-        options["environment"] = "missing_protocol"
+        options[:environment] = "missing_protocol"
         expect { described_class.deployer_for(options) }.to raise_error(Wordmove::NoAdapterFound)
       end
     end
