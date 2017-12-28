@@ -47,10 +47,13 @@ module Wordmove
         after_pull_cleanup!
       end
 
+      # In following commands, we do not guard for simulate?
+      # because it is handled through --dry-run rsync option.
+      # @see initialize
       %w[get put get_directory put_directory delete].each do |command|
         define_method "remote_#{command}" do |*args|
           logger.task_step false, "#{command}: #{args.join(' ')}"
-          @copier.send(command, *args) unless simulate?
+          @copier.send(command, *args)
         end
       end
 
