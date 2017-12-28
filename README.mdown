@@ -10,7 +10,8 @@ Wordmove has also a neat hook system which enables you to run arbitrary commands
 before and after push/pull actions. Local and remote commands are both supported, but remote
 ones will be run only if using SSH protocol. Read the [dedicated wiki page](https://github.com/welaika/wordmove/wiki/Hooks) for more info.
 
-**SSH** connections are fully supported, while [FTP support is planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) when new features will be introduced.
+[FTP support has been discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), thus most recent features won't work,
+while base functionalities are granted.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.svg?branch=master)](https://travis-ci.org/welaika/wordmove)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
