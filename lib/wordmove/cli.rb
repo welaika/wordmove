@@ -65,7 +65,7 @@ module Wordmove
     def pull
       ensure_wordpress_options_presence!(options)
       begin
-        deployer = Wordmove::Deployer::Base.deployer_for(options)
+        deployer = Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
       rescue MovefileNotFound => e
         logger.error(e.message)
         exit 1
