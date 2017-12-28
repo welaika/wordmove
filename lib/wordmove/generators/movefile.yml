@@ -24,19 +24,20 @@ production:
     # mysqldump_options: --max_allowed_packet=1G # Only available if using SSH
 
   exclude:
-    - .git/
-    - .gitignore
-    - .sass-cache/
-    - node_modules/
-    - bin/
-    - tmp/*
-    - Gemfile*
-    - Movefile
-    - movefile
-    - movefile.yml
-    - movefile.yaml
-    - wp-config.php
-    - wp-content/*.sql.gz
+    - '.git/'
+    - '.gitignore'
+    - '.sass-cache/'
+    - 'node_modules/'
+    - 'bin/'
+    - 'tmp/*'
+    - 'Gemfile*'
+    - 'Movefile'
+    - 'movefile'
+    - 'movefile.yml'
+    - 'movefile.yaml'
+    - 'wp-config.php'
+    - 'wp-content/*.sql.gz'
+    - '*.orig'
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: wp-content
