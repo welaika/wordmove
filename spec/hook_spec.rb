@@ -44,6 +44,18 @@ describe Wordmove::Hook do
           .to output(/Calling hook push after remote/)
           .to_stdout_from_any_process
       end
+
+      context "if --similate was passed by user on cli" do
+        let(:options) do
+          common_options.merge("environment" => 'ssh_with_hooks', "simulate" => true)
+        end
+
+        it "does not really run any commands" do
+          expect { cli.invoke(:push, [], options) }
+            .not_to output(/Output:/)
+            .to_stdout_from_any_process
+        end
+      end
     end
 
     context "when pulling from a remote with ssh" do
