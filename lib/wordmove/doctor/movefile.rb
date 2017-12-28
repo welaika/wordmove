@@ -1,14 +1,14 @@
 module Wordmove
   class Doctor
     class Movefile
-      MANDATORY_SECTIONS = %w[global local].freeze
+      MANDATORY_SECTIONS = %i[global local].freeze
       attr_reader :movefile, :contents, :root_keys
 
       def initialize(name = nil, dir = '.')
-        @movefile = Wordmove::Movefile.new
+        @movefile = Wordmove::Movefile.new(name, dir)
 
         begin
-          @contents = movefile.fetch(name, dir)
+          @contents = movefile.fetch
           @root_keys = contents.keys
         rescue Psych::SyntaxError
           movefile.logger.error "Your movefile is not parsable due to a syntax error"\
@@ -37,7 +37,7 @@ module Wordmove
       def validate_section(key)
         validator = validator_for(key)
 
-        errors = validator.validate(contents[key])
+        errors = validator.validate(contents[key].deep_stringify_keys)
 
         if errors&.empty?
           movefile.logger.success "Formal validation passed"
@@ -67,7 +67,7 @@ module Wordmove
       end
 
       def validate_protocol_presence(keys)
-        return true if keys.include?('ssh') || keys.include?('ftp')
+        return true if keys.include?(:ssh) || keys.include?(:ftp)
 
         movefile.logger.error "This remote has not ssh nor ftp protocol defined"
 

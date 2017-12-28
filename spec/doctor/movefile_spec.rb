@@ -11,7 +11,7 @@ describe Wordmove::Doctor::Movefile do
 
   context ".root_keys" do
     it "returns all the yml's root keys" do
-      expected_root_keys = %w[
+      expected_root_keys = %i[
         global
         local
         staging

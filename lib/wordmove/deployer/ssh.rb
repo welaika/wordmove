@@ -9,6 +9,13 @@ module Wordmove
       def initialize(environment, options)
         super
         ssh_options = remote_options[:ssh]
+
+        if simulate? && ssh_options[:rsync_options]
+          ssh_options[:rsync_options].concat(" --dry-run")
+        elsif simulate?
+          ssh_options[:rsync_options] = "--dry-run"
+        end
+
         @copier = Photocopier::SSH.new(ssh_options).tap { |c| c.logger = logger }
 
         @local_dump_path = local_wp_content_dir.path("dump.sql")
@@ -23,6 +30,8 @@ module Wordmove
       def push_db
         super
 
+        return true if simulate?
+
         backup_remote_db!
         adapt_local_db!
         after_push_cleanup!
@@ -31,15 +40,20 @@ module Wordmove
       def pull_db
         super
 
+        return true if simulate?
+
         backup_local_db!
         adapt_remote_db!
         after_pull_cleanup!
       end
 
+      # In following commands, we do not guard for simulate?
+      # because it is handled through --dry-run rsync option.
+      # @see initialize
       %w[get put get_directory put_directory delete].each do |command|
         define_method "remote_#{command}" do |*args|
           logger.task_step false, "#{command}: #{args.join(' ')}"
-          @copier.send(command, *args) unless simulate?
+          @copier.send(command, *args)
         end
       end
 

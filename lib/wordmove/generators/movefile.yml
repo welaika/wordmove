@@ -24,19 +24,20 @@ production:
     # mysqldump_options: --max_allowed_packet=1G # Only available if using SSH
 
   exclude:
-    - .git/
-    - .gitignore
-    - .sass-cache/
-    - node_modules/
-    - bin/
-    - tmp/*
-    - Gemfile*
-    - Movefile
-    - movefile
-    - movefile.yml
-    - movefile.yaml
-    - wp-config.php
-    - wp-content/*.sql.gz
+    - '.git/'
+    - '.gitignore'
+    - '.sass-cache/'
+    - 'node_modules/'
+    - 'bin/'
+    - 'tmp/*'
+    - 'Gemfile*'
+    - 'Movefile'
+    - 'movefile'
+    - 'movefile.yml'
+    - 'movefile.yaml'
+    - 'wp-config.php'
+    - 'wp-content/*.sql.gz'
+    - '*.orig'
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: wp-content
@@ -51,7 +52,7 @@ production:
   #   user: user
   #   password: password # password is optional, will use public keys if available.
   #   port: 22 # Port is optional
-  #   rsync_options: --verbose # Additional rsync options, optional
+  #   rsync_options: --verbose --itemize-changes# Additional rsync options, optional
   #   gateway: # Gateway is optional
   #     host: host
   #     user: user
@@ -63,6 +64,30 @@ production:
   #   host: host
   #   passive: true
   #   scheme: ftps # default ftp
+
+  # hooks: # Remote hooks won't work with FTP
+  #   push:
+  #     before:
+  #       local:
+  #         - 'echo "Do something locally before push"'
+  #       remote:
+  #         - 'echo "Do something remotely before push"'
+  #     after:
+  #       local:
+  #         - 'echo "Do something locally after push"'
+  #       remote:
+  #         - 'echo "Do something remotely after push"'
+  #   pull:
+  #     before:
+  #       local:
+  #         - 'echo "Do something locally before pull"'
+  #       remote:
+  #         - 'echo "Do something remotely before pull"'
+  #     after:
+  #       local:
+  #         - 'echo "Do something locally after pull"'
+  #       remote:
+  #         - 'echo "Do something remotely after pull"'
 
 # staging: # multiple environments can be specified
 #   [...]

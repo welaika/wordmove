@@ -1,0 +1,93 @@
+global:
+  sql_adapter: "default"
+
+local:
+  vhost: "http://localhost:8080"
+  wordpress_path: "/home/welaika/sites/your_site"
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+ssh_with_hooks:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+  hooks:
+    push:
+      before:
+        local:
+          - 'echo "Calling hook push before local"'
+        remote:
+          - 'echo "Calling hook push before remote"'
+      after:
+        local:
+          - 'echo "Calling hook push after local"'
+        remote:
+          - 'echo "Calling hook push after remote"'
+    pull:
+      before:
+        local:
+          - 'echo "Calling hook pull before local"'
+        remote:
+          - 'echo "Calling hook pull before remote"'
+      after:
+        local:
+          - 'echo "Calling hook pull after local"'
+        remote:
+          - 'echo "Calling hook pull after remote"'
+
+ftp_with_hooks:
+  vhost: "http://production.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ftp:
+    user: "user"
+    password: "password"
+    host: "production.mysite.example.com"
+    passive: true
+
+  hooks:
+    push:
+      before:
+        remote:
+          - echo "Calling hook push before remote"
+
+ssh_with_hooks_partially_filled:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+  hooks:
+    push:
+    pull:
+      after:
+        local:
+          - echo "I've partially configured my hooks"

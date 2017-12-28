@@ -76,3 +76,56 @@ mapping:
       passive:
         type: bool
       scheme:
+  hooks:
+    type: map
+    mapping:
+      push:
+        type: map
+        mapping:
+          before:
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
+          after:
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
+      pull:
+        type: map
+        mapping:
+          before:
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str
+          after:
+            type: map
+            mapping:
+              local:
+                type: seq
+                sequence:
+                  - type: str
+              remote:
+                type: seq
+                sequence:
+                  - type: str

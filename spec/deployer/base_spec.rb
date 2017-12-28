@@ -13,14 +13,14 @@ describe Wordmove::Deployer::Base do
 
     context "with ftp remote connection" do
       it "returns an instance of FTP deployer" do
-        options["environment"] = "production"
+        options[:environment] = "production"
         expect(described_class.deployer_for(options)).to be_a Wordmove::Deployer::FTP
       end
     end
 
     context "with ssh remote connection" do
       it "returns an instance of Ssh::Default deployer" do
-        options["environment"] = "staging"
+        options[:environment] = "staging"
 
         expect(described_class.deployer_for(options))
           .to be_a Wordmove::Deployer::Ssh::DefaultSqlAdapter
@@ -29,33 +29,35 @@ describe Wordmove::Deployer::Base do
       context "when Movefile is configured with 'wpcli' sql_adapter" do
         it "returns an instance of Ssh::WpcliSqlAdapter deployer" do
           options[:config] = movefile_path_for('multi_environments_wpcli_sql_adapter')
-          options["environment"] = "staging"
+          options[:environment] = "staging"
 
           expect(described_class.deployer_for(options))
             .to be_a Wordmove::Deployer::Ssh::WpcliSqlAdapter
+        end
+      end
+
+      context "with --simulate" do
+        it "rsync_options will contain --dry-run" do
+          options[:environment] = "staging"
+          options[:simulate] = true
+          copier = double(:copier)
+
+          allow(copier).to receive(:logger=)
+
+          expect(Photocopier::SSH).to receive(:new)
+            .with(hash_including(rsync_options: '--dry-run'))
+            .and_return(copier)
+
+          described_class.deployer_for(options)
         end
       end
     end
 
     context "with unknown type of connection " do
       it "raises an exception" do
-        options["environment"] = "missing_protocol"
+        options[:environment] = "missing_protocol"
         expect { described_class.deployer_for(options) }.to raise_error(Wordmove::NoAdapterFound)
       end
-    end
-  end
-
-  context ".fecth_movefile" do
-    let(:movefile) { double('movefile') }
-
-    before do
-      allow(Wordmove::Movefile).to receive(:new).and_return(movefile)
-    end
-
-    it "calls Wordmove::Movefile .fetch method" do
-      expect(movefile).to receive(:fetch)
-
-      described_class.fetch_movefile
     end
   end
 
@@ -135,17 +137,6 @@ describe Wordmove::Deployer::Base do
       )
 
       expect(command).to eq("gzip -d --force \"dummy file.sql\"")
-    end
-  end
-
-  context "#extract_available_envs" do
-    let(:movefile) { movefile_path_for("multi_environments") }
-
-    it "retrieves only remote environments: no local and no global" do
-      expected_envs = %i[staging production missing_protocol]
-      options = described_class.fetch_movefile(movefile)
-      expect(described_class.extract_available_envs(options))
-        .to eq(expected_envs)
     end
   end
 end

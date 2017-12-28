@@ -10,6 +10,8 @@ module Wordmove
       def push_db
         super
 
+        return true if simulate?
+
         local_dump_path = local_wp_content_dir.path("dump.sql")
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
         local_backup_path = local_wp_content_dir.path("remote-backup-#{Time.now.to_i}.sql")
@@ -32,6 +34,9 @@ module Wordmove
 
       def pull_db
         super
+
+        return true if simulate?
+
         local_dump_path = local_wp_content_dir.path("dump.sql")
         local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
 
