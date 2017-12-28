@@ -6,11 +6,14 @@ Wordmove is a gem that lets you automatically mirror local Wordpress
 installations and DB data back and forth from your local development machine to
 the remote server.
 
-**SSH** connections are fully supported, while [FTP support is planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) when new features will be introduced.
+Wordmove has also a neat hook system which enables you to run arbitrary commands
+before and after push/pull actions. Local and remote commands are both supported, but remote
+ones will be run only if using SSH protocol. Read the [dedicated wiki page](https://github.com/welaika/wordmove/wiki/Hooks) for more info.
 
-Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
+[FTP support has been discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), thus most recent features won't work,
+while base functionalities are granted.
 
-[![Build Status](https://travis-ci.org/welaika/wordmove.png?branch=master)](https://travis-ci.org/welaika/wordmove)
+[![Build Status](https://travis-ci.org/welaika/wordmove.svg?branch=master)](https://travis-ci.org/welaika/wordmove)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 [![Gem Version](https://badge.fury.io/rb/wordmove.svg)](https://rubygems.org/gems/wordmove)
 
@@ -18,11 +21,11 @@ Think of it like Capistrano for Wordpress, complete with push/pull capabilities.
 
 That's easy:
 
-```
-gem install wordmove
-```
+    gem install wordmove
 
+And to update:
 
+    gem update wordmove
 
 ## Peer dependencies
 
@@ -32,7 +35,7 @@ Wordmove just acts as automation glue bewtween tools you already have and love. 
 | ------- | ---------------------------- | ------------------------------- |
 | rsync   | Push and pull files and dirs | Yes for SSH connections         |
 | mysql   | Import and dump database     | Yes                             |
-| wp-cli  | DB adapt                     | Nope: experimental and optional |
+| wp-cli  | DB adapt                     | Nope (but soon will be)         |
 | lftp    | all                          | Yes, for FTP connections        |
 | ssh     | all                          | Yes, for SSH connections        |
 
@@ -61,62 +64,100 @@ Move inside the Wordpress folder and use `wordmove init` to generate a new `move
 
 ## movefile.yml
 
-You can configure Wordmove creating a `movefile.yml`. That's just a YAML file with local and remote host infos:
+You can configure Wordmove creating a `movefile.yml`. That's a YAML file with local and remote host(s) infos:
 
 ```yaml
 global:
-  sql_adapter: "default"
+  sql_adapter: default
 
 local:
-  vhost: "http://vhost.local"
-  wordpress_path: "/home/john/sites/your_site" # use an absolute path here
+  vhost: http://vhost.local
+  wordpress_path: /home/john/sites/your_site # use an absolute path here
 
   database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "127.0.0.1"
+    name: database_name
+    user: user
+    password: password
+    host: localhost
 
   # paths: # you can customize wordpress internal paths
-  #   wp_content: "wp-content"
-  #   uploads: "wp-content/uploads"
-  #   plugins: "wp-content/plugins"
-  #   themes: "wp-content/themes"
-  #   languages: "wp-content/languages"
+  #   wp_content: wp-content
+  #   uploads: wp-content/uploads
+  #   plugins: wp-content/plugins
+  #   themes: wp-content/themes
+  #   languages: wp-content/languages
 
 production:
-  vhost: "http://example.com"
-  wordpress_path: "/var/www/your_site" # use an absolute path here
+  vhost: http://example.com
+  wordpress_path: /var/www/your_site # use an absolute path here
 
   database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "host"
-    # port: "3308" # Use just in case you have exotic server config
-    # mysqldump_options: "--max_allowed_packet=50MB" # Only available if using SSH
+    name: database_name
+    user: user
+    password: password
+    host: host
+    # port: 3308 # Use just in case you have exotic server config
+    # mysqldump_options: --max_allowed_packet=50MB # Only available if using SSH
 
   exclude:
-    - ".git/"
-    - ".gitignore"
-    - ".sass-cache/"
-    - "bin/"
-    - "tmp/*"
-    - "Gemfile*"
-    - "Movefile"
-    - "movefile"
-    - "movefile.yml"
-    - "movefile.yaml"
-    - "wp-config.php"
-    - "wp-content/*.sql"
+    - .git/
+    - .gitignore
+    - .sass-cache/
+    - bin/
+    - tmp/*
+    - Gemfile*
+    - Movefile
+    - movefile
+    - movefile.yml
+    - movefile.yaml
+    - wp-config.php
+    - wp-content/*.sql
 
   ssh:
-    host: "host"
-    user: "user"
+    host: host
+    user: user
+
+  # hooks: # Remote hooks won't work with FTP
+  #   push:
+  #     before:
+  #       local:
+  #         - 'echo "Do something locally before push"'
+  #       remote:
+  #         - 'echo "Do something remotely before push"'
+  #     after:
+  #       local:
+  #         - 'echo "Do something locally after push"'
+  #       remote:
+  #         - 'echo "Do something remotely after push"'
+  #   pull:
+  #     before:
+  #       local:
+  #         - 'echo "Do something locally before pull"'
+  #       remote:
+  #         - 'echo "Do something remotely before pull"'
+  #     after:
+  #       local:
+  #         - 'echo "Do something locally after pull"'
+  #       remote:
+  #         - 'echo "Do something remotely after pull"'
 ```
 
 **We warmly recommend to read the wiki article [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained) to understand about the supported configurations.**
+
+## Multistage
+
+You can define multiple environments in your `movefile.yml`, such as production, staging, etc.
+Use `-e` with `pull` or `push` to run the command on the specified environment.
+
+For example:
+
+    wordmove push -e staging -d
+
+will push your local database to the staging environment only.
+
+We warmly **recommend** to read the wiki article: [Multiple environments explained
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
 ## Supports
 
@@ -141,21 +182,17 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 
 FTP support is [planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) at some point of future development.
 
-### Multistage
-
-You can define multiple environments in your `movefile.yml`, such as production, staging, etc.
-Use `-e` with `pull` or `push` to run the command on the specified environment.
-
-For example:
-```
-wordmove push -e staging -d
-```
-will push your local database to the staging environment only.
-
-We warmly **recommend** to read the wiki article: [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
-
 ## Notes
+
+### Mirroring
+
+Push and pull actions on files will perform a **mirror** operation. Please, keep
+in mind that to mirror means to transfer new/updated files **and remove files**
+from destination if not present in source.
+
+This means that if you have files/directories on your remotes which you must
+preserve, you **must exclude those in your movefile.yml**, or they will be
+deleted.
 
 ### How the heck you are able to sync the DB via FTP?
 
