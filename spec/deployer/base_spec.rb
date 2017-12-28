@@ -35,6 +35,22 @@ describe Wordmove::Deployer::Base do
             .to be_a Wordmove::Deployer::Ssh::WpcliSqlAdapter
         end
       end
+
+      context "with --simulate" do
+        it "rsync_options will contain --dry-run" do
+          options[:environment] = "staging"
+          options[:simulate] = true
+          copier = double(:copier)
+
+          allow(copier).to receive(:logger=)
+
+          expect(Photocopier::SSH).to receive(:new)
+            .with(hash_including(rsync_options: '--dry-run'))
+            .and_return(copier)
+
+          described_class.deployer_for(options)
+        end
+      end
     end
 
     context "with unknown type of connection " do

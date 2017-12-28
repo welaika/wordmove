@@ -9,6 +9,13 @@ module Wordmove
       def initialize(environment, options)
         super
         ssh_options = remote_options[:ssh]
+
+        if simulate? && ssh_options[:rsync_options]
+          ssh_options[:rsync_options].concat(" --dry-run")
+        elsif simulate?
+          ssh_options[:rsync_options] = "--dry-run"
+        end
+
         @copier = Photocopier::SSH.new(ssh_options).tap { |c| c.logger = logger }
 
         @local_dump_path = local_wp_content_dir.path("dump.sql")
