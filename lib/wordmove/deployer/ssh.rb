@@ -23,6 +23,8 @@ module Wordmove
       def push_db
         super
 
+        return true if simulate?
+
         backup_remote_db!
         adapt_local_db!
         after_push_cleanup!
@@ -30,6 +32,8 @@ module Wordmove
 
       def pull_db
         super
+
+        return true if simulate?
 
         backup_local_db!
         adapt_remote_db!
