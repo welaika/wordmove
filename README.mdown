@@ -208,7 +208,7 @@ Wordmove `1.3.1` has been removed from `rubygems` due to a bug with FTP deployin
 using this version, please update soon (`gem update wordmove`).
 
 ## Need more tools?
-Visit [Wordpress Tools](http://wptools.it).
+Visit [Wordpress Tools](https://www.wptools.it).
 
 ## Credits
 
@@ -228,7 +228,7 @@ Feel free to open an issue about contribution if more you need more info
 
 ## Author
 
-made with ❤️ and ☕️ by [weLaika](http://dev.welaika.com)
+made with ❤️ and ☕️ by [weLaika](https://dev.welaika.com)
 
 ## License
 
