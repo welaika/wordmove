@@ -35,14 +35,14 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "photocopier", "~> 1.1", ">= 1.1.3"
   spec.add_runtime_dependency "thor", "~> 0.19.4"
 
-  spec.required_ruby_version = "~> 2.4.0"
+  spec.required_ruby_version = ">= 2.4.0", "~> 2.5.0"
 
   spec.add_development_dependency "bundler", "~> 1.14", ">= 1.14.6"
   spec.add_development_dependency "priscilla", "~> 1.0"
   spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.3"
-  spec.add_development_dependency "rubocop", "~> 0.51.0"
+  spec.add_development_dependency "rubocop", "~> 0.52.0"
   spec.add_development_dependency "simplecov", "~> 0.9"
 
   spec.post_install_message = <<-RAINBOW
