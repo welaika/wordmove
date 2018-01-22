@@ -16,7 +16,7 @@ while base functionalities are granted.
 [![Build Status](https://travis-ci.org/welaika/wordmove.svg?branch=master)](https://travis-ci.org/welaika/wordmove)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 [![Gem Version](https://badge.fury.io/rb/wordmove.svg)](https://rubygems.org/gems/wordmove)
-[![CodeTriage](https://www.codetriage.com/welaika/wordmove/badges/users.svg)
+![CodeTriage](https://www.codetriage.com/welaika/wordmove/badges/users.svg)
 
 ## Installation
 
