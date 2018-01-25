@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "photocopier", "~> 1.1", ">= 1.1.3"
   spec.add_runtime_dependency "thor", "~> 0.19.4"
 
-  spec.required_ruby_version = ">= 2.4.0", "~> 2.5.0"
+  spec.required_ruby_version = ">= 2.4.0"
 
   spec.add_development_dependency "bundler", "~> 1.14", ">= 1.14.6"
   spec.add_development_dependency "priscilla", "~> 1.0"
