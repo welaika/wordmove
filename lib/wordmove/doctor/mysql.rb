@@ -42,9 +42,12 @@ module Wordmove
 
       def mysql_server_doctor
         command = ["mysql"]
-        command << "-u #{config['user']}"
-        command << "-p#{config['password']}" unless config['password'].blank?
-        command << "-h #{config['host']}"
+        command << "--host=#{Shellwords.escape(config[:host])}" if config[:host].present?
+        command << "--port=#{Shellwords.escape(config[:port])}" if config[:port].present?
+        command << "--user=#{Shellwords.escape(config[:user])}" if config[:user].present?
+        if config[:password].present?
+          command << "--password=#{Shellwords.escape(config[:password])}"
+        end
         command << "-e'QUIT'"
         command = command.join(" ")
 
