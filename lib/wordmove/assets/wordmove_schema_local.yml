@@ -1,7 +1,7 @@
 type: map
 mapping:
   vhost:
-    pattern: /^http:\/\//
+    pattern: /^https?:\/\//
   wordpress_path:
   database:
     type: map
