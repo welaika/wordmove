@@ -27,5 +27,11 @@ describe Wordmove::Doctor::Mysql do
 
       silence_stream(STDOUT) { doctor.check! }
     end
+
+    it "calls mysql database check" do
+      # expect(doctor).to receive(:mysql_database_doctor)
+
+      silence_stream(STDOUT) { doctor.check! }
+    end
   end
 end
