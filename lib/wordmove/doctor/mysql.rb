@@ -20,6 +20,7 @@ module Wordmove
         mysql_client_doctor
         mysqldump_doctor
         mysql_server_doctor
+        mysql_database_doctor
       end
 
       private
@@ -41,6 +42,43 @@ module Wordmove
       end
 
       def mysql_server_doctor
+        command = mysql_command
+
+        if system(command, out: File::NULL, err: File::NULL)
+          logger.success "Successfully connected to the MySQL server"
+        else
+          logger.error <<-LONG
+  We can't connect to the MySQL server using credentials
+                specified in the Movefile. Double check them or try
+                to debug your system configuration.
+
+                The command used to test was:
+
+                #{command}
+          LONG
+        end
+      end
+
+      def mysql_database_doctor
+        command = mysql_command(database: config[:name])
+
+        if system(command, out: File::NULL, err: File::NULL)
+          logger.success "Successfully connected to the database"
+        else
+          logger.error <<-LONG
+  We can't connect to the database using credentials
+                specified in the Movefile, or the database does not
+                exists. Double check them or try to debug your
+                system configuration.
+
+                The command used to test was:
+
+                #{command}
+          LONG
+        end
+      end
+
+      def mysql_command(database: nil)
         command = ["mysql"]
         command << "--host=#{Shellwords.escape(config[:host])}" if config[:host].present?
         command << "--port=#{Shellwords.escape(config[:port])}" if config[:port].present?
@@ -48,22 +86,9 @@ module Wordmove
         if config[:password].present?
           command << "--password=#{Shellwords.escape(config[:password])}"
         end
+        command << database if database.present?
         command << "-e'QUIT'"
-        command = command.join(" ")
-
-        if system(command, out: File::NULL, err: File::NULL)
-          logger.success "Successfully connected to the database"
-        else
-          logger.error <<~LONG
-            We can't connect to the database using credentials
-            specified in the Movefile. Double check them or try
-            to debug your system configuration.
-
-            The command used to test was:
-
-            #{command}
-          LONG
-        end
+        command.join(" ")
       end
     end
   end
