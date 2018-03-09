@@ -162,6 +162,7 @@ module Wordmove
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
+        command << "--protocol=#{Shellwords.escape(options[:protocol])}" if options[:protocol].present?
         if options[:password].present?
           command << "--password=#{Shellwords.escape(options[:password])}"
         end
