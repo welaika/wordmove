@@ -26,6 +26,17 @@ module Wordmove
       YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
     end
 
+    def dotenv(cli_options = {})
+      env = cli_options['environment'] || cli_options[:environment]
+      env_files = Dir[File.join(start_dir, ".env{.#{env},}")]
+
+      found_env = env_files.first
+      logger.task("Using .env file: #{found_env}") if found_env && found_env != ENV['dotenv']
+      ENV['dotenv'] = found_env
+
+      Dotenv.load(found_env) if found_env
+    end
+
     def environment(cli_options = {})
       options = fetch(false)
       available_enviroments = extract_available_envs(options)
