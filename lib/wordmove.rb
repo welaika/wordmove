@@ -11,6 +11,7 @@ require 'open-uri'
 require 'active_support'
 require 'active_support/core_ext'
 require 'kwalify'
+require 'dotenv'
 
 require 'photocopier'
 

@@ -160,6 +160,33 @@ will push your local database to the staging environment only.
 We warmly **recommend** to read the wiki article: [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
+## Secrets
+
+If you intend on committing movefiles to your repos, consider using ERB tags to hide sensitive variables and credentials:
+
+```yaml
+production:
+  database:
+    user: "<%= ENV['PROD_DB_USER'] %>"
+    password: "<%= ENV['PROD_DB_PASS'] %>"
+```
+
+This can either be specified through shell variables or a dotenv file.
+
+### Shell
+In `bash`, you can set variables like so:
+```bash
+export PROD_DB_USER="username" PROD_DB_PASS="password"
+```
+
+### Dotenv
+Wordmove supports the [dotenv](https://github.com/bkeepers/dotenv) module. Simply create a file named `.env` next to your movefile:
+```dosini
+PROD_DB_USER=username
+PROD_DB_PASS=password
+```
+You may also use `.env.{environmentname}`, but this is discouraged.
+
 ## Supports
 
 ### OS
