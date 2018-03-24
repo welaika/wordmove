@@ -14,7 +14,7 @@ module Wordmove
           raise UnmetPeerDependencyError, "WP-CLI is not installed or not in your $PATH"
         end
 
-        "wp search-replace #{from} #{to} --quiet --skip-columns=guid --all-tables"
+        "wp search-replace #{from} #{to} --quiet --skip-columns=guid --all-tables --allow-root"
       end
     end
   end
