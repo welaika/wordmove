@@ -3,3 +3,9 @@ rvm:
   - 2.4.0
   - 2.4.3
   - 2.5.0
+cache: bundler
+install:
+  - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  - chmod +x wp-cli.phar
+  - sudo mv wp-cli.phar /usr/local/bin/wp
+  - bundle install --jobs=3 --retry=3
