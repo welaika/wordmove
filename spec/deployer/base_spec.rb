@@ -72,7 +72,6 @@ describe Wordmove::Deployer::Base do
           port: "8888",
           user: "root",
           password: "'\"$ciao",
-          charset: "utf8",
           name: "database_name",
           mysqldump_options: "--max_allowed_packet=1G --no-create-db"
         },
@@ -83,7 +82,7 @@ describe Wordmove::Deployer::Base do
         [
           "mysqldump --host=localhost",
           "--port=8888 --user=root --password=\\'\\\"\\$ciao",
-          "--default-character-set=utf8 --result-file=\"./mysql dump.sql\"",
+          "--result-file=\"./mysql dump.sql\"",
           "--max_allowed_packet=1G --no-create-db database_name"
         ].join(' ')
       )
@@ -101,14 +100,16 @@ describe Wordmove::Deployer::Base do
         port: "8888",
         user: "root",
         password: "'\"$ciao",
-        charset: "utf8",
-        name: "database_name"
+        name: "database_name",
+        mysql_options: "--protocol=TCP"
       )
       expect(command).to eq(
         [
           "mysql --host=localhost --port=8888 --user=root",
-          "--password=\\'\\\"\\$ciao --default-character-set=utf8",
-          "--database=database_name --execute=\"SET autocommit=0;SOURCE ./my dump.sql;COMMIT\""
+          "--password=\\'\\\"\\$ciao",
+          "--database=database_name",
+          "--protocol=TCP",
+          "--execute=\"SET autocommit=0;SOURCE ./my dump.sql;COMMIT\""
         ].join(" ")
       )
     end
