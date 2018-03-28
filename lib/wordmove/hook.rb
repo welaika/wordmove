@@ -29,7 +29,7 @@ module Wordmove
       end
 
       Wordmove::Hook::Remote.run(
-        hooks.remote_hooks, options[environment][:ssh], cli_options[:simulate]
+        hooks.remote_hooks, options[environment], cli_options[:simulate]
       )
     end
 
@@ -90,15 +90,19 @@ module Wordmove
         parent.logger
       end
 
-      def self.run(commands, ssh_options, simulate = false)
+      def self.run(commands, options, simulate = false)
         logger.task "Running remote hooks"
+
+        ssh_options = options[:ssh]
+        wordpress_path = options[:wordpress_path]
 
         copier = Photocopier::SSH.new(ssh_options).tap { |c| c.logger = logger }
         commands.each do |command|
           logger.task_step false, "Exec command: #{command}"
           return true if simulate
 
-          stdout, stderr, exit_code = copier.exec! command
+          stdout, stderr, exit_code =
+            copier.exec!("bash -l -c 'cd #{wordpress_path} && #{command}'")
 
           if exit_code.zero?
             logger.task_step false, "Output: #{stdout}"
