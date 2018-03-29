@@ -47,8 +47,8 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = <<-RAINBOW
     Starting from version 3.0.0 `database.charset` option is no longer accepted.
-    pass the '--default-charecter-set' flag into `database.mysqldump_options` or to
-    `database.mysqlimport_options` instead, if you need to set the same option.
+    Pass the '--default-charecter-set' flag into `database.mysqldump_options` or to
+    `database.mysql_options` instead, if you need to set the same option.
 
     Starting from version 3.0.0 the default `global.sql_adapter` is "wpcli".
     Therefor `WP-CLI` becomes a required peer dependency, unless you'll
