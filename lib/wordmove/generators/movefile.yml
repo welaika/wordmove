@@ -88,6 +88,21 @@ production:
   #         - 'echo "Do something locally after pull"'
   #       remote:
   #         - 'echo "Do something remotely after pull"'
+  # forbid:
+  #   push:
+  #     db: false
+  #     plugins: false
+  #     themes: false
+  #     languages: false
+  #     uploads: false
+  #     mu-plugins: false
+  #   pull:
+  #     db: false
+  #     plugins: false
+  #     themes: false
+  #     languages: false
+  #     uploads: false
+  #     mu-plugins: false
 
 # staging: # multiple environments can be specified
 #   [...]

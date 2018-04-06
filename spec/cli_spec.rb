@@ -50,6 +50,21 @@ describe Wordmove::CLI do
         end
         cli.invoke(:pull, [], options)
       end
+
+      context "with forbidden task" do
+        let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
+
+        it "does not pull the forbidden task" do
+          expected_components = ordered_components - ['db']
+
+          expected_components.each do |component|
+            expect(deployer).to receive("pull_#{component}")
+          end
+          expect(deployer).to_not receive("pull_db")
+
+          silence_stream(STDOUT) { cli.invoke(:pull, [], options) }
+        end
+      end
     end
 
     context "#push" do
@@ -58,6 +73,21 @@ describe Wordmove::CLI do
           expect(deployer).to receive("push_#{component}")
         end
         cli.invoke(:push, [], options)
+      end
+
+      context "with forbidden task" do
+        let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
+
+        it "does not push the forbidden task" do
+          expected_components = ordered_components - ['db']
+
+          expected_components.each do |component|
+            expect(deployer).to receive("push_#{component}")
+          end
+          expect(deployer).to_not receive("push_db")
+
+          silence_stream(STDOUT) { cli.invoke(:push, [], options) }
+        end
       end
     end
 
