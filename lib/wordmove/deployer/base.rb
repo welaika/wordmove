@@ -47,9 +47,9 @@ module Wordmove
         logger.task "Pulling Database"
       end
 
-      def remote_get_directory(directory); end
+      def remote_get_directory; end
 
-      def remote_put_directory(directory); end
+      def remote_put_directory; end
 
       %w[uploads themes plugins mu_plugins languages].each do |task|
         define_method "push_#{task}" do
