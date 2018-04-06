@@ -11,6 +11,7 @@ module Wordmove
 
     def allows(task)
       if forbidden?(task)
+        logger.task("#{action.capitalize}ing #{task.capitalize}")
         logger.warn("You tried to #{action} #{task}, but is forbidden by configuration. Skipping")
       end
 
