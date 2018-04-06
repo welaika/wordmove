@@ -129,3 +129,36 @@ mapping:
                 type: seq
                 sequence:
                   - type: str
+  forbid:
+    type: map
+    mapping:
+      pull:
+        type: map
+        mapping:
+          db:
+            type: bool
+          plugins:
+            type: bool
+          themes:
+            type: bool
+          languages:
+            type: bool
+          uploads:
+            type: bool
+          mu-plugins:
+            type: bool
+      push:
+        type: map
+        mapping:
+          db:
+            type: bool
+          plugins:
+            type: bool
+          themes:
+            type: bool
+          languages:
+            type: bool
+          uploads:
+            type: bool
+          mu-plugins:
+            type: bool
