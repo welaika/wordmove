@@ -49,9 +49,9 @@ module Wordmove
         logger.task "Pulling Database"
       end
 
-      def remote_get_directory(directory); end
+      def remote_get_directory; end
 
-      def remote_put_directory(directory); end
+      def remote_put_directory; end
 
       %w[uploads themes plugins mu_plugins languages].each do |task|
         define_method "push_#{task}" do
@@ -147,9 +147,6 @@ module Wordmove
         if options[:password].present?
           command << "--password=#{Shellwords.escape(options[:password])}"
         end
-        if options[:charset].present?
-          command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
-        end
         command << "--result-file=\"#{save_to_path}\""
         if options[:mysqldump_options].present?
           command << Shellwords.split(options[:mysqldump_options])
@@ -166,10 +163,8 @@ module Wordmove
         if options[:password].present?
           command << "--password=#{Shellwords.escape(options[:password])}"
         end
-        if options[:charset].present?
-          command << "--default-character-set=#{Shellwords.escape(options[:charset])}"
-        end
         command << "--database=#{Shellwords.escape(options[:name])}"
+        command << Shellwords.split(options[:mysql_options]) if options[:mysql_options].present?
         command << "--execute=\"SET autocommit=0;SOURCE #{dump_path};COMMIT\""
         command.join(" ")
       end

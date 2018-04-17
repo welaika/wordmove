@@ -1,5 +1,5 @@
 global:
-  sql_adapter: default
+  sql_adapter: wpcli
 
 local:
   vhost: http://vhost.local
@@ -22,11 +22,11 @@ production:
     host: host
     # port: 3308 # Use just in case you have exotic server config
     # mysqldump_options: --max_allowed_packet=1G # Only available if using SSH
+    # mysql_options: --protocol=TCP # mysql command is used to import db
 
   exclude:
     - '.git/'
     - '.gitignore'
-    - '.sass-cache/'
     - 'node_modules/'
     - 'bin/'
     - 'tmp/*'
@@ -88,6 +88,21 @@ production:
   #         - 'echo "Do something locally after pull"'
   #       remote:
   #         - 'echo "Do something remotely after pull"'
+  # forbid:
+  #   push:
+  #     db: false
+  #     plugins: false
+  #     themes: false
+  #     languages: false
+  #     uploads: false
+  #     mu-plugins: false
+  #   pull:
+  #     db: false
+  #     plugins: false
+  #     themes: false
+  #     languages: false
+  #     uploads: false
+  #     mu-plugins: false
 
 # staging: # multiple environments can be specified
 #   [...]

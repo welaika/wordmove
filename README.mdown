@@ -32,13 +32,14 @@ And to update:
 
 Wordmove just acts as automation glue bewtween tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
 
-| Program | Actions                      | Mandatory?                      |
-| ------- | ---------------------------- | ------------------------------- |
-| rsync   | Push and pull files and dirs | Yes for SSH connections         |
-| mysql   | Import and dump database     | Yes                             |
-| wp-cli  | DB adapt                     | Nope (but soon will be)         |
-| lftp    | all                          | Yes, for FTP connections        |
-| ssh     | all                          | Yes, for SSH connections        |
+| Program   | Actions                      | Mandatory?                      |
+| -------   | ---------------------------- | ------------------------------- |
+| rsync     | Mirror files and dirs        | Yes for SSH connections         |
+| mysql     | Import database              | Yes                             |
+| mysqldump | Dump database                | Yes                             |
+| wp-cli    | Adapt database               | Yes by defalut, but configurable|
+| lftp      | all                          | Yes, for FTP connections        |
+| ssh       | all                          | Yes, for SSH connections        |
 
 ## Usage
 
@@ -69,7 +70,7 @@ You can configure Wordmove creating a `movefile.yml`. That's a YAML file with lo
 
 ```yaml
 global:
-  sql_adapter: default
+  sql_adapter: wpcli
 
 local:
   vhost: http://vhost.local
@@ -99,20 +100,22 @@ production:
     host: host
     # port: 3308 # Use just in case you have exotic server config
     # mysqldump_options: --max_allowed_packet=50MB # Only available if using SSH
+    # mysql_options: --protocol=TCP # Only available if using SSH
 
   exclude:
-    - .git/
-    - .gitignore
-    - .sass-cache/
-    - bin/
-    - tmp/*
-    - Gemfile*
-    - Movefile
-    - movefile
-    - movefile.yml
-    - movefile.yaml
-    - wp-config.php
-    - wp-content/*.sql
+    - '.git/'
+    - '.gitignore'
+    - 'node_modules/'
+    - 'bin/'
+    - 'tmp/*'
+    - 'Gemfile*'
+    - 'Movefile'
+    - 'movefile'
+    - 'movefile.yml'
+    - 'movefile.yaml'
+    - 'wp-config.php'
+    - 'wp-content/*.sql.gz'
+    - '*.orig'
 
   ssh:
     host: host
@@ -198,8 +201,8 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 ### SSH
 
 * You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
-* if you want to use your SSH public key for authentication,just delete the `production.ssh.password` field in your `movefile.yml`. Easy peasy.
-* writing the password inside the move file was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
+* To use your SSH public key for authentication, just delete the `production.ssh.password` field in your `movefile.yml`. Easy peasy.
+* writing the password inside `movefile.yml` was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
 
 ### FTP
 
@@ -208,7 +211,7 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 * Use the absolute FTP path as `production.wordpress_absolute_path` (you may need to recover this from the `__FILE__` [magic constant](http://php.net/manual/en/language.constants.predefined.php)
 * if you want to specify a passive FTP connection add to the YAML config a `production.ftp.passive` flag and set it to `true`.
 
-FTP support is [planned to be discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer) at some point of future development.
+FTP support development is [discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), but it's always there.
 
 ## Notes
 

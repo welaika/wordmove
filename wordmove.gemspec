@@ -47,11 +47,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov", "~> 0.9"
 
   spec.post_install_message = <<-RAINBOW
-    Starting from 2.1.0 you'll need to add the global section in your movefile.yml:
-        global:
-            sql_adapter: "default"
-    Or you can spawn a new one with `wordmove init` (backup the old one!)
+    Starting from version 3.0.0 `database.charset` option is no longer accepted.
+    Pass the '--default-charecter-set' flag into `database.mysqldump_options` or to
+    `database.mysql_options` instead, if you need to set the same option.
 
-    Starting from 2.2.0 the default name of the config file is `movefile.yml`.
+    Starting from version 3.0.0 the default `global.sql_adapter` is "wpcli".
+    Therefor `WP-CLI` becomes a required peer dependency, unless you'll
+    change to the "default" adapter.
   RAINBOW
 end

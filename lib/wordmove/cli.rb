@@ -73,8 +73,10 @@ module Wordmove
 
       Wordmove::Hook.run(:pull, :before, options)
 
+      guardian = Wordmove::Guardian.new(options: options, action: :pull)
+
       handle_options(options) do |task|
-        deployer.send("pull_#{task}")
+        deployer.send("pull_#{task}") if guardian.allows(task.to_sym)
       end
 
       Wordmove::Hook.run(:pull, :after, options)
@@ -95,8 +97,10 @@ module Wordmove
 
       Wordmove::Hook.run(:push, :before, options)
 
+      guardian = Wordmove::Guardian.new(options: options, action: :push)
+
       handle_options(options) do |task|
-        deployer.send("push_#{task}")
+        deployer.send("push_#{task}") if guardian.allows(task.to_sym)
       end
 
       Wordmove::Hook.run(:push, :after, options)

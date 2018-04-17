@@ -39,7 +39,7 @@ describe Wordmove::Generators::Movefile do
       yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['global']).to be_present
       expect(yaml['global']['sql_adapter']).to be_present
-      expect(yaml['global']['sql_adapter']).to eq('default')
+      expect(yaml['global']['sql_adapter']).to eq('wpcli')
     end
   end
 

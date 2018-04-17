@@ -30,6 +30,10 @@ module Wordmove
       puts "    ⚠ debug".magenta + " | ".black + message.to_s
     end
 
+    def warn(message)
+      puts "    ⚠ warning".yellow + " | ".black + message.to_s
+    end
+
     private
 
     def padding_length(line)
