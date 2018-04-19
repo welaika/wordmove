@@ -8,7 +8,7 @@ module Wordmove
       class << self
         def deployer_for(cli_options)
           movefile = Wordmove::Movefile.new(cli_options[:config])
-          movefile.dotenv(cli_options)
+          movefile.load_dotenv(cli_options)
 
           options = movefile.fetch.merge! cli_options
           environment = movefile.environment(cli_options)
