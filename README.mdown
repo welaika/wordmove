@@ -174,17 +174,24 @@ production:
 This can either be specified through shell variables or a dotenv file.
 
 ### Shell
-In `bash`, you can set variables like so:
+You can set variables like so:
+
 ```bash
+# bash
 export PROD_DB_USER="username" PROD_DB_PASS="password"
+
+# fish
+set --export --global PROD_DB_USER "username"; set --export --global PROD_DB_PASS "password"
 ```
 
 ### Dotenv
 Wordmove supports the [dotenv](https://github.com/bkeepers/dotenv) module. Simply create a file named `.env` next to your movefile:
+
 ```dosini
 PROD_DB_USER=username
 PROD_DB_PASS=password
 ```
+
 You may also use `.env.{environmentname}`, but this is discouraged.
 
 ## Supports
