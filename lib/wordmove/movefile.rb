@@ -34,7 +34,7 @@ module Wordmove
 
       return false unless found_env.present?
 
-      logger.task("Using .env file: #{found_env}")
+      logger.info("Using .env file: #{found_env}")
       Dotenv.load(found_env)
     end
 
