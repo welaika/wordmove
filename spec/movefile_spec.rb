@@ -7,6 +7,39 @@ describe Wordmove::Movefile do
     end
   end
 
+  context ".load_env" do
+    TMPDIR = "/tmp/wordmove".freeze
+
+    let(:path) { File.join(TMPDIR, 'movefile.yml') }
+    let(:dotenv_path) { File.join(TMPDIR, '.env') }
+    let(:yaml) { "name: Waldo\njob: Hider" }
+    let(:dotenv) { "OBIWAN=KENOBI" }
+    let(:movefile) { described_class.new(nil, path) }
+
+    before do
+      FileUtils.mkdir(TMPDIR)
+      allow(movefile).to receive(:current_dir).and_return(TMPDIR)
+      allow(movefile).to receive(:logger).and_return(double('logger').as_null_object)
+      File.open(path, 'w') { |f| f.write(yaml) }
+    end
+
+    after do
+      FileUtils.rm_rf(TMPDIR)
+    end
+
+    context "when .env is present" do
+      before do
+        File.open(dotenv_path, 'w') { |f| f.write(dotenv) }
+      end
+
+      it "loads environment variables" do
+        movefile.load_dotenv(environment: 'local')
+
+        expect(ENV['OBIWAN']).to eq('KENOBI')
+      end
+    end
+  end
+
   context ".fetch" do
     TMPDIR = "/tmp/wordmove".freeze
 
