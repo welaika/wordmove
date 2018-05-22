@@ -19,9 +19,11 @@ describe Wordmove::Deployer::Base do
     end
 
     context "with ssh remote connection" do
-      it "returns an instance of Ssh::Default deployer" do
+      before do
         options[:environment] = "staging"
+      end
 
+      it "returns an instance of Ssh::Default deployer" do
         expect(described_class.deployer_for(options))
           .to be_a Wordmove::Deployer::Ssh::DefaultSqlAdapter
       end
@@ -29,7 +31,6 @@ describe Wordmove::Deployer::Base do
       context "when Movefile is configured with 'wpcli' sql_adapter" do
         it "returns an instance of Ssh::WpcliSqlAdapter deployer" do
           options[:config] = movefile_path_for('multi_environments_wpcli_sql_adapter')
-          options[:environment] = "staging"
 
           expect(described_class.deployer_for(options))
             .to be_a Wordmove::Deployer::Ssh::WpcliSqlAdapter

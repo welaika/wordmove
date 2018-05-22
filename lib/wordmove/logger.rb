@@ -19,23 +19,23 @@ module Wordmove
     end
 
     def error(message)
-      puts "    ✗ error".red + " | ".black + message.to_s
+      puts "    ❌  error".red + " | ".black + message.to_s
     end
 
     def success(message)
-      puts "    ✓ success".green + " | ".black + message.to_s
+      puts "    ✅  success".green + " | ".black + message.to_s
     end
 
     def debug(message)
-      puts "    ⚠ debug".magenta + " | ".black + message.to_s
+      puts "    🛠  debug".magenta + " | ".black + message.to_s
     end
 
     def warn(message)
-      puts "    ⚠ warning".yellow + " | ".black + message.to_s
+      puts "    ⚠️  warning".yellow + " | ".black + message.to_s
     end
 
     def info(message)
-      puts "    ℹ️ info".yellow + " | ".black + message.to_s
+      puts "    ℹ️  info".yellow + " | ".black + message.to_s
     end
 
     private
