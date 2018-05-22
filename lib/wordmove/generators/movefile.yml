@@ -27,6 +27,8 @@ production:
   exclude:
     - '.git/'
     - '.gitignore'
+    - '.gitmodules'
+    - '.env'
     - 'node_modules/'
     - 'bin/'
     - 'tmp/*'
