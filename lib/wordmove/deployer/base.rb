@@ -174,7 +174,6 @@ module Wordmove
         command << "--best"
         command << "--force"
         command << "\"#{path}\""
-        puts command.join(" ")
         command.join(" ")
       end
 
@@ -183,7 +182,6 @@ module Wordmove
         command << "-d"
         command << "--force"
         command << "\"#{path}\""
-        puts command.join(" ")
         command.join(" ")
       end
 
