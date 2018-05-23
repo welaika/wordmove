@@ -1,11 +1,22 @@
 language: ruby
+
 rvm:
   - 2.4.0
   - 2.4.3
   - 2.5.0
+
 cache: bundler
+
 install:
   - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
   - chmod +x wp-cli.phar
   - sudo mv wp-cli.phar /usr/local/bin/wp
   - bundle install --jobs=3 --retry=3
+
+deploy:
+  provider: script
+  script: 'curl -H "Content-Type: application/json" --data '{"docker_tag": "latest"}' -X POST $DOCKER_TRIGGER'
+  on:
+    tags: true
+    branch: master
+    rvm: 2.5.0
