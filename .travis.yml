@@ -15,7 +15,7 @@ install:
 
 deploy:
   provider: script
-  script: bash -c "curl -H \"Content-Type: application/json\" --data '{\"docker_tag\": \"latest\"}' -X POST $DOCKER_TRIGGER"
+  script: bash deploy/deploy.sh
   on:
     tags: true
     branch: master
