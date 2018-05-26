@@ -58,6 +58,22 @@ module Wordmove
 
       private
 
+      %w[uploads themes plugins mu_plugins languages].each do |task|
+        define_method "push_#{task}" do
+          logger.task "Pushing #{task.titleize}"
+          local_path = send("local_#{task}_dir").path
+          remote_path = send("remote_#{task}_dir").path
+          remote_put_directory(local_path, remote_path, paths_to_exclude)
+        end
+
+        define_method "pull_#{task}" do
+          logger.task "Pulling #{task.titleize}"
+          local_path = send("local_#{task}_dir").path
+          remote_path = send("remote_#{task}_dir").path
+          remote_get_directory(remote_path, local_path, paths_to_exclude)
+        end
+      end
+
       %w[get get_directory put_directory delete].each do |command|
         define_method "remote_#{command}" do |*args|
           logger.task_step false, "#{command}: #{args.join(' ')}"

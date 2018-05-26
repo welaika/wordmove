@@ -25,7 +25,7 @@ module Wordmove
                                      .path("#{environment}-backup-#{Time.now.to_i}.sql.gz")
       end
 
-      protected
+      private
 
       def push_db
         super
@@ -90,6 +90,53 @@ module Wordmove
         remote_run uncompress_command(remote_gizipped_dump_path)
         remote_run mysql_import_command(remote_dump_path, remote_options[:database])
         remote_delete(remote_dump_path)
+      end
+
+      %w[uploads themes plugins mu_plugins languages].each do |task|
+        define_method "push_#{task}" do
+          logger.task "Pushing #{task.titleize}"
+          local_path = local_options[:wordpress_path]
+          remote_path = remote_options[:wordpress_path]
+
+          remote_put_directory(local_path, remote_path,
+                               push_exclude_paths, push_inlcude_paths(task))
+        end
+
+        define_method "pull_#{task}" do
+          logger.task "Pulling #{task.titleize}"
+          local_path = local_options[:wordpress_path]
+          remote_path = remote_options[:wordpress_path]
+          remote_get_directory(remote_path, local_path,
+                               pull_exclude_paths, pull_include_paths(task))
+        end
+      end
+
+      def push_inlcude_paths(task)
+        [
+          "/#{local_wp_content_dir.relative_path}/",
+          "/#{local_wp_content_dir.relative_path}/#{task}/"
+        ]
+      end
+
+      def push_exclude_paths
+        paths_to_exclude + [
+          "/*",
+          "/#{local_wp_content_dir.relative_path}/*"
+        ]
+      end
+
+      def pull_include_paths(task)
+        [
+          "/#{remote_wp_content_dir.relative_path}/",
+          "/#{remote_wp_content_dir.relative_path}/#{task}/"
+        ]
+      end
+
+      def pull_exclude_paths
+        paths_to_exclude + [
+          "/*",
+          "/#{remote_wp_content_dir.relative_path}/*"
+        ]
       end
     end
   end
