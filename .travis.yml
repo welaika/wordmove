@@ -19,4 +19,4 @@ deploy:
   on:
     tags: true
     branch: master
-    rvm: 2.5.0
+    ruby: 2.5.0
