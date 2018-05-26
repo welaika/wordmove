@@ -19,8 +19,4 @@ deploy:
   on:
     tags: true
     branch: master
-<<<<<<< HEAD
-    ruby: 2.5.0
-=======
     ruby: '2.5.0'
->>>>>>> fix travis deploy
