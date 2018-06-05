@@ -115,13 +115,13 @@ module Wordmove
 
       def push_inlcude_paths(task)
         Pathname.new(send(:"local_#{task}_dir").relative_path)
-          .ascend
-          .each_with_object([]) do |directory, array|
-            path = directory.to_path
-            path.prepend('/') unless path =~ %r{^/}
-            path.concat('/') unless path =~ %r{/$}
-            array << path
-          end
+                .ascend
+                .each_with_object([]) do |directory, array|
+                  path = directory.to_path
+                  path.prepend('/') unless path.match? %r{^/}
+                  path.concat('/') unless path.match? %r{/$}
+                  array << path
+                end
       end
 
       def push_exclude_paths
