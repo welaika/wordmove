@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Wordmove
   module Deployer
     class SSH < Base
@@ -112,10 +114,14 @@ module Wordmove
       end
 
       def push_inlcude_paths(task)
-        [
-          "/#{local_wp_content_dir.relative_path}/",
-          "/#{local_wp_content_dir.relative_path}/#{task}/"
-        ]
+        Pathname.new(send(:"local_#{task}_dir").relative_path)
+          .ascend
+          .each_with_object([]) do |directory, array|
+            path = directory.to_path
+            path.prepend('/') unless path =~ %r{^/}
+            path.concat('/') unless path =~ %r{/$}
+            array << path
+          end
       end
 
       def push_exclude_paths
@@ -126,10 +132,7 @@ module Wordmove
       end
 
       def pull_include_paths(task)
-        [
-          "/#{remote_wp_content_dir.relative_path}/",
-          "/#{remote_wp_content_dir.relative_path}/#{task}/"
-        ]
+        push_inlcude_paths(task)
       end
 
       def pull_exclude_paths
