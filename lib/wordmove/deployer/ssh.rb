@@ -101,7 +101,7 @@ module Wordmove
           remote_path = remote_options[:wordpress_path]
 
           remote_put_directory(local_path, remote_path,
-                               push_exclude_paths, push_inlcude_paths(task))
+                               push_exclude_paths(task), push_inlcude_paths(task))
         end
 
         define_method "pull_#{task}" do
@@ -109,7 +109,7 @@ module Wordmove
           local_path = local_options[:wordpress_path]
           remote_path = remote_options[:wordpress_path]
           remote_get_directory(remote_path, local_path,
-                               pull_exclude_paths, pull_include_paths(task))
+                               pull_exclude_paths(task), pull_include_paths(task))
         end
       end
 
@@ -124,22 +124,45 @@ module Wordmove
                 end
       end
 
-      def push_exclude_paths
-        paths_to_exclude + [
-          "/*",
-          "/#{local_wp_content_dir.relative_path}/*"
-        ]
+      def push_exclude_paths(task)
+        Pathname.new(send(:"local_#{task}_dir").relative_path)
+                .dirname
+                .ascend
+                .each_with_object([]) do |directory, array|
+                  path = directory.to_path
+                  path.prepend('/') unless path.match? %r{^/}
+                  path.concat('/') unless path.match? %r{/$}
+                  path.concat('*')
+                  array << path
+                end
+                .concat(paths_to_exclude)
+                .concat(['/*'])
       end
 
       def pull_include_paths(task)
-        push_inlcude_paths(task)
+        Pathname.new(send(:"remote_#{task}_dir").relative_path)
+                .ascend
+                .each_with_object([]) do |directory, array|
+                  path = directory.to_path
+                  path.prepend('/') unless path.match? %r{^/}
+                  path.concat('/') unless path.match? %r{/$}
+                  array << path
+                end
       end
 
-      def pull_exclude_paths
-        paths_to_exclude + [
-          "/*",
-          "/#{remote_wp_content_dir.relative_path}/*"
-        ]
+      def pull_exclude_paths(task)
+        Pathname.new(send(:"remote_#{task}_dir").relative_path)
+                .dirname
+                .ascend
+                .each_with_object([]) do |directory, array|
+                  path = directory.to_path
+                  path.prepend('/') unless path.match? %r{^/}
+                  path.concat('/') unless path.match? %r{/$}
+                  path.concat('*')
+                  array << path
+                end
+                .concat(paths_to_exclude)
+                .concat(['/*'])
       end
     end
   end
