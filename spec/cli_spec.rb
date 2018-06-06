@@ -41,7 +41,7 @@ describe Wordmove::CLI do
 
   context "--all" do
     let(:options) { { all: true, config: movefile_path_for('Movefile') } }
-    let(:ordered_components) { %w[wordpress uploads themes plugins mu_plugins languages db] }
+    let(:ordered_components) { %i[wordpress uploads themes plugins mu_plugins languages db] }
 
     context "#pull" do
       it "invokes commands in the right order" do
@@ -55,7 +55,7 @@ describe Wordmove::CLI do
         let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
 
         it "does not pull the forbidden task" do
-          expected_components = ordered_components - ['db']
+          expected_components = ordered_components - [:db]
 
           expected_components.each do |component|
             expect(deployer).to receive("pull_#{component}")
@@ -79,7 +79,7 @@ describe Wordmove::CLI do
         let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
 
         it "does not push the forbidden task" do
-          expected_components = ordered_components - ['db']
+          expected_components = ordered_components - [:db]
 
           expected_components.each do |component|
             expect(deployer).to receive("push_#{component}")
