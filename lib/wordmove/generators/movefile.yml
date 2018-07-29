@@ -65,6 +65,7 @@ production:
   #   password: password
   #   host: host
   #   passive: true
+  #   port: 21 # Port is optional
   #   scheme: ftps # default ftp
 
   # hooks: # Remote hooks won't work with FTP
