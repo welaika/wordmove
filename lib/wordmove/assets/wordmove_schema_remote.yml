@@ -76,6 +76,10 @@ mapping:
       passive:
         type: bool
       scheme:
+        type: str
+        pattern: /\Aftp\Z|\Aftps\Z|\Asftp\Z/
+      port:
+        type: int
   hooks:
     type: map
     mapping:
