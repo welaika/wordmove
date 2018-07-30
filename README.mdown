@@ -39,7 +39,6 @@ Wordmove just acts as automation glue bewtween tools you already have and love. 
 | mysqldump | Dump database                | Yes                             |
 | wp-cli    | Adapt database               | Yes by defalut, but configurable|
 | lftp      | all                          | Yes, for FTP connections        |
-| ssh       | all                          | Yes, for SSH connections        |
 
 ## Usage
 
