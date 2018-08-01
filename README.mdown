@@ -146,7 +146,9 @@ production:
 ```
 
 **We warmly recommend to read the wiki article [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support, and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained) to understand about the supported configurations.**
+](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support,
+and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained)
+to understand about the supported configurations.**
 
 ## Multistage
 
@@ -210,7 +212,7 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 * To use your SSH public key for authentication, just delete the `production.ssh.password` field in your `movefile.yml`. Easy peasy.
 * writing the password inside `movefile.yml` was and is somewhat supported, but **we discourage this practice** in favor of password-less authentication with pub key. Read [here](https://github.com/welaika/wordmove/wiki/%5Bdeprecated%5D-SSH-password-inside-Movefile) for old informations.
 
-### FTP
+### FTP and SFTP
 
 * You need to install `lftp` on your machine. See community wiki article: [Install lftp on OSX yosemite](https://github.com/welaika/wordmove/wiki/Install-lftp-on-OSX-yosemite)).
 * Use the relative FTP path as `production.wordpress_path`
@@ -218,6 +220,9 @@ See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wik
 * if you want to specify a passive FTP connection add to the YAML config a `production.ftp.passive` flag and set it to `true`.
 
 FTP support development is [discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), but it's always there.
+
+Sice version 3.2.0 SFTP is fully supported, with same functionalities as FTP, through `production.ftp.scheme`
+configuration. More information found in the wiki.
 
 ## Notes
 
