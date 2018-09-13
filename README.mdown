@@ -207,6 +207,12 @@ OS X and Linux are fully supported.
 
 See the [Windows (un)support disclaimer](https://github.com/welaika/wordmove/wiki/Windows-(un)support-disclaimer)
 
+### Docker
+
+We have a docker image bringing the latest Wordmove's version with autobuild on new releases.
+
+[![Docker Build Status](https://img.shields.io/docker/automated/welaika/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
+
 ### SSH
 
 * You need `rsync` on your machine; as far as we know it's already installed on OS X and Linux.
