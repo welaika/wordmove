@@ -17,6 +17,7 @@ while base functionalities are granted.
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 [![Gem Version](https://badge.fury.io/rb/wordmove.svg)](https://rubygems.org/gems/wordmove)
 [![Docker Build Status](https://img.shields.io/docker/automated/welaika/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 
 ## Installation
