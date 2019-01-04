@@ -2,7 +2,7 @@
 
 ![logo](https://raw.githubusercontent.com/welaika/wordmove/master/assets/images/wordmove.png)
 
-Wordmove is a gem that lets you automatically mirror local Wordpress
+Wordmove is a gem that lets you automatically mirror local WordPress
 installations and DB data back and forth from your local development machine to
 the remote server.
 
@@ -54,7 +54,7 @@ Commands:
   wordmove push             # Pushes WP data from local machine to remote host
 ```
 
-Move inside the Wordpress folder and use `wordmove init` to generate a new `movefile.yml` and edit it with your settings. Read the next paragraph for more info.
+Move inside the WordPress folder and use `wordmove init` to generate a new `movefile.yml` and edit it with your settings. Read the next paragraph for more info.
 
 **See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.**
 
