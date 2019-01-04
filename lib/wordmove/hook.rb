@@ -102,7 +102,7 @@ module Wordmove
           return true if simulate
 
           stdout, stderr, exit_code =
-            copier.exec!("bash -l -c 'cd #{wordpress_path} && #{command}'")
+            copier.exec!("cd #{wordpress_path} && #{command}")
 
           if exit_code.zero?
             logger.task_step false, "Output: #{stdout}"
