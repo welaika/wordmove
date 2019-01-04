@@ -155,8 +155,8 @@ module Wordmove
 
       def compress_command(path)
         command = ["gzip"]
-        command << "--best"
-        command << "--force"
+        command << "-9"
+        command << "-f"
         command << "\"#{path}\""
         command.join(" ")
       end
@@ -164,7 +164,7 @@ module Wordmove
       def uncompress_command(path)
         command = ["gzip"]
         command << "-d"
-        command << "--force"
+        command << "-f"
         command << "\"#{path}\""
         command.join(" ")
       end
