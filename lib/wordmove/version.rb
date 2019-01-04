@@ -1,3 +1,3 @@
 module Wordmove
-  VERSION = "3.2.3pre2".freeze
+  VERSION = "3.2.3".freeze
 end
