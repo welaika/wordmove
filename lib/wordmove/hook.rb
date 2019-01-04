@@ -16,7 +16,7 @@ module Wordmove
       )
 
       unless hooks.local_hooks.empty?
-        Wordmove::Hook::Local.run(hooks.local_hooks, cli_options[:simulate])
+        Wordmove::Hook::Local.run(hooks.local_hooks, options[:local], cli_options[:simulate])
       end
 
       return if hooks.remote_hooks.empty?
@@ -66,14 +66,16 @@ module Wordmove
         parent.logger
       end
 
-      def self.run(commands, simulate = false)
+      def self.run(commands, options, simulate = false)
         logger.task "Running local hooks"
+
+        wordpress_path = options[:wordpress_path]
 
         commands.each do |command|
           logger.task_step true, "Exec command: #{command}"
           return true if simulate
 
-          stdout_return = `#{command} 2>&1`
+          stdout_return = `cd #{wordpress_path} && #{command} 2>&1`
           logger.task_step true, "Output: #{stdout_return}"
 
           if $CHILD_STATUS.exitstatus.zero?

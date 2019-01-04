@@ -1,9 +1,11 @@
+<% require 'tmpdir' %>
+
 global:
   sql_adapter: "default"
 
 local:
   vhost: "http://localhost:8080"
-  wordpress_path: "/home/welaika/sites/your_site"
+  wordpress_path: "<%= Dir.tmpdir %>"
 
   database:
     name: "database_name"
@@ -30,6 +32,7 @@ ssh_with_hooks:
       before:
         local:
           - 'echo "Calling hook push before local"'
+          - 'pwd'
         remote:
           - 'echo "Calling hook push before remote"'
       after:
