@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'tmpdir'
 
 describe Wordmove::Hook do
   let(:common_options) { { "wordpress" => true, "config" => movefile_path_for('with_hooks') } }
@@ -24,21 +25,31 @@ describe Wordmove::Hook do
       end
 
       let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+
       it "runs registered before local hooks" do
         expect { cli.invoke(:push, [], options) }
           .to output(/Calling hook push before local/)
           .to_stdout_from_any_process
       end
+
+      it "runs registered before local hooks in the wordpress folder" do
+        expect { cli.invoke(:push, [], options) }
+          .to output(/#{Dir.tmpdir}/)
+          .to_stdout_from_any_process
+      end
+
       it "runs registered before remote hooks" do
         expect { cli.invoke(:push, [], options) }
           .to output(/Calling hook push before remote/)
           .to_stdout_from_any_process
       end
+
       it "runs registered after local hooks" do
         expect { cli.invoke(:push, [], options) }
           .to output(/Calling hook push after local/)
           .to_stdout_from_any_process
       end
+
       it "runs registered after remote hooks" do
         expect { cli.invoke(:push, [], options) }
           .to output(/Calling hook push after remote/)
@@ -67,26 +78,31 @@ describe Wordmove::Hook do
       end
 
       let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+
       it "runs registered before local hooks" do
         expect { cli.invoke(:pull, [], options) }
           .to output(/Calling hook pull before local/)
           .to_stdout_from_any_process
       end
+
       it "runs registered before remote hooks" do
         expect { cli.invoke(:pull, [], options) }
           .to output(/Calling hook pull before remote/)
           .to_stdout_from_any_process
       end
+
       it "runs registered after local hooks" do
         expect { cli.invoke(:pull, [], options) }
           .to output(/Calling hook pull after local/)
           .to_stdout_from_any_process
       end
+
       it "runs registered after remote hooks" do
         expect { cli.invoke(:pull, [], options) }
           .to output(/Calling hook pull after remote/)
           .to_stdout_from_any_process
       end
+
       it "return remote stdout" do
         expect { cli.invoke(:pull, [], options) }
           .to output(/Stubbed remote stdout/)
@@ -154,7 +170,7 @@ describe Wordmove::Hook::Config do
 
   context "#local_hooks" do
     it "returns all the local hooks" do
-      expect(config.local_hooks).to eq ['echo "Calling hook push before local"']
+      expect(config.local_hooks).to eq ['echo "Calling hook push before local"', 'pwd']
     end
   end
 
