@@ -23,7 +23,7 @@ module Wordmove
 
       if options[environment][:ftp]
         logger.debug "You have configured remote hooks to run over "\
-                     "an FTP connections, but this is not possible. Skipping."
+                     "an FTP connection, but this is not possible. Skipping."
 
         return
       end
@@ -82,6 +82,7 @@ module Wordmove
             logger.success ""
           else
             logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
+            raise Wordmove::LocalHookException
           end
         end
       end
@@ -112,6 +113,7 @@ module Wordmove
           else
             logger.task_step false, "Output: #{stderr}"
             logger.error "Error code #{exit_code}"
+            raise Wordmove::RemoteHookException
           end
         end
       end

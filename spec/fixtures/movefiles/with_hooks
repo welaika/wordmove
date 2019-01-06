@@ -94,3 +94,23 @@ ssh_with_hooks_partially_filled:
       after:
         local:
           - echo "I've partially configured my hooks"
+
+ssh_with_hooks_which_return_error:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+  hooks:
+    push:
+      after:
+        local:
+          - 'exit 127'
