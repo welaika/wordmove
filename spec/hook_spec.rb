@@ -67,6 +67,19 @@ describe Wordmove::Hook do
             .to_stdout_from_any_process
         end
       end
+
+      context "with local hook errored" do
+        let(:options) { common_options.merge("environment" => 'ssh_with_hooks_which_return_error') }
+
+        it "logs an error and raises a LocalHookException" do
+          expect do
+            expect do
+              cli.invoke(:push, [], options)
+            end.to raise_exception(Wordmove::LocalHookException)
+          end.to output(/Error code: 127/)
+            .to_stdout_from_any_process
+        end
+      end
     end
 
     context "when pulling from a remote with ssh" do
@@ -109,7 +122,7 @@ describe Wordmove::Hook do
           .to_stdout_from_any_process
       end
 
-      context "with remote error" do
+      context "with remote hook errored" do
         before do
           allow_any_instance_of(Photocopier::SSH)
             .to receive(:exec!)
@@ -117,10 +130,21 @@ describe Wordmove::Hook do
             .and_return(['Stubbed remote stdout', 'Stubbed remote stderr', 1])
         end
 
-        it "returns remote stdout" do
-          expect { cli.invoke(:pull, [], options) }
-            .to output(/Stubbed remote stderr/)
+        it "returns remote stdout and raise an exception" do
+          expect do
+            expect do
+              cli.invoke(:pull, [], options)
+            end.to raise_exception(Wordmove::RemoteHookException)
+          end.to output(/Stubbed remote stderr/)
             .to_stdout_from_any_process
+        end
+
+        it "raises a RemoteHookException" do
+          expect do
+            silence_stream(STDOUT) do
+              cli.invoke(:pull, [], options)
+            end
+          end.to raise_exception(Wordmove::RemoteHookException)
         end
       end
     end
@@ -158,37 +182,6 @@ describe Wordmove::Hook do
         expect { cli.invoke(:pull, [], options) }
           .to output(/I've partially configured my hooks/)
           .to_stdout_from_any_process
-      end
-    end
-
-    context "with hooks which fail" do
-      let(:options) { common_options.merge("environment" => 'ssh_with_hooks_which_return_error') }
-
-      context "if the hook is remote" do
-        before do
-          allow_any_instance_of(Photocopier::SSH)
-            .to receive(:exec!)
-            .with(String)
-            .and_return(['Stubbed remote stdout', 'Remote hook failed', 1])
-        end
-
-        it "raises a RemoteHookException" do
-          expect do
-            silence_stream(STDOUT) do
-              cli.invoke(:pull, [], options)
-            end
-          end.to raise_exception(Wordmove::RemoteHookException)
-        end
-      end
-
-      context "if the hook is local" do
-        it "raises a LocalHookException" do
-          expect do
-            silence_stream(STDOUT) do
-              cli.invoke(:push, [], options)
-            end
-          end.to raise_exception(Wordmove::LocalHookException)
-        end
       end
     end
   end

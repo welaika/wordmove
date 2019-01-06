@@ -113,8 +113,4 @@ ssh_with_hooks_which_return_error:
     push:
       after:
         local:
-          - 'exit 1'
-    pull:
-      after:
-        remote:
-          - 'exit 1'
+          - 'exit 127'
