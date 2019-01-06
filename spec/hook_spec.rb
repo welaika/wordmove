@@ -160,6 +160,37 @@ describe Wordmove::Hook do
           .to_stdout_from_any_process
       end
     end
+
+    context "with hooks which fail" do
+      let(:options) { common_options.merge("environment" => 'ssh_with_hooks_which_return_error') }
+
+      context "if the hook is remote" do
+        before do
+          allow_any_instance_of(Photocopier::SSH)
+            .to receive(:exec!)
+            .with(String)
+            .and_return(['Stubbed remote stdout', 'Remote hook failed', 1])
+        end
+
+        it "raises a RemoteHookException" do
+          expect do
+            silence_stream(STDOUT) do
+              cli.invoke(:pull, [], options)
+            end
+          end.to raise_exception(Wordmove::RemoteHookException)
+        end
+      end
+
+      context "if the hook is local" do
+        it "raises a LocalHookException" do
+          expect do
+            silence_stream(STDOUT) do
+              cli.invoke(:push, [], options)
+            end
+          end.to raise_exception(Wordmove::LocalHookException)
+        end
+      end
+    end
   end
 end
 
