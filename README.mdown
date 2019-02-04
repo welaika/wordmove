@@ -31,7 +31,7 @@ And to update:
 
 ## Peer dependencies
 
-Wordmove just acts as automation glue bewtween tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
+Wordmove just acts as automation glue between tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
 
 | Program   | Actions                      | Mandatory?                      |
 | -------   | ---------------------------- | ------------------------------- |
