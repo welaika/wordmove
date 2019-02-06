@@ -38,7 +38,7 @@ Wordmove just acts as automation glue between tools you already have and love. T
 | rsync     | Mirror files and dirs        | Yes for SSH connections         |
 | mysql     | Import database              | Yes                             |
 | mysqldump | Dump database                | Yes                             |
-| wp-cli    | Adapt database               | Yes by defalut, but configurable|
+| wp-cli    | Adapt database               | Yes by default, but configurable|
 | lftp      | all                          | Yes, for FTP connections        |
 
 ## Usage
