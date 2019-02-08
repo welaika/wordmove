@@ -46,7 +46,8 @@ module Wordmove
           return if options[:no_adapt]
 
           logger.task_step true, "adapt dump for #{config_key}"
-          SqlAdapter::Wpcli.new(local, remote, config_key).command unless simulate?
+          path = local_options[:wordpress_path]
+          SqlAdapter::Wpcli.new(local, remote, config_key, path).command unless simulate?
         end
       end
     end
