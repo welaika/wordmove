@@ -18,3 +18,13 @@ mapping:
       mysqldump_options:
       port:
       charset:
+  paths:
+    type: map
+    mapping:
+      wp_content:
+      wp_config:
+      uploads:
+      plugins:
+      mu_plugins:
+      themes:
+      languages:
