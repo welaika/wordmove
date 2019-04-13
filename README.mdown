@@ -165,22 +165,20 @@ will push your local database to the staging environment only.
 We warmly **recommend** to read the wiki article: [Multiple environments explained
 ](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
-## Secrets
+## Environment Variables
 
-If you intend on committing movefiles to your repos, consider using ERB tags to hide sensitive variables and credentials:
+Wordmove allows the use of environment variables in your movefiles.
+This is useful in order to protect sensitive variables and credentials, as well as make it easy to share movefiles between your team.
 
-```yaml
-production:
-  database:
-    user: "<%= ENV['PROD_DB_USER'] %>"
-    password: "<%= ENV['PROD_DB_PASS'] %>"
+Environment variables are written using the **ERB tags** syntax:
+```
+"<%= ENV['YOUR_SECRET_NAME'] %>"
 ```
 
-This can either be specified through shell variables or a dotenv file.
+### Variables set up
+Environment variables can be set up using two methods:
 
-### Shell
-You can set variables like so:
-
+#### Using the shell:
 ```bash
 # bash
 export PROD_DB_USER="username" PROD_DB_PASS="password"
@@ -188,16 +186,38 @@ export PROD_DB_USER="username" PROD_DB_PASS="password"
 # fish
 set --export --global PROD_DB_USER "username"; set --export --global PROD_DB_PASS "password"
 ```
+#### Using a `.env` file:
 
-### Dotenv
-Wordmove supports the [dotenv](https://github.com/bkeepers/dotenv) module. Simply create a file named `.env` next to your movefile:
+Wordmove supports the [dotenv](https://github.com/bkeepers/dotenv) module.
 
-```dosini
-PROD_DB_USER=username
-PROD_DB_PASS=password
+Simply create a `.env` file next to your movefile structured as follows:
+```bash
+PROD_DB_USER="username"
+PROD_DB_PASS="password"
 ```
+Wordmove will take care of loading the file  and making the environment variables ready to be used in your configuration file.
 
 You may also use `.env.{environmentname}`, but this is discouraged.
+
+### Use them in your `movefile.yml`
+Using the ERB syntax described above, write your movefile as follows:
+```yaml
+production:
+  database:
+    user: "<%= ENV['PROD_DB_USER'] %>"
+    password: "<%= ENV['PROD_DB_PASS'] %>"
+```
+
+### System variables
+You can use system variables to configure your movefile.
+
+For example:
+```yaml
+local:
+  vhost: "http://wordpress-site.localhost"
+  wordpress_path: "<%= ENV['HOME'] %>/[wordpress directory path]/"
+  # wordpress_path will be substituted with /home/user_name/[wordpress directory path]
+```
 
 ## Supports
 
@@ -301,3 +321,4 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
