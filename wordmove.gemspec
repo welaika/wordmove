@@ -35,12 +35,12 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "kwalify", "~> 0"
   spec.add_runtime_dependency "photocopier", "1.3.3.pre3"
   spec.add_runtime_dependency "thor", "~> 0.19.4"
-  spec.add_runtime_dependency "pry-byebug", "~> 3.1"
 
   spec.required_ruby_version = ">= 2.4.0"
 
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "priscilla", "~> 1.0"
+  spec.add_development_dependency "pry-byebug", "~> 3.1"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.3"
   spec.add_development_dependency "rubocop", "~> 0.52.0"
