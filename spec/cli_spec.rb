@@ -31,6 +31,45 @@ describe Wordmove::CLI do
     end
   end
 
+  context "#list" do
+    subject { cli.invoke(:list, []) }
+    # Werdmove.List.start should be called
+    it "delagates the command to List class" do
+      expect(Wordmove::List).to receive(:start)
+      subject
+    end
+
+    context 'without a valid movefile' do
+      context "no movefile" do
+        it { expect { subject }.to raise_error SystemExit }
+      end
+
+      context "syntax error movefile " do
+        before do
+          allow(Wordmove::List).to receive(:start).and_raise(Psych::SyntaxError)
+        end
+
+        it { expect { subject }.to raise_error SystemExit }
+      end
+
+      context "load error movefile" do
+        before do
+          allow(Wordmove::List).to receive(:start).and_raise(LoadError)
+        end
+
+        it { expect { subject }.to raise_error SystemExit }
+      end
+    end
+
+    context "with a movefile" do
+      subject { cli.invoke(:list, [], options) }
+      let(:options) { { config: movefile_path_for('Movefile') } }
+      it "invoke list without error" do
+        expect { subject }.not_to raise_error
+      end
+    end
+  end
+
   context "#push" do
     context "without a movefile" do
       it "it rescues from a MovefileNotFound exception" do

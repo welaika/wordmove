@@ -31,6 +31,7 @@ require 'wordmove/sql_adapter/default'
 require 'wordmove/sql_adapter/wpcli'
 require 'wordmove/wordpress_directory'
 require "wordmove/version"
+require "wordmove/list"
 
 require 'wordmove/generators/movefile_adapter'
 require 'wordmove/generators/movefile'
