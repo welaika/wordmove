@@ -33,9 +33,10 @@ describe Wordmove::CLI do
 
   context "#list" do
     subject { cli.invoke(:list, []) }
-    # Werdmove.List.start should be called
-    it "delagates the command to List class" do
-      expect(Wordmove::List).to receive(:start)
+    let(:list_class) { Wordmove::EnvironmentsList }
+    # Werdmove::EnvironmentsList.print should be called
+    it "delagates the command to EnvironmentsList class" do
+      expect(list_class).to receive(:print)
       subject
     end
 
@@ -46,15 +47,12 @@ describe Wordmove::CLI do
 
       context "syntax error movefile " do
         before do
-          allow(Wordmove::List).to receive(:start).and_raise(Psych::SyntaxError)
-        end
-
-        it { expect { subject }.to raise_error SystemExit }
-      end
-
-      context "load error movefile" do
-        before do
-          allow(Wordmove::List).to receive(:start).and_raise(LoadError)
+          # Ref. https://github.com/ruby/psych/blob/master/lib/psych/syntax_error.rb#L8
+          # Arguments for initialization: file, line, col, offset, problem, context
+          args = [nil, 1, 5, 0,
+                  "found character that cannot start any token",
+                  "while scanning for the next token"]
+          allow(list_class).to receive(:print).and_raise(Psych::SyntaxError.new(*args))
         end
 
         it { expect { subject }.to raise_error SystemExit }

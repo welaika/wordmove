@@ -63,15 +63,12 @@ module Wordmove
       method_option option, args
     end
     def list
-      Wordmove::List.start(options)
+      Wordmove::EnvironmentsList.print(options)
     rescue Wordmove::MovefileNotFound => e
       puts e.message
       exit 1
     rescue Psych::SyntaxError => e
       puts "Your movefile is not parsable due to a syntax error: #{e.message}"
-      exit 1
-    rescue LoadError, StandardError => e
-      puts "Your movefile is not parsable. Please confirmt its format: #{e.message}"
       exit 1
     end
 

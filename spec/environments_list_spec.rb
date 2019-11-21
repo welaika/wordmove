@@ -1,12 +1,12 @@
-describe Wordmove::List do
+describe Wordmove::EnvironmentsList do
   let(:instance) { described_class.new(options) }
   let(:options) { {} }
 
-  describe ".start" do
-    subject { described_class.start(options) }
+  describe ".print" do
+    subject { described_class.print(options) }
 
-    it "create new instance and call its #start" do
-      expect_any_instance_of(described_class).to receive(:start).once
+    it "create new instance and call its #print" do
+      expect_any_instance_of(described_class).to receive(:print).once
       subject
     end
   end
@@ -23,8 +23,8 @@ describe Wordmove::List do
     end
   end
 
-  describe "#start" do
-    subject { instance.start }
+  describe "#print" do
+    subject { instance.print }
 
     context "non exist movefile" do
       let(:options) { { config: 'non_exists_path' } }
@@ -44,8 +44,8 @@ describe Wordmove::List do
     end
   end
 
-  describe "#output_string" do
-    subject { instance.output_string(vhost_list: vhost_list) }
+  describe "private #output_string" do
+    subject { instance.send(:output_string, vhost_list: vhost_list) }
 
     let(:vhost_list) do
       [

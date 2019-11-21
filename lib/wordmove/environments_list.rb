@@ -1,8 +1,10 @@
 module Wordmove
-  class List
+  class EnvironmentsList
+    attr_reader :movefile, :logger, :remote_vhosts, :local_vhost
+
     class << self
-      def start(cli_options)
-        new(cli_options).start
+      def print(cli_options)
+        new(cli_options).print
       end
     end
 
@@ -13,19 +15,36 @@ module Wordmove
       @local_vhost = []
     end
 
-    def start
+    def print
       contents = parse_movefile(movefile: movefile)
       generate_vhost_list(contents: contents)
       output
     end
 
+    private
+
+    def select_vhost(contents:)
+      target = contents.select { |_key, env| env[:vhost].present? }
+      target.map { |key, env| { env: key, vhost: env[:vhost] } }
+    end
+
+    def parse_movefile(movefile:)
+      movefile.fetch
+    end
+
+    def output
+      logger.task('Listing Local')
+      puts output_string(vhost_list: local_vhost)
+
+      logger.task('Listing Remotes')
+      puts output_string(vhost_list: remote_vhosts)
+    end
+
     def output_string(vhost_list:)
       return 'vhost list is empty' if vhost_list.empty?
 
-      ''.tap do |retval|
-        vhost_list.each do |entry|
-          retval << "#{entry[:env]}: #{entry[:vhost]}\n"
-        end
+      vhost_list.each_with_object("") do |entry, retval|
+        retval << "#{entry[:env]}: #{entry[:vhost]}\n"
       end
     end
 
@@ -44,27 +63,6 @@ module Wordmove
           @remote_vhosts << list
         end
       end
-    end
-
-    private
-
-    attr_reader :movefile, :logger, :remote_vhosts, :local_vhost
-
-    def select_vhost(contents:)
-      target = contents.select { |_key, env| env[:vhost].present? }
-      target.map { |key, env| { env: key, vhost: env[:vhost] } }
-    end
-
-    def parse_movefile(movefile:)
-      movefile.fetch
-    end
-
-    def output
-      logger.task('Listing Local')
-      puts output_string(vhost_list: local_vhost)
-
-      logger.task('Listing Remotes')
-      puts output_string(vhost_list: remote_vhosts)
     end
   end
 end
