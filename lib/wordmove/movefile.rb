@@ -53,6 +53,24 @@ module Wordmove
       (options[:environment] || available_enviroments.first).to_sym
     end
 
+    def secrets
+      options = fetch(false)
+
+      secrets = []
+      options.each_key do |env|
+        secrets << options.dig(env, :database, :password)
+        secrets << options.dig(env, :database, :host)
+        secrets << options.dig(env, :vhost)
+        secrets << options.dig(env, :ssh, :password)
+        secrets << options.dig(env, :ssh, :host)
+        secrets << options.dig(env, :ftp, :password)
+        secrets << options.dig(env, :ftp, :host)
+        secrets << options.dig(env, :wordpress_path)
+      end
+
+      secrets.compact.delete_if(&:empty?)
+    end
+
     private
 
     def extract_available_envs(options)
