@@ -30,15 +30,17 @@ module Wordmove
           '.'
         end
 
-        def logger
-          Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+        def logger(secrets)
+          Logger.new(STDOUT, secrets).tap { |l| l.level = Logger::DEBUG }
         end
       end
 
       def initialize(environment, options = {})
         @environment = environment.to_sym
         @options = options
-        @logger = self.class.logger
+
+        movefile_secrets = Wordmove::Movefile.new.secrets
+        @logger = self.class.logger(movefile_secrets)
       end
 
       def push_db
