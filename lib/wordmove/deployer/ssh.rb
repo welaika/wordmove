@@ -9,7 +9,7 @@ module Wordmove
                   :local_gzipped_backup_path
 
       def initialize(environment, options)
-        super
+        super(environment, options)
         ssh_options = remote_options[:ssh]
 
         if simulate? && ssh_options[:rsync_options]

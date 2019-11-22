@@ -2,7 +2,7 @@ module Wordmove
   module Deployer
     class FTP < Base
       def initialize(environment, options)
-        super
+        super(environment, options)
         ftp_options = remote_options[:ftp]
         @copier = Photocopier::FTP.new(ftp_options).tap { |c| c.logger = logger }
       end

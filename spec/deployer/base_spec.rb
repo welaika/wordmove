@@ -1,8 +1,8 @@
 describe Wordmove::Deployer::Base do
+  let(:options) do
+    { config: movefile_path_for("multi_environments") }
+  end
   context ".deployer_for" do
-    let(:options) do
-      { config: movefile_path_for("multi_environments") }
-    end
 
     context "with more then one environment, but none chosen" do
       it "raises an exception" do
@@ -63,7 +63,7 @@ describe Wordmove::Deployer::Base do
   end
 
   context "#mysql_dump_command" do
-    let(:deployer) { described_class.new(:dummy_env) }
+    let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid mysqldump command" do
       command = deployer.send(
@@ -91,7 +91,7 @@ describe Wordmove::Deployer::Base do
   end
 
   context "#mysql_import_command" do
-    let(:deployer) { described_class.new(:dummy_env) }
+    let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid mysql import command" do
       command = deployer.send(
@@ -117,7 +117,7 @@ describe Wordmove::Deployer::Base do
   end
 
   context "#compress_command" do
-    let(:deployer) { described_class.new(:dummy_env) }
+    let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "cerates a valid gzip command" do
       command = deployer.send(
@@ -130,7 +130,7 @@ describe Wordmove::Deployer::Base do
   end
 
   context "#uncompress_command" do
-    let(:deployer) { described_class.new(:dummy_env) }
+    let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid gunzip command" do
       command = deployer.send(
