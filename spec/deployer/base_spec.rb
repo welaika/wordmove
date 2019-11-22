@@ -3,7 +3,6 @@ describe Wordmove::Deployer::Base do
     { config: movefile_path_for("multi_environments") }
   end
   context ".deployer_for" do
-
     context "with more then one environment, but none chosen" do
       it "raises an exception" do
         expect { described_class.deployer_for(options) }
