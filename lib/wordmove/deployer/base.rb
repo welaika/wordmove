@@ -39,7 +39,7 @@ module Wordmove
         @environment = environment.to_sym
         @options = options
 
-        movefile_secrets = Wordmove::Movefile.new.secrets
+        movefile_secrets = Wordmove::Movefile.new(options[:config]).secrets
         @logger = self.class.logger(movefile_secrets)
       end
 
