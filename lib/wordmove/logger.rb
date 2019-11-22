@@ -2,6 +2,16 @@ module Wordmove
   class Logger < ::Logger
     MAX_LINE = 70
 
+    def initialize(device, strings_to_hide = [])
+      super(device, formatter: proc { |_severity, _datetime, _progname, msg|
+        if strings_to_hide.empty?
+          msg
+        else
+          "\n#{msg}\n".gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
+        end
+      })
+    end
+
     def task(title)
       prefix = "▬" * 2
       title = " #{title} "
