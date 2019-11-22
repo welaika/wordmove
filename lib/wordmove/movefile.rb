@@ -16,7 +16,11 @@ module Wordmove
                 end
 
       if entries.empty?
-        raise MovefileNotFound, "Could not find a valid Movefile" if last_dir?(start_dir)
+        if last_dir?(start_dir)
+          raise MovefileNotFound, "Could not find a valid Movefile. Searched"\
+                                  " for filename \"#{name}\" in folder \"#{start_dir}\""
+        end
+
         @start_dir = upper_dir(start_dir)
         return fetch
       end
