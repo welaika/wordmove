@@ -38,6 +38,10 @@ module Wordmove
       puts "    ℹ️  info".yellow + " | ".black + message.to_s
     end
 
+    def plain(message)
+      puts message.to_s
+    end
+
     private
 
     def padding_length(line)

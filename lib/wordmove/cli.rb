@@ -65,10 +65,10 @@ module Wordmove
     def list
       Wordmove::EnvironmentsList.print(options)
     rescue Wordmove::MovefileNotFound => e
-      puts e.message
+      logger.error(e.message)
       exit 1
     rescue Psych::SyntaxError => e
-      puts "Your movefile is not parsable due to a syntax error: #{e.message}"
+      logger.error("Your movefile is not parsable due to a syntax error: #{e.message}")
       exit 1
     end
 
