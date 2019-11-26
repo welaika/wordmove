@@ -34,10 +34,10 @@ module Wordmove
 
     def output
       logger.task('Listing Local')
-      puts output_string(vhost_list: local_vhost)
+      logger.plain(output_string(vhost_list: local_vhost))
 
       logger.task('Listing Remotes')
-      puts output_string(vhost_list: remote_vhosts)
+      logger.plain(output_string(vhost_list: remote_vhosts))
     end
 
     def output_string(vhost_list:)
