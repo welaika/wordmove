@@ -58,6 +58,20 @@ module Wordmove
       end
     end
 
+    desc "list", "List all environments and vhosts"
+    shared_options.each do |option, args|
+      method_option option, args
+    end
+    def list
+      Wordmove::EnvironmentsList.print(options)
+    rescue Wordmove::MovefileNotFound => e
+      logger.error(e.message)
+      exit 1
+    rescue Psych::SyntaxError => e
+      logger.error("Your movefile is not parsable due to a syntax error: #{e.message}")
+      exit 1
+    end
+
     desc "pull", "Pulls WP data from remote host to the local machine"
     shared_options.each do |option, args|
       method_option option, args

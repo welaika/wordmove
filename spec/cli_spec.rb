@@ -31,6 +31,43 @@ describe Wordmove::CLI do
     end
   end
 
+  context "#list" do
+    subject { cli.invoke(:list, []) }
+    let(:list_class) { Wordmove::EnvironmentsList }
+    # Werdmove::EnvironmentsList.print should be called
+    it "delagates the command to EnvironmentsList class" do
+      expect(list_class).to receive(:print)
+      subject
+    end
+
+    context 'without a valid movefile' do
+      context "no movefile" do
+        it { expect { subject }.to raise_error SystemExit }
+      end
+
+      context "syntax error movefile " do
+        before do
+          # Ref. https://github.com/ruby/psych/blob/master/lib/psych/syntax_error.rb#L8
+          # Arguments for initialization: file, line, col, offset, problem, context
+          args = [nil, 1, 5, 0,
+                  "found character that cannot start any token",
+                  "while scanning for the next token"]
+          allow(list_class).to receive(:print).and_raise(Psych::SyntaxError.new(*args))
+        end
+
+        it { expect { subject }.to raise_error SystemExit }
+      end
+    end
+
+    context "with a movefile" do
+      subject { cli.invoke(:list, [], options) }
+      let(:options) { { config: movefile_path_for('Movefile') } }
+      it "invoke list without error" do
+        expect { subject }.not_to raise_error
+      end
+    end
+  end
+
   context "#push" do
     context "without a movefile" do
       it "it rescues from a MovefileNotFound exception" do
