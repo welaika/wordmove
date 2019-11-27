@@ -18,22 +18,20 @@ module Wordmove
     end
 
     shared_options = {
-      wordpress:   { aliases: "-w", type: :boolean },
-      uploads:     { aliases: "-u", type: :boolean },
-      themes:      { aliases: "-t", type: :boolean },
-      plugins:     { aliases: "-p", type: :boolean },
-      mu_plugins:  { aliases: "-m", type: :boolean },
-      languages:   { aliases: "-l", type: :boolean },
-      db:          { aliases: "-d", type: :boolean },
-
-      verbose:     { aliases: "-v", type: :boolean },
-      simulate:    { aliases: "-s", type: :boolean },
+      wordpress: { aliases: "-w", type: :boolean },
+      uploads: { aliases: "-u", type: :boolean },
+      themes: { aliases: "-t", type: :boolean },
+      plugins: { aliases: "-p", type: :boolean },
+      mu_plugins: { aliases: "-m", type: :boolean },
+      languages: { aliases: "-l", type: :boolean },
+      db: { aliases: "-d", type: :boolean },
+      verbose: { aliases: "-v", type: :boolean },
+      simulate: { aliases: "-s", type: :boolean },
       environment: { aliases: "-e" },
-      config:      { aliases: "-c" },
-      debug:       { type: :boolean },
-
-      no_adapt:    { type: :boolean },
-      all:         { type: :boolean }
+      config: { aliases: "-c" },
+      debug: { type: :boolean },
+      no_adapt: { type: :boolean },
+      all: { type: :boolean }
     }
 
     no_tasks do
@@ -49,6 +47,7 @@ module Wordmove
 
       def ensure_wordpress_options_presence!(options)
         return if (options.keys & (wordpress_options + ["all"])).present?
+
         puts "No options given. See wordmove --help"
         exit 1
       end

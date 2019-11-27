@@ -22,6 +22,7 @@ module Wordmove
 
     def forbidden?(task)
       return false unless forbidden_tasks[task].present?
+
       forbidden_tasks[task] == true
     end
 
