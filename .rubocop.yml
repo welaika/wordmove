@@ -1,11 +1,5 @@
-Rails:
-  Enabled: false
-
-Rails/Output:
-  Enabled: false
-
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
   DisplayCopNames: true
   DisplayStyleGuide: true
 
