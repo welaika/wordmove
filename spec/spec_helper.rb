@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require "tempfile"
 require "pry-byebug"
@@ -11,7 +11,7 @@ end
 
 require "wordmove"
 
-Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
+Dir[File.expand_path("support/**/*.rb", __dir__)].sort.each { |f| require f }
 
 # I don't know from where this method was imported,
 # but since last updates it was lost. I looked about

@@ -19,13 +19,13 @@ module Wordmove
             logger.error <<-LONG
   wp-cli is not up to date.
                 Use `wp cli update` to update to the latest version.
-              LONG
+            LONG
           end
         else
           logger.error <<-LONG
   wp-cli is not installed (or not in your $PATH).
               Read http://wp-cli.org/#installing for installation info.
-            LONG
+          LONG
         end
       end
 

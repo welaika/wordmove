@@ -100,9 +100,11 @@ module Wordmove
 
         return true if simulate?
 
+        # rubocop:todo Security/Open
         open(local_path, 'w') do |file|
           file << open(url).read
         end
+        # rubocop:enable Security/Open
       end
 
       def simulate?
