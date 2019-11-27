@@ -30,27 +30,28 @@ ssh_with_hooks:
   hooks:
     push:
       before:
-        local:
-          - 'echo "Calling hook push before local"'
-          - 'pwd'
-        remote:
-          - 'echo "Calling hook push before remote"'
+        - command: 'echo "Calling hook push before local"'
+          where: local
+        - command: 'pwd'
+          where: local
+        - command: 'echo "Calling hook push before remote"'
+          where: remote
       after:
-        local:
-          - 'echo "Calling hook push after local"'
-        remote:
-          - 'echo "Calling hook push after remote"'
+        - command: 'echo "Calling hook push after local"'
+          where: local
+        - command: 'echo "Calling hook push after remote"'
+          where: remote
     pull:
       before:
-        local:
-          - 'echo "Calling hook pull before local"'
-        remote:
-          - 'echo "Calling hook pull before remote"'
+        - command: 'echo "Calling hook pull before local"'
+          where: local
+        - command: 'echo "Calling hook pull before remote"'
+          where: remote
       after:
-        local:
-          - 'echo "Calling hook pull after local"'
-        remote:
-          - 'echo "Calling hook pull after remote"'
+        - command: 'echo "Calling hook pull after local"'
+          where: local
+        - command: 'echo "Calling hook pull after remote"'
+          where: remote
 
 ftp_with_hooks:
   vhost: "http://production.mysite.example.com"
@@ -71,8 +72,8 @@ ftp_with_hooks:
   hooks:
     push:
       before:
-        remote:
-          - echo "Calling hook push before remote"
+        - command: echo "Calling hook push before remote"
+          where: remote
 
 ssh_with_hooks_partially_filled:
   vhost: "http://staging.mysite.example.com"
@@ -92,8 +93,8 @@ ssh_with_hooks_partially_filled:
     push:
     pull:
       after:
-        local:
-          - echo "I've partially configured my hooks"
+        - command: echo "I've partially configured my hooks"
+          where: local
 
 ssh_with_hooks_which_return_error:
   vhost: "http://staging.mysite.example.com"
@@ -112,5 +113,26 @@ ssh_with_hooks_which_return_error:
   hooks:
     push:
       after:
-        local:
-          - 'exit 127'
+        - command: 'exit 127'
+          where: local
+
+ssh_with_hooks_which_return_error_raise_false:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+  hooks:
+    push:
+      after:
+        - command: 'exit 127'
+          where: local
+          raise: false

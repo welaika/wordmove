@@ -79,6 +79,21 @@ describe Wordmove::Hook do
           end.to output(/Error code: 127/)
             .to_stdout_from_any_process
         end
+
+        context "with raise set to `false`" do
+          let(:options) do
+            common_options.merge("environment" => 'ssh_with_hooks_which_return_error_raise_false')
+          end
+
+          it "logs an error without raising an exeption" do
+            expect do
+              expect do
+                cli.invoke(:push, [], options)
+              end.to_not raise_exception
+            end.to output(/Error code: 127/)
+              .to_stdout_from_any_process
+          end
+        end
       end
     end
 
@@ -194,13 +209,16 @@ describe Wordmove::Hook::Config do
 
   context "#local_hooks" do
     it "returns all the local hooks" do
-      expect(config.local_hooks).to eq ['echo "Calling hook push before local"', 'pwd']
+      expect(config.remote_hooks).to be_kind_of(Array)
+      expect(config.local_hooks.first[:command]).to eq 'echo "Calling hook push before local"'
+      expect(config.local_hooks.second[:command]).to eq 'pwd'
     end
   end
 
   context "#remote_hooks" do
     it "returns all the remote hooks" do
-      expect(config.remote_hooks).to eq ['echo "Calling hook push before remote"']
+      expect(config.remote_hooks).to be_kind_of(Array)
+      expect(config.remote_hooks.first[:command]).to eq 'echo "Calling hook push before remote"'
     end
   end
 
