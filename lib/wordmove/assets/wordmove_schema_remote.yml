@@ -87,52 +87,57 @@ mapping:
         type: map
         mapping:
           before:
-            type: map
-            mapping:
-              local:
-                type: seq
-                sequence:
-                  - type: str
-              remote:
-                type: seq
-                sequence:
-                  - type: str
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  command:
+                    type: str
+                    required: true
+                  where:
+                    type: str
+                    required: true
+                    pattern: /\Alocal\Z|\Aremote\Z/
           after:
-            type: map
-            mapping:
-              local:
-                type: seq
-                sequence:
-                  - type: str
-              remote:
-                type: seq
-                sequence:
-                  - type: str
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  command:
+                    type: str
+                    required: true
+                  where:
+                    type: str
+                    required: true
+                    pattern: /\Alocal\Z|\Aremote\Z/
       pull:
         type: map
         mapping:
           before:
-            type: map
-            mapping:
-              local:
-                type: seq
-                sequence:
-                  - type: str
-              remote:
-                type: seq
-                sequence:
-                  - type: str
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  command:
+                    type: str
+                    required: true
+                  where:
+                    type: str
+                    required: true
+                    pattern: /\Alocal\Z|\Aremote\Z/
           after:
-            type: map
-            mapping:
-              local:
-                type: seq
-                sequence:
-                  - type: str
-              remote:
-                type: seq
-                sequence:
-                  - type: str
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  command:
+                    type: str
+                    required: true
+                  where:
+                    type: str
+                    required: true
+                    pattern: /\Alocal\Z|\Aremote\Z/
+
   forbid:
     type: map
     mapping:
