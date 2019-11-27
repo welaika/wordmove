@@ -22,7 +22,7 @@ module Wordmove
         end
 
         @start_dir = upper_dir(start_dir)
-        return fetch
+        return fetch(verbose)
       end
 
       found = entries.first
