@@ -115,3 +115,24 @@ ssh_with_hooks_which_return_error:
       after:
         - command: 'exit 127'
           where: local
+
+ssh_with_hooks_which_return_error_raise_false:
+  vhost: "http://staging.mysite.example.com"
+  wordpress_path: "/var/www/your_site" # use an absolute path here
+
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+
+  ssh:
+    host: "staging.mysite.example.com"
+    user: "user"
+
+  hooks:
+    push:
+      after:
+        - command: 'exit 127'
+          where: local
+          raise: false

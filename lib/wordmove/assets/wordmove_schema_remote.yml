@@ -98,6 +98,8 @@ mapping:
                     type: str
                     required: true
                     pattern: /\Alocal\Z|\Aremote\Z/
+                  raise:
+                    type: bool
           after:
             type: seq
             sequence:
@@ -110,6 +112,8 @@ mapping:
                     type: str
                     required: true
                     pattern: /\Alocal\Z|\Aremote\Z/
+                  raise:
+                    type: bool
       pull:
         type: map
         mapping:
@@ -125,6 +129,8 @@ mapping:
                     type: str
                     required: true
                     pattern: /\Alocal\Z|\Aremote\Z/
+                  raise:
+                    type: bool
           after:
             type: seq
             sequence:
@@ -137,6 +143,8 @@ mapping:
                     type: str
                     required: true
                     pattern: /\Alocal\Z|\Aremote\Z/
+                  raise:
+                    type: bool
 
   forbid:
     type: map
