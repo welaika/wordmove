@@ -1,9 +1,7 @@
 language: ruby
 
 rvm:
-  - 2.4.0
-  - 2.4.3
-  - 2.5.0
+  - 2.6.5
 
 cache: bundler
 
@@ -23,4 +21,4 @@ deploy:
   on:
     tags: true
     branch: master
-    ruby: '2.5.0'
+    ruby: '2.6.5'
