@@ -7,7 +7,7 @@ module Wordmove
         if strings_to_hide.empty?
           msg
         else
-          "\n#{msg}\n".gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
+          msg.gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
         end
       })
     end
