@@ -50,6 +50,7 @@ Commands:
   wordmove doctor           # Do some local configuration and environment checks
   wordmove help [TASK]      # Describe available tasks or one specific task
   wordmove init             # Generates a brand new movefile.yml
+  wordmove list             # List all environments and vhosts
   wordmove pull             # Pulls WP data from remote host to the local machine
   wordmove push             # Pushes WP data from local machine to remote host
 ```
@@ -121,29 +122,23 @@ production:
     host: host
     user: user
 
-  # hooks: # Remote hooks won't work with FTP
-  #   push:
-  #     before:
-  #       local:
-  #         - 'echo "Do something locally before push"'
-  #       remote:
-  #         - 'echo "Do something remotely before push"'
-  #     after:
-  #       local:
-  #         - 'echo "Do something locally after push"'
-  #       remote:
-  #         - 'echo "Do something remotely after push"'
-  #   pull:
-  #     before:
-  #       local:
-  #         - 'echo "Do something locally before pull"'
-  #       remote:
-  #         - 'echo "Do something remotely before pull"'
-  #     after:
-  #       local:
-  #         - 'echo "Do something locally after pull"'
-  #       remote:
-  #         - 'echo "Do something remotely after pull"'
+#  hooks: # Remote hooks won't work with FTP
+#    push:
+#      before:
+#        - command: 'echo "do something"'
+#          where: local
+#          raise: false # raise is true by default
+#      after:
+#        - command: 'echo "do something"'
+#          where: remote
+#    pull:
+#      before:
+#        - command: 'echo "do something"'
+#          where: local
+#          raise: false
+#      after:
+#        - command: 'echo "do something"'
+#          where: remote
 ```
 
 **We warmly recommend to read the wiki article [Multiple environments explained
@@ -321,4 +316,3 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
