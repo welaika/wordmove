@@ -41,13 +41,17 @@ module Wordmove
       def local_hooks
         return [] if empty_step?
 
-        options[action][step][:local] || []
+        options[action][step]
+          .select { |hook| hook[:where] == 'local' }
+          .map { |hook| hook[:command] } || []
       end
 
       def remote_hooks
         return [] if empty_step?
 
-        options[action][step][:remote] || []
+        options[action][step]
+          .select { |hook| hook[:where] == 'remote' }
+          .map { |hook| hook[:command] } || []
       end
 
       private
