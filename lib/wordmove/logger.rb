@@ -3,12 +3,14 @@ module Wordmove
     MAX_LINE = 70
 
     def initialize(device, strings_to_hide = [])
-      super(device, formatter: proc { |_severity, _datetime, _progname, msg|
-        if strings_to_hide.empty?
-          msg
-        else
-          msg.gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
-        end
+      super(device, formatter: proc { |_severity, _datetime, _progname, message|
+        formatted_message = if strings_to_hide.empty?
+                              message
+                            else
+                              message.gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
+                            end
+
+        "\n#{formatted_message}\n"
       })
     end
 
