@@ -48,7 +48,7 @@ module Wordmove
     end
 
     def plain(message)
-      puts message.to_s
+      add(INFO, message.to_s)
     end
 
     private
