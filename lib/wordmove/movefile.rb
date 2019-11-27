@@ -16,7 +16,11 @@ module Wordmove
                 end
 
       if entries.empty?
-        raise MovefileNotFound, "Could not find a valid Movefile" if last_dir?(start_dir)
+        if last_dir?(start_dir)
+          raise MovefileNotFound, "Could not find a valid Movefile. Searched"\
+                                  " for filename \"#{name}\" in folder \"#{start_dir}\""
+        end
+
         @start_dir = upper_dir(start_dir)
         return fetch
       end
@@ -51,6 +55,24 @@ module Wordmove
       end
 
       (options[:environment] || available_enviroments.first).to_sym
+    end
+
+    def secrets
+      options = fetch(false)
+
+      secrets = []
+      options.each_key do |env|
+        secrets << options.dig(env, :database, :password)
+        secrets << options.dig(env, :database, :host)
+        secrets << options.dig(env, :vhost)
+        secrets << options.dig(env, :ssh, :password)
+        secrets << options.dig(env, :ssh, :host)
+        secrets << options.dig(env, :ftp, :password)
+        secrets << options.dig(env, :ftp, :host)
+        secrets << options.dig(env, :wordpress_path)
+      end
+
+      secrets.compact.delete_if(&:empty?)
     end
 
     private
