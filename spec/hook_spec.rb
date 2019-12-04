@@ -207,31 +207,31 @@ describe Wordmove::Hook::Config do
   let(:options) { movefile.fetch(false)[:ssh_with_hooks][:hooks] }
   let(:config) { described_class.new(options, :push, :before) }
 
-  context "#local_hooks" do
+  context "#local_commands" do
     it "returns all the local hooks" do
-      expect(config.remote_hooks).to be_kind_of(Array)
-      expect(config.local_hooks.first[:command]).to eq 'echo "Calling hook push before local"'
-      expect(config.local_hooks.second[:command]).to eq 'pwd'
+      expect(config.remote_commands).to be_kind_of(Array)
+      expect(config.local_commands.first[:command]).to eq 'echo "Calling hook push before local"'
+      expect(config.local_commands.second[:command]).to eq 'pwd'
     end
   end
 
-  context "#remote_hooks" do
+  context "#remote_commands" do
     it "returns all the remote hooks" do
-      expect(config.remote_hooks).to be_kind_of(Array)
-      expect(config.remote_hooks.first[:command]).to eq 'echo "Calling hook push before remote"'
+      expect(config.remote_commands).to be_kind_of(Array)
+      expect(config.remote_commands.first[:command]).to eq 'echo "Calling hook push before remote"'
     end
   end
 
   context "#empty?" do
     it "returns true if both local and remote hooks are empty" do
-      allow(config).to receive(:local_hooks).and_return([])
-      allow(config).to receive(:remote_hooks).and_return([])
+      allow(config).to receive(:local_commands).and_return([])
+      allow(config).to receive(:remote_commands).and_return([])
 
       expect(config.empty?).to be true
     end
 
     it "returns false if there is at least one hook registered" do
-      allow(config).to receive(:local_hooks).and_return([])
+      allow(config).to receive(:local_commands).and_return([])
 
       expect(config.empty?).to be false
     end
