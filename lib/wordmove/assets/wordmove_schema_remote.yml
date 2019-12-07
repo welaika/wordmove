@@ -29,6 +29,8 @@ mapping:
         type: str
       port:
         type: int
+      socket:
+        type: str
       charset:
         type: str
   exclude:

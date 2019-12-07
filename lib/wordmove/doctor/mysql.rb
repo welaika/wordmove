@@ -82,6 +82,7 @@ module Wordmove
         command = ["mysql"]
         command << "--host=#{Shellwords.escape(config[:host])}" if config[:host].present?
         command << "--port=#{Shellwords.escape(config[:port])}" if config[:port].present?
+        command << "--socket=\"#{config[:socket]}\"" if config[:socket].present?
         command << "--user=#{Shellwords.escape(config[:user])}" if config[:user].present?
         if config[:password].present?
           command << "--password=#{Shellwords.escape(config[:password])}"

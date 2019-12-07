@@ -219,11 +219,12 @@ $db_port = '<%= db[:port] %>';
 if (!$db_port) {
   $db_port = ini_get("mysqli.default_port");
 }
+$db_socket = '<%= escape_php db[:socket] %>';
 $db_user = '<%= escape_php db[:user] %>';
 $db_password = '<%= escape_php db[:password] %>';
 $db_name = '<%= escape_php db[:name] %>';
 
-$connection = new mysqli($db_host, $db_user, $db_password, $db_name, $db_port);
+$connection = new mysqli($db_host, $db_user, $db_password, $db_name, $db_port, $db_socket);
 $dump = new MySQLDump($connection);
 $db_file = 'dump.mysql';
 $dump->save($db_file);

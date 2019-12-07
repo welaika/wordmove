@@ -131,6 +131,7 @@ module Wordmove
         command = ["mysqldump"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
+        command << "--socket=\"#{options[:socket]}\"" if options[:socket].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
         if options[:password].present?
           command << "--password=#{Shellwords.escape(options[:password])}"
@@ -147,6 +148,7 @@ module Wordmove
         command = ["mysql"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
+        command << "--socket=\"#{options[:socket]}\"" if options[:socket].present?
         command << "--user=#{Shellwords.escape(options[:user])}" if options[:user].present?
         if options[:password].present?
           command << "--password=#{Shellwords.escape(options[:password])}"

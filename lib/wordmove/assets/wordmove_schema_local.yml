@@ -17,6 +17,7 @@ mapping:
         required: true
       mysqldump_options:
       port:
+      socket:
       charset:
   paths:
     type: map
