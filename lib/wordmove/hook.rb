@@ -16,7 +16,7 @@ module Wordmove
         step
       )
 
-      return if hooks.all_commands.empty?
+      return if hooks.empty?
 
       logger.task "Running #{action}/#{step} hooks"
 
