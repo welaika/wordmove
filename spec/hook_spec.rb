@@ -273,9 +273,8 @@ describe Wordmove::Hook::Config do
   end
 
   context "#empty?" do
-    it "returns true if both local and remote hooks are empty" do
-      allow(config).to receive(:local_commands).and_return([])
-      allow(config).to receive(:remote_commands).and_return([])
+    it "returns true if `all_commands` array is empty" do
+      allow(config).to receive(:all_commands).and_return([])
 
       expect(config.empty?).to be true
     end
