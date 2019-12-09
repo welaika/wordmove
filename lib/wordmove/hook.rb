@@ -81,20 +81,20 @@ module Wordmove
         parent.logger
       end
 
-      def self.run(command_object, options, simulate = false)
+      def self.run(command_hash, options, simulate = false)
         wordpress_path = options[:wordpress_path]
 
-        logger.task_step true, "Exec command: #{command_object[:command]}"
+        logger.task_step true, "Exec command: #{command_hash[:command]}"
         return true if simulate
 
-        stdout_return = `cd #{wordpress_path} && #{command_object[:command]} 2>&1`
+        stdout_return = `cd #{wordpress_path} && #{command_hash[:command]} 2>&1`
         logger.task_step true, "Output: #{stdout_return}"
 
         if $CHILD_STATUS.exitstatus.zero?
           logger.success ""
         else
           logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
-          raise Wordmove::LocalHookException unless command_object[:raise].eql? false
+          raise Wordmove::LocalHookException unless command_hash[:raise].eql? false
         end
       end
     end
