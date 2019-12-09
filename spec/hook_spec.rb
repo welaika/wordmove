@@ -5,6 +5,36 @@ describe Wordmove::Hook do
   let(:common_options) { { "wordpress" => true, "config" => movefile_path_for('with_hooks') } }
   let(:cli) { Wordmove::CLI.new }
 
+  context 'testing comand order' do
+    let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+
+    before do
+      allow(Wordmove::Hook::Local).to receive(:run)
+      allow(Wordmove::Hook::Remote).to receive(:run)
+    end
+
+    it 'checks the order' do
+      cli.invoke(:push, [], options)
+
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with({command: 'echo "Calling hook push before local"', where: 'local'}, an_instance_of(Hash), nil).ordered
+      )
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with({command: 'pwd', where: 'local'}, an_instance_of(Hash), nil).ordered
+      )
+      expect(Wordmove::Hook::Remote).to(
+        have_received(:run).with({command: 'echo "Calling hook push before remote"', where: 'remote'}, an_instance_of(Hash), nil).ordered
+      )
+
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with({command: 'echo "Calling hook push after local"', where: 'local'}, an_instance_of(Hash), nil).ordered
+      )
+      expect(Wordmove::Hook::Remote).to(
+        have_received(:run).with({command: 'echo "Calling hook push after remote"', where: 'remote'}, an_instance_of(Hash), nil).ordered
+      )
+    end
+  end
+
   context "#run" do
     before do
       allow_any_instance_of(Wordmove::Deployer::Base)
