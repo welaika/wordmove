@@ -13,6 +13,10 @@ describe Wordmove::SqlAdapter::Wpcli do
   end
 
   context "#command" do
+    before do
+      allow(adapter).to receive(:wp_in_path?).and_return(true)
+    end
+
     it "returns the right command as a string" do
       expect(adapter.command)
         .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
