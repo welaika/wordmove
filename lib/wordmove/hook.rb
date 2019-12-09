@@ -41,7 +41,7 @@ module Wordmove
 
     Config = Struct.new(:options, :action, :step) do
       def empty?
-        (local_commands + remote_commands).empty?
+        all_commands.empty?
       end
 
       def all_commands
