@@ -7,7 +7,12 @@ module Wordmove
         formatted_message = if strings_to_hide.empty?
                               message
                             else
-                              message.gsub(Regexp.new(strings_to_hide.join('|')), '[secret]')
+                              message.gsub(
+                                Regexp.new(
+                                  strings_to_hide.map { |string| Regexp.escape(string) }.join('|')
+                                ),
+                                '[secret]'
+                              )
                             end
 
         "\n#{formatted_message}\n"
