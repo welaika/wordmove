@@ -17,7 +17,7 @@ Command used on the CLI: (e.g.: `wordmove pull --all --no-db`)
 A clear and concise description of what you expected to happen.
 
 **movefile.yml**
-Paste (removing personal data) the interesting part of your `movefile.yml` formatting it inside a code block with `yml` syntax.
+Paste (removing personal data) the interesting part, if any, of your `movefile.yml` formatting it inside a code block with `yml` syntax and double checking the indentation.
 
 **Exception/trace**
 Paste (removing personal data) the entire trace of error/exception you encountered, if any
