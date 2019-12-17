@@ -5,6 +5,9 @@ rvm:
 
 cache: bundler
 
+before_install:
+  - gem install bundler -v '~> 2.0'
+
 install:
   - bundle install --jobs=3 --retry=3
 
