@@ -50,6 +50,7 @@ Commands:
   wordmove doctor           # Do some local configuration and environment checks
   wordmove help [TASK]      # Describe available tasks or one specific task
   wordmove init             # Generates a brand new movefile.yml
+  wordmove list             # List all environments and vhosts
   wordmove pull             # Pulls WP data from remote host to the local machine
   wordmove push             # Pushes WP data from local machine to remote host
 ```
@@ -121,29 +122,23 @@ production:
     host: host
     user: user
 
-  # hooks: # Remote hooks won't work with FTP
-  #   push:
-  #     before:
-  #       local:
-  #         - 'echo "Do something locally before push"'
-  #       remote:
-  #         - 'echo "Do something remotely before push"'
-  #     after:
-  #       local:
-  #         - 'echo "Do something locally after push"'
-  #       remote:
-  #         - 'echo "Do something remotely after push"'
-  #   pull:
-  #     before:
-  #       local:
-  #         - 'echo "Do something locally before pull"'
-  #       remote:
-  #         - 'echo "Do something remotely before pull"'
-  #     after:
-  #       local:
-  #         - 'echo "Do something locally after pull"'
-  #       remote:
-  #         - 'echo "Do something remotely after pull"'
+#  hooks: # Remote hooks won't work with FTP
+#    push:
+#      before:
+#        - command: 'echo "do something"'
+#          where: local
+#          raise: false # raise is true by default
+#      after:
+#        - command: 'echo "do something"'
+#          where: remote
+#    pull:
+#      before:
+#        - command: 'echo "do something"'
+#          where: local
+#          raise: false
+#      after:
+#        - command: 'echo "do something"'
+#          where: remote
 ```
 
 **We warmly recommend to read the wiki article [Multiple environments explained
@@ -286,39 +281,10 @@ Visit [Wordpress Tools](https://www.wptools.it).
 
 ## Contribute
 
-In order to promote a simpler contribution workflow we have decided to fork and PR the `master` branch.
-We will accordingly tag and release or pre-release versions to the rubygems.org repository.
-Do not consider the `dev` branch for your forks and PR.
-We will never more use version-named branches as in the past, but we'll tag release on `master` and pre-release on `dev`.
+Please, read the [contributor guide](https://github.com/welaika/wordmove/blob/master/CONTRIBUTING.md).
 
-### Please, **read the full [contributor guide](https://github.com/welaika/wordmove/wiki/Contributor-Guide)**.
-
-Feel free to open an issue about contribution if more you need more info
+Feel free to open a discussion issue about contribution if you need more info.
 
 ## Author
 
 made with ❤️ and ☕️ by [weLaika](https://dev.welaika.com)
-
-## License
-
-(The MIT License)
-
-Copyright © 2013-2019 weLaika
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the ‘Software’), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

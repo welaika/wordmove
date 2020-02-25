@@ -71,26 +71,21 @@ production:
   # hooks: # Remote hooks won't work with FTP
   #   push:
   #     before:
-  #       local:
-  #         - 'echo "Do something locally before push"'
-  #       remote:
-  #         - 'echo "Do something remotely before push"'
+  #       - command: 'echo "do something"'
+  #         where: local
+  #         raise: false # raise is true by default
   #     after:
-  #       local:
-  #         - 'echo "Do something locally after push"'
-  #       remote:
-  #         - 'echo "Do something remotely after push"'
+  #       - command: 'echo "do something"'
+  #         where: remote
   #   pull:
   #     before:
-  #       local:
-  #         - 'echo "Do something locally before pull"'
-  #       remote:
-  #         - 'echo "Do something remotely before pull"'
+  #       - command: 'echo "do something"'
+  #         where: local
+  #         raise: false
   #     after:
-  #       local:
-  #         - 'echo "Do something locally after pull"'
-  #       remote:
-  #         - 'echo "Do something remotely after pull"'
+  #       - command: 'echo "do something"'
+  #         where: remote
+  #
   # forbid:
   #   push:
   #     db: false

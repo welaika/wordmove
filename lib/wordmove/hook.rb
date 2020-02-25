@@ -4,6 +4,7 @@ module Wordmove
       Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
     end
 
+    # rubocop:disable Metrics/MethodLength
     def self.run(action, step, cli_options)
       movefile = Wordmove::Movefile.new(cli_options[:config])
       options = movefile.fetch(false)
@@ -15,39 +16,52 @@ module Wordmove
         step
       )
 
-      unless hooks.local_hooks.empty?
-        Wordmove::Hook::Local.run(hooks.local_hooks, options[:local], cli_options[:simulate])
+      return if hooks.empty?
+
+      logger.task "Running #{action}/#{step} hooks"
+
+      hooks.all_commands.each do |command|
+        case command[:where]
+        when 'local'
+          Wordmove::Hook::Local.run(command, options[:local], cli_options[:simulate])
+        when 'remote'
+          if options[environment][:ftp]
+            logger.debug "You have configured remote hooks to run over "\
+                         "an FTP connection, but this is not possible. Skipping."
+            next
+          end
+
+          Wordmove::Hook::Remote.run(command, options[environment], cli_options[:simulate])
+        else
+          next
+        end
       end
-
-      return if hooks.remote_hooks.empty?
-
-      if options[environment][:ftp]
-        logger.debug "You have configured remote hooks to run over "\
-                     "an FTP connection, but this is not possible. Skipping."
-
-        return
-      end
-
-      Wordmove::Hook::Remote.run(
-        hooks.remote_hooks, options[environment], cli_options[:simulate]
-      )
     end
+    # rubocop:enable Metrics/MethodLength
 
     Config = Struct.new(:options, :action, :step) do
       def empty?
-        (local_hooks + remote_hooks).empty?
+        all_commands.empty?
       end
 
-      def local_hooks
+      def all_commands
         return [] if empty_step?
 
-        options[action][step][:local] || []
+        options[action][step] || []
       end
 
-      def remote_hooks
+      def local_commands
         return [] if empty_step?
 
-        options[action][step][:remote] || []
+        options[action][step]
+          .select { |hook| hook[:where] == 'local' } || []
+      end
+
+      def remote_commands
+        return [] if empty_step?
+
+        options[action][step]
+          .select { |hook| hook[:where] == 'remote' } || []
       end
 
       private
@@ -56,6 +70,7 @@ module Wordmove
         return true unless options
         return true if options[action].nil?
         return true if options[action][step].nil?
+        return true if options[action][step].empty?
 
         false
       end
@@ -66,24 +81,20 @@ module Wordmove
         parent.logger
       end
 
-      def self.run(commands, options, simulate = false)
-        logger.task "Running local hooks"
-
+      def self.run(command_hash, options, simulate = false)
         wordpress_path = options[:wordpress_path]
 
-        commands.each do |command|
-          logger.task_step true, "Exec command: #{command}"
-          return true if simulate
+        logger.task_step true, "Exec command: #{command_hash[:command]}"
+        return true if simulate
 
-          stdout_return = `cd #{wordpress_path} && #{command} 2>&1`
-          logger.task_step true, "Output: #{stdout_return}"
+        stdout_return = `cd #{wordpress_path} && #{command_hash[:command]} 2>&1`
+        logger.task_step true, "Output: #{stdout_return}"
 
-          if $CHILD_STATUS.exitstatus.zero?
-            logger.success ""
-          else
-            logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
-            raise Wordmove::LocalHookException
-          end
+        if $CHILD_STATUS.exitstatus.zero?
+          logger.success ""
+        else
+          logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
+          raise Wordmove::LocalHookException unless command_hash[:raise].eql? false
         end
       end
     end
@@ -93,28 +104,25 @@ module Wordmove
         parent.logger
       end
 
-      def self.run(commands, options, simulate = false)
-        logger.task "Running remote hooks"
-
+      def self.run(command_hash, options, simulate = false)
         ssh_options = options[:ssh]
         wordpress_path = options[:wordpress_path]
 
         copier = Photocopier::SSH.new(ssh_options).tap { |c| c.logger = logger }
-        commands.each do |command|
-          logger.task_step false, "Exec command: #{command}"
-          return true if simulate
 
-          stdout, stderr, exit_code =
-            copier.exec!("cd #{wordpress_path} && #{command}")
+        logger.task_step false, "Exec command: #{command_hash[:command]}"
+        return true if simulate
 
-          if exit_code.zero?
-            logger.task_step false, "Output: #{stdout}"
-            logger.success ""
-          else
-            logger.task_step false, "Output: #{stderr}"
-            logger.error "Error code #{exit_code}"
-            raise Wordmove::RemoteHookException
-          end
+        stdout, stderr, exit_code =
+          copier.exec!("cd #{wordpress_path} && #{command_hash[:command]}")
+
+        if exit_code.zero?
+          logger.task_step false, "Output: #{stdout}"
+          logger.success ""
+        else
+          logger.task_step false, "Output: #{stderr}"
+          logger.error "Error code #{exit_code}"
+          raise Wordmove::RemoteHookException unless command_hash[:raise].eql? false
         end
       end
     end

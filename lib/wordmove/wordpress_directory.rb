@@ -10,12 +10,12 @@ class WordpressDirectory
 
   DEFAULT_PATHS = {
     Path::WP_CONTENT => 'wp-content',
-    Path::WP_CONFIG  => 'wp-config.php',
-    Path::PLUGINS    => 'wp-content/plugins',
+    Path::WP_CONFIG => 'wp-config.php',
+    Path::PLUGINS => 'wp-content/plugins',
     Path::MU_PLUGINS => 'wp-content/mu-plugins',
-    Path::THEMES     => 'wp-content/themes',
-    Path::UPLOADS    => 'wp-content/uploads',
-    Path::LANGUAGES  => 'wp-content/languages'
+    Path::THEMES => 'wp-content/themes',
+    Path::UPLOADS => 'wp-content/uploads',
+    Path::LANGUAGES => 'wp-content/languages'
   }.freeze
 
   def self.default_path_for(sym)

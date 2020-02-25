@@ -5,6 +5,56 @@ describe Wordmove::Hook do
   let(:common_options) { { "wordpress" => true, "config" => movefile_path_for('with_hooks') } }
   let(:cli) { Wordmove::CLI.new }
 
+  context 'testing comand order' do
+    let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+
+    before do
+      allow(Wordmove::Hook::Local).to receive(:run)
+      allow(Wordmove::Hook::Remote).to receive(:run)
+    end
+
+    it 'checks the order' do
+      cli.invoke(:push, [], options)
+
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with(
+          { command: 'echo "Calling hook push before local"', where: 'local' },
+          an_instance_of(Hash),
+          nil
+        ).ordered
+      )
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with(
+          { command: 'pwd', where: 'local' },
+          an_instance_of(Hash),
+          nil
+        ).ordered
+      )
+      expect(Wordmove::Hook::Remote).to(
+        have_received(:run).with(
+          { command: 'echo "Calling hook push before remote"', where: 'remote' },
+          an_instance_of(Hash),
+          nil
+        ).ordered
+      )
+
+      expect(Wordmove::Hook::Local).to(
+        have_received(:run).with(
+          { command: 'echo "Calling hook push after local"', where: 'local' },
+          an_instance_of(Hash),
+          nil
+        ).ordered
+      )
+      expect(Wordmove::Hook::Remote).to(
+        have_received(:run).with(
+          { command: 'echo "Calling hook push after remote"', where: 'remote' },
+          an_instance_of(Hash),
+          nil
+        ).ordered
+      )
+    end
+  end
+
   context "#run" do
     before do
       allow_any_instance_of(Wordmove::Deployer::Base)
@@ -78,6 +128,21 @@ describe Wordmove::Hook do
             end.to raise_exception(Wordmove::LocalHookException)
           end.to output(/Error code: 127/)
             .to_stdout_from_any_process
+        end
+
+        context "with raise set to `false`" do
+          let(:options) do
+            common_options.merge("environment" => 'ssh_with_hooks_which_return_error_raise_false')
+          end
+
+          it "logs an error without raising an exeption" do
+            expect do
+              expect do
+                cli.invoke(:push, [], options)
+              end.to_not raise_exception
+            end.to output(/Error code: 127/)
+              .to_stdout_from_any_process
+          end
         end
       end
     end
@@ -192,28 +257,30 @@ describe Wordmove::Hook::Config do
   let(:options) { movefile.fetch(false)[:ssh_with_hooks][:hooks] }
   let(:config) { described_class.new(options, :push, :before) }
 
-  context "#local_hooks" do
+  context "#local_commands" do
     it "returns all the local hooks" do
-      expect(config.local_hooks).to eq ['echo "Calling hook push before local"', 'pwd']
+      expect(config.remote_commands).to be_kind_of(Array)
+      expect(config.local_commands.first[:command]).to eq 'echo "Calling hook push before local"'
+      expect(config.local_commands.second[:command]).to eq 'pwd'
     end
   end
 
-  context "#remote_hooks" do
+  context "#remote_commands" do
     it "returns all the remote hooks" do
-      expect(config.remote_hooks).to eq ['echo "Calling hook push before remote"']
+      expect(config.remote_commands).to be_kind_of(Array)
+      expect(config.remote_commands.first[:command]).to eq 'echo "Calling hook push before remote"'
     end
   end
 
   context "#empty?" do
-    it "returns true if both local and remote hooks are empty" do
-      allow(config).to receive(:local_hooks).and_return([])
-      allow(config).to receive(:remote_hooks).and_return([])
+    it "returns true if `all_commands` array is empty" do
+      allow(config).to receive(:all_commands).and_return([])
 
       expect(config.empty?).to be true
     end
 
     it "returns false if there is at least one hook registered" do
-      allow(config).to receive(:local_hooks).and_return([])
+      allow(config).to receive(:local_commands).and_return([])
 
       expect(config.empty?).to be false
     end

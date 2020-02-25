@@ -30,15 +30,17 @@ module Wordmove
           '.'
         end
 
-        def logger
-          Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+        def logger(secrets)
+          Logger.new(STDOUT, secrets).tap { |l| l.level = Logger::DEBUG }
         end
       end
 
       def initialize(environment, options = {})
         @environment = environment.to_sym
         @options = options
-        @logger = self.class.logger
+
+        movefile_secrets = Wordmove::Movefile.new(options[:config]).secrets
+        @logger = self.class.logger(movefile_secrets)
       end
 
       def push_db
@@ -98,9 +100,11 @@ module Wordmove
 
         return true if simulate?
 
+        # rubocop:todo Security/Open
         open(local_path, 'w') do |file|
           file << open(url).read
         end
+        # rubocop:enable Security/Open
       end
 
       def simulate?

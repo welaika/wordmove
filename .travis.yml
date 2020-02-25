@@ -1,20 +1,14 @@
 language: ruby
 
 rvm:
-  - 2.4.0
-  - 2.4.3
-  - 2.5.0
+  - 2.6.5
 
 cache: bundler
 
 before_install:
-  - gem update --system
-  - gem install bundler
+  - gem install bundler -v '~> 2.0'
 
 install:
-  - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-  - chmod +x wp-cli.phar
-  - sudo mv wp-cli.phar /usr/local/bin/wp
   - bundle install --jobs=3 --retry=3
 
 deploy:
@@ -23,4 +17,4 @@ deploy:
   on:
     tags: true
     branch: master
-    ruby: '2.5.0'
+    ruby: '2.6.5'

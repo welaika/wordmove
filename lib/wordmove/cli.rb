@@ -18,22 +18,20 @@ module Wordmove
     end
 
     shared_options = {
-      wordpress:   { aliases: "-w", type: :boolean },
-      uploads:     { aliases: "-u", type: :boolean },
-      themes:      { aliases: "-t", type: :boolean },
-      plugins:     { aliases: "-p", type: :boolean },
-      mu_plugins:  { aliases: "-m", type: :boolean },
-      languages:   { aliases: "-l", type: :boolean },
-      db:          { aliases: "-d", type: :boolean },
-
-      verbose:     { aliases: "-v", type: :boolean },
-      simulate:    { aliases: "-s", type: :boolean },
+      wordpress: { aliases: "-w", type: :boolean },
+      uploads: { aliases: "-u", type: :boolean },
+      themes: { aliases: "-t", type: :boolean },
+      plugins: { aliases: "-p", type: :boolean },
+      mu_plugins: { aliases: "-m", type: :boolean },
+      languages: { aliases: "-l", type: :boolean },
+      db: { aliases: "-d", type: :boolean },
+      verbose: { aliases: "-v", type: :boolean },
+      simulate: { aliases: "-s", type: :boolean },
       environment: { aliases: "-e" },
-      config:      { aliases: "-c" },
-      debug:       { type: :boolean },
-
-      no_adapt:    { type: :boolean },
-      all:         { type: :boolean }
+      config: { aliases: "-c" },
+      debug: { type: :boolean },
+      no_adapt: { type: :boolean },
+      all: { type: :boolean }
     }
 
     no_tasks do
@@ -49,6 +47,7 @@ module Wordmove
 
       def ensure_wordpress_options_presence!(options)
         return if (options.keys & (wordpress_options + ["all"])).present?
+
         puts "No options given. See wordmove --help"
         exit 1
       end
@@ -56,6 +55,20 @@ module Wordmove
       def logger
         Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
       end
+    end
+
+    desc "list", "List all environments and vhosts"
+    shared_options.each do |option, args|
+      method_option option, args
+    end
+    def list
+      Wordmove::EnvironmentsList.print(options)
+    rescue Wordmove::MovefileNotFound => e
+      logger.error(e.message)
+      exit 1
+    rescue Psych::SyntaxError => e
+      logger.error("Your movefile is not parsable due to a syntax error: #{e.message}")
+      exit 1
     end
 
     desc "pull", "Pulls WP data from remote host to the local machine"
