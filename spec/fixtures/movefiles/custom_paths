@@ -1,0 +1,27 @@
+global:
+  sql_adapter: "default"
+local:
+  vhost: "http://vhost.local"
+  wordpress_path: "~/dev/sites/your_site"
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+  paths:
+    uploads: 'wp-content/pirate'
+remote:
+  vhost: "http://example.com"
+  wordpress_path: "/var/www/your_site"
+  paths:
+    uploads: 'wp-content/pirate'
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
+  ssh:
+    user: "user"
+    password: "password"
+    host: "host"
+    port: 30000
