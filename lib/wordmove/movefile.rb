@@ -1,24 +1,24 @@
 module Wordmove
   class Movefile
-    attr_reader :logger, :name, :start_dir
+    attr_reader :logger, :config_file_name, :start_dir
 
-    def initialize(name = nil, start_dir = current_dir)
+    def initialize(config_file_name = nil, start_dir = current_dir)
       @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
-      @name = name
+      @config_file_name = config_file_name
       @start_dir = start_dir
     end
 
     def fetch(verbose = true)
-      entries = if name.nil?
+      entries = if config_file_name.nil?
                   Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
                 else
-                  Dir["#{File.join(start_dir, name)}{,.yml,.yaml}"]
+                  Dir["#{File.join(start_dir, config_file_name)}{,.yml,.yaml}"]
                 end
 
       if entries.empty?
         if last_dir?(start_dir)
           raise MovefileNotFound, "Could not find a valid Movefile. Searched"\
-                                  " for filename \"#{name}\" in folder \"#{start_dir}\""
+                                  " for filename \"#{config_file_name}\" in folder \"#{start_dir}\""
         end
 
         @start_dir = upper_dir(start_dir)
