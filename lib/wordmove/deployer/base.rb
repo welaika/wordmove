@@ -111,20 +111,52 @@ module Wordmove
         options[:simulate]
       end
 
-      [
-        WordpressDirectory::Path::WP_CONTENT,
-        WordpressDirectory::Path::PLUGINS,
-        WordpressDirectory::Path::MU_PLUGINS,
-        WordpressDirectory::Path::THEMES,
-        WordpressDirectory::Path::UPLOADS,
-        WordpressDirectory::Path::LANGUAGES
-      ].each do |type|
-        %i[remote local].each do |location|
-          define_method "#{location}_#{type}_dir" do
-            options = send("#{location}_options")
-            WordpressDirectory.new(type, options)
-          end
-        end
+      def remote_wp_content_dir
+        WordpressDirectory.new(:wp_content, remote_options)
+      end
+
+      def remote_plugins_dir
+        WordpressDirectory.new(:plugins, remote_options)
+      end
+
+      def remote_mu_plugins_dir
+        WordpressDirectory.new(:mu_plugins, remote_options)
+      end
+
+      def remote_themes_dir
+        WordpressDirectory.new(:themes, remote_options)
+      end
+
+      def remote_uploads_dir
+        WordpressDirectory.new(:uploads, remote_options)
+      end
+
+      def remote_languages_dir
+        WordpressDirectory.new(:languages, remote_options)
+      end
+
+      def local_wp_content_dir
+        WordpressDirectory.new(:wp_content, local_options)
+      end
+
+      def local_plugins_dir
+        WordpressDirectory.new(:plugins, local_options)
+      end
+
+      def local_mu_plugins_dir
+        WordpressDirectory.new(:mu_plugins, local_options)
+      end
+
+      def local_themes_dir
+        WordpressDirectory.new(:themes, local_options)
+      end
+
+      def local_uploads_dir
+        WordpressDirectory.new(:uploads, local_options)
+      end
+
+      def local_languages_dir
+        WordpressDirectory.new(:languages, local_options)
       end
 
       def mysql_dump_command(options, save_to_path)
