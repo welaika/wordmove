@@ -6,9 +6,9 @@ module Wordmove
 
     # rubocop:disable Metrics/MethodLength
     def self.run(action, step, cli_options)
-      movefile = Wordmove::Movefile.new(cli_options[:config])
-      options = movefile.fetch(false)
-      environment = movefile.environment(cli_options)
+      movefile = Wordmove::Movefile.new(cli_options, nil, false)
+      options = movefile.options
+      environment = movefile.environment
 
       hooks = Wordmove::Hook::Config.new(
         options[environment][:hooks],

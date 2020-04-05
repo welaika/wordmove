@@ -1,6 +1,6 @@
 describe Wordmove::EnvironmentsList do
   let(:instance) { described_class.new(options) }
-  let(:options) { {} }
+  let(:options) { { config: movefile_path_for('multi_environments') } }
 
   describe ".print" do
     subject { described_class.print(options) }
@@ -29,14 +29,11 @@ describe Wordmove::EnvironmentsList do
     context "non exist movefile" do
       let(:options) { { config: 'non_exists_path' } }
       it "call parse_content" do
-        expect(instance).to receive(:parse_movefile).and_call_original
         expect { subject }.to raise_error Wordmove::MovefileNotFound
       end
     end
 
     context "valid movefile" do
-      let(:options) { { config: movefile_path_for('multi_environments') } }
-
       it "call parse_content" do
         expect(instance).to receive(:parse_movefile).and_call_original
         subject

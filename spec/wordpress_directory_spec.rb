@@ -25,8 +25,8 @@ describe WordpressDirectory do
   end
 
   context '.path' do
-    let(:movefile) { Wordmove::Movefile.new(movefile_path_for("Movefile")) }
-    let(:options) { movefile.fetch(false)[:local] }
+    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for("Movefile") }, nil, false) }
+    let(:options) { movefile.options[:local] }
 
     context 'given an additional path as a string' do
       it 'returns the absolute path of the folder joined with the additional one' do
@@ -44,8 +44,8 @@ describe WordpressDirectory do
   end
 
   context '.url' do
-    let(:movefile) { Wordmove::Movefile.new(movefile_path_for("Movefile")) }
-    let(:options) { movefile.fetch(false)[:local] }
+    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for("Movefile") }, nil, false) }
+    let(:options) { movefile.options[:local] }
 
     context 'given an additional path as a string' do
       it 'returns the URL of the folder joined with the additional path' do
@@ -64,8 +64,10 @@ describe WordpressDirectory do
 
   context '.relative_path' do
     context 'given a movefile with custom paths defined' do
-      let(:movefile) { Wordmove::Movefile.new(movefile_path_for("custom_paths")) }
-      let(:options) { movefile.fetch(false)[:remote] }
+      let(:movefile) do
+        Wordmove::Movefile.new({ config: movefile_path_for("custom_paths") }, nil, false)
+      end
+      let(:options) { movefile.options[:remote] }
 
       context 'given addional path as argument' do
         it 'returns the customized relative path joined with the additional one' do

@@ -9,11 +9,11 @@ module Wordmove
 
       class << self
         def deployer_for(cli_options)
-          movefile = Wordmove::Movefile.new(cli_options[:config])
-          movefile.load_dotenv(cli_options)
+          movefile = Wordmove::Movefile.new(cli_options)
+          movefile.load_dotenv
 
-          options = movefile.fetch.merge!(cli_options).freeze
-          environment = movefile.environment(cli_options)
+          options = cli_options.merge!(movefile.options).freeze
+          environment = movefile.environment
 
           return FTP.new(environment, options) if options[environment][:ftp]
 
@@ -41,7 +41,7 @@ module Wordmove
         @environment = environment.to_sym
         @options = options
 
-        movefile_secrets = Wordmove::Movefile.new(options[:config]).secrets
+        movefile_secrets = Wordmove::Movefile.new(options).secrets
         @logger = self.class.logger(movefile_secrets)
       end
 

@@ -2,11 +2,11 @@ require 'spec_helper'
 require 'tmpdir'
 
 describe Wordmove::Hook do
-  let(:common_options) { { "wordpress" => true, "config" => movefile_path_for('with_hooks') } }
+  let(:common_options) { { wordpress: true, config: movefile_path_for('with_hooks') } }
   let(:cli) { Wordmove::CLI.new }
 
-  context 'testing comand order' do
-    let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+  context 'testing command order' do
+    let(:options) { common_options.merge(environment: 'ssh_with_hooks') }
 
     before do
       allow(Wordmove::Hook::Local).to receive(:run)
@@ -74,7 +74,7 @@ describe Wordmove::Hook do
           .and_return(['Stubbed remote stdout', nil, 0])
       end
 
-      let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+      let(:options) { common_options.merge(environment: 'ssh_with_hooks') }
 
       it "runs registered before local hooks" do
         expect { cli.invoke(:push, [], options) }
@@ -108,7 +108,7 @@ describe Wordmove::Hook do
 
       context "if --similate was passed by user on cli" do
         let(:options) do
-          common_options.merge("environment" => 'ssh_with_hooks', "simulate" => true)
+          common_options.merge(environment: 'ssh_with_hooks', simulate: true)
         end
 
         it "does not really run any commands" do
@@ -119,20 +119,19 @@ describe Wordmove::Hook do
       end
 
       context "with local hook errored" do
-        let(:options) { common_options.merge("environment" => 'ssh_with_hooks_which_return_error') }
+        let(:options) { common_options.merge(environment: 'ssh_with_hooks_which_return_error') }
 
         it "logs an error and raises a LocalHookException" do
           expect do
             expect do
               cli.invoke(:push, [], options)
             end.to raise_exception(Wordmove::LocalHookException)
-          end.to output(/Error code: 127/)
-            .to_stdout_from_any_process
+          end.to output(/Error code: 127/).to_stdout_from_any_process
         end
 
         context "with raise set to `false`" do
           let(:options) do
-            common_options.merge("environment" => 'ssh_with_hooks_which_return_error_raise_false')
+            common_options.merge(environment: 'ssh_with_hooks_which_return_error_raise_false')
           end
 
           it "logs an error without raising an exeption" do
@@ -155,7 +154,7 @@ describe Wordmove::Hook do
           .and_return(['Stubbed remote stdout', nil, 0])
       end
 
-      let(:options) { common_options.merge("environment" => 'ssh_with_hooks') }
+      let(:options) { common_options.merge(environment: 'ssh_with_hooks') }
 
       it "runs registered before local hooks" do
         expect { cli.invoke(:pull, [], options) }
@@ -215,7 +214,7 @@ describe Wordmove::Hook do
     end
 
     context "when pushing to a remote with ftp" do
-      let(:options) { common_options.merge("environment" => 'ftp_with_hooks') }
+      let(:options) { common_options.merge(environment: 'ftp_with_hooks') }
 
       context "having remote hooks" do
         it "does not run the remote hooks" do
@@ -230,7 +229,7 @@ describe Wordmove::Hook do
     end
 
     context "with hooks partially filled" do
-      let(:options) { common_options.merge("environment" => 'ssh_with_hooks_partially_filled') }
+      let(:options) { common_options.merge(environment: 'ssh_with_hooks_partially_filled') }
 
       it "works silently ignoring push hooks are not present" do
         expect(Wordmove::Hook::Remote)
@@ -253,8 +252,8 @@ describe Wordmove::Hook do
 end
 
 describe Wordmove::Hook::Config do
-  let(:movefile) { Wordmove::Movefile.new(movefile_path_for('with_hooks')) }
-  let(:options) { movefile.fetch(false)[:ssh_with_hooks][:hooks] }
+  let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for('with_hooks')}, nil, false) }
+  let(:options) { movefile.options[:ssh_with_hooks][:hooks] }
   let(:config) { described_class.new(options, :push, :before) }
 
   context "#local_commands" do

@@ -10,7 +10,7 @@ module Wordmove
 
     def initialize(options)
       @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
-      @movefile = Wordmove::Movefile.new(options[:config])
+      @movefile = Wordmove::Movefile.new(options)
       @remote_vhosts = []
       @local_vhost = []
     end
@@ -29,7 +29,7 @@ module Wordmove
     end
 
     def parse_movefile(movefile:)
-      movefile.fetch
+      movefile.options
     end
 
     def output

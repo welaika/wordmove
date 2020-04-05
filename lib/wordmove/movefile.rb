@@ -1,12 +1,66 @@
 module Wordmove
   class Movefile
-    attr_reader :logger, :config_file_name, :start_dir
+    attr_reader :logger,
+                :config_file_name,
+                :start_dir,
+                :options,
+                :cli_options
 
-    def initialize(config_file_name = nil, start_dir = current_dir)
+    def initialize(cli_options = {}, start_dir = nil, verbose = true)
       @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
-      @config_file_name = config_file_name
-      @start_dir = start_dir
+      @cli_options = cli_options.deep_symbolize_keys || {}
+      @config_file_name = @cli_options.fetch(:config, nil)
+      @start_dir = start_dir || current_dir
+
+      @options = fetch(verbose)
+                 .deep_symbolize_keys!
+                 .freeze
     end
+
+    def load_dotenv
+      env_files = Dir[File.join(start_dir, ".env{.#{environment},}")]
+
+      found_env = env_files.first
+
+      return false unless found_env.present?
+
+      logger.info("Using .env file: #{found_env}")
+      Dotenv.load(found_env)
+    end
+
+    def environment
+      available_enviroments = extract_available_envs(options)
+
+      if available_enviroments.size > 1 && cli_options[:environment].nil?
+        raise(
+          UndefinedEnvironment,
+          "You need to specify an environment with --environment parameter"
+        )
+      end
+
+      # NOTE: This is Hash#fetch, not self.fetch.
+      options
+        .merge(cli_options)
+        .fetch(:environment, available_enviroments.first).to_sym
+    end
+
+    def secrets
+      secrets = []
+      options.each_key do |env|
+        secrets << options.dig(env, :database, :password)
+        secrets << options.dig(env, :database, :host)
+        secrets << options.dig(env, :vhost)
+        secrets << options.dig(env, :ssh, :password)
+        secrets << options.dig(env, :ssh, :host)
+        secrets << options.dig(env, :ftp, :password)
+        secrets << options.dig(env, :ftp, :host)
+        secrets << options.dig(env, :wordpress_path)
+      end
+
+      secrets.compact.delete_if(&:empty?)
+    end
+
+    private
 
     def fetch(verbose = true)
       entries = if config_file_name.nil?
@@ -30,55 +84,8 @@ module Wordmove
       YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
     end
 
-    def load_dotenv(cli_options = {})
-      env = environment(cli_options)
-      env_files = Dir[File.join(start_dir, ".env{.#{env},}")]
-
-      found_env = env_files.first
-
-      return false unless found_env.present?
-
-      logger.info("Using .env file: #{found_env}")
-      Dotenv.load(found_env)
-    end
-
-    def environment(cli_options = {})
-      options = fetch(false)
-      available_enviroments = extract_available_envs(options)
-      options.merge!(cli_options).deep_symbolize_keys!
-
-      if available_enviroments.size > 1 && options[:environment].nil?
-        raise(
-          UndefinedEnvironment,
-          "You need to specify an environment with --environment parameter"
-        )
-      end
-
-      (options[:environment] || available_enviroments.first).to_sym
-    end
-
-    def secrets
-      options = fetch(false)
-
-      secrets = []
-      options.each_key do |env|
-        secrets << options.dig(env, :database, :password)
-        secrets << options.dig(env, :database, :host)
-        secrets << options.dig(env, :vhost)
-        secrets << options.dig(env, :ssh, :password)
-        secrets << options.dig(env, :ssh, :host)
-        secrets << options.dig(env, :ftp, :password)
-        secrets << options.dig(env, :ftp, :host)
-        secrets << options.dig(env, :wordpress_path)
-      end
-
-      secrets.compact.delete_if(&:empty?)
-    end
-
-    private
-
     def extract_available_envs(options)
-      options.keys.map(&:to_sym) - %i[local global]
+      options.keys - %i[local global]
     end
 
     def last_dir?(directory)

@@ -1,7 +1,7 @@
 describe Wordmove::Doctor::Movefile do
   let(:movefile_name) { 'multi_environments' }
   let(:movefile_dir) { "spec/fixtures/movefiles" }
-  let(:doctor) { Wordmove::Doctor::Movefile.new(movefile_name, movefile_dir) }
+  let(:doctor) { Wordmove::Doctor::Movefile.new({ config: movefile_name }, movefile_dir) }
 
   context ".new" do
     it "create an Hash representing the Movefile content" do

@@ -108,7 +108,7 @@ module Wordmove
         exit 1
       end
 
-      Wordmove::Hook.run(:push, :before, options)
+      Wordmove::Hook.run(:push, :before, options.deep_symbolize_keys)
 
       guardian = Wordmove::Guardian.new(options: options, action: :push)
 

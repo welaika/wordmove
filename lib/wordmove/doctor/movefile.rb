@@ -4,11 +4,11 @@ module Wordmove
       MANDATORY_SECTIONS = %i[global local].freeze
       attr_reader :movefile, :contents, :root_keys
 
-      def initialize(name = nil, dir = '.')
-        @movefile = Wordmove::Movefile.new(name, dir)
+      def initialize(cli_options = {}, dir = '.')
+        @movefile = Wordmove::Movefile.new(cli_options, dir)
 
         begin
-          @contents = movefile.fetch
+          @contents = movefile.options
           @root_keys = contents.keys
         rescue Psych::SyntaxError
           movefile.logger.error "Your movefile is not parsable due to a syntax error"\
