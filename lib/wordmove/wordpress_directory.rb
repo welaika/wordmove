@@ -1,8 +1,8 @@
 class WordpressDirectory
-  attr_accessor :type, :options
+  attr_reader :folder, :options
 
-  def initialize(type, options)
-    @type = type
+  def initialize(folder, options)
+    @folder = folder
     @options = options
   end
 
@@ -39,10 +39,10 @@ class WordpressDirectory
   end
 
   def relative_path(*args)
-    path = if options[:paths] && options[:paths][type]
-             options[:paths][type]
+    path = if options[:paths] && options[:paths][folder]
+             options[:paths][folder]
            else
-             DEFAULT_PATHS[type]
+             DEFAULT_PATHS[folder]
            end
     File.join(path, *args)
   end
