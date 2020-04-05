@@ -10,7 +10,7 @@ module Wordmove
 
     def initialize(options)
       @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
-      @movefile = Wordmove::Movefile.new(options[:config])
+      @movefile = Wordmove::Movefile.new(options)
       @remote_vhosts = []
       @local_vhost = []
     end
@@ -29,7 +29,7 @@ module Wordmove
     end
 
     def parse_movefile(movefile:)
-      movefile.fetch
+      movefile.options
     end
 
     def output
@@ -43,7 +43,7 @@ module Wordmove
     def output_string(vhost_list:)
       return 'vhost list is empty' if vhost_list.empty?
 
-      vhost_list.each_with_object("") do |entry, retval|
+      vhost_list.each_with_object('') do |entry, retval|
         retval << "#{entry[:env]}: #{entry[:vhost]}\n"
       end
     end

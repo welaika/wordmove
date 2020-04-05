@@ -1,5 +1,6 @@
 module Wordmove
   module Deployer
+    # This whole deployer still has to be rewritten
     class FTP < Base
       def initialize(environment, options)
         super(environment, options)
@@ -12,8 +13,8 @@ module Wordmove
 
         return true if simulate?
 
-        local_dump_path = local_wp_content_dir.path("dump.sql")
-        remote_dump_path = remote_wp_content_dir.path("dump.sql")
+        local_dump_path = local_wp_content_dir.path('dump.sql')
+        remote_dump_path = remote_wp_content_dir.path('dump.sql')
         local_backup_path = local_wp_content_dir.path("remote-backup-#{Time.now.to_i}.sql")
 
         download_remote_db(local_backup_path)
@@ -37,7 +38,7 @@ module Wordmove
 
         return true if simulate?
 
-        local_dump_path = local_wp_content_dir.path("dump.sql")
+        local_dump_path = local_wp_content_dir.path('dump.sql')
         local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
 
         save_local_db(local_backup_path)
@@ -99,17 +100,17 @@ module Wordmove
       end
 
       def generate_dump_script(db, password)
-        template = ERB.new File.read(File.join(File.dirname(__FILE__), "../assets/dump.php.erb"))
+        template = ERB.new File.read(File.join(File.dirname(__FILE__), '../assets/dump.php.erb'))
         template.result(binding)
       end
 
       def generate_import_script(db, password)
-        template = ERB.new File.read(File.join(File.dirname(__FILE__), "../assets/import.php.erb"))
+        template = ERB.new File.read(File.join(File.dirname(__FILE__), '../assets/import.php.erb'))
         template.result(binding)
       end
 
       def download_remote_db(local_dump_path)
-        remote_dump_script = remote_wp_content_dir.path("dump.php")
+        remote_dump_script = remote_wp_content_dir.path('dump.php')
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate dump script
@@ -121,12 +122,12 @@ module Wordmove
         download(dump_url, local_dump_path)
         # cleanup remotely
         remote_delete(remote_dump_script)
-        remote_delete(remote_wp_content_dir.path("dump.mysql"))
+        remote_delete(remote_wp_content_dir.path('dump.mysql'))
       end
 
       def import_remote_dump
-        temp_path = local_wp_content_dir.path("log.html")
-        remote_import_script_path = remote_wp_content_dir.path("import.php")
+        temp_path = local_wp_content_dir.path('log.html')
+        remote_import_script_path = remote_wp_content_dir.path('import.php')
         # generate a secure one-time password
         one_time_password = SecureRandom.hex(40)
         # generate import script
@@ -137,7 +138,7 @@ module Wordmove
         import_url = [
           remote_wp_content_dir.url('import.php').to_s,
           "?shared_key=#{one_time_password}",
-          "&start=1&foffset=0&totalqueries=0&fn=dump.sql"
+          '&start=1&foffset=0&totalqueries=0&fn=dump.sql'
         ].join
         download(import_url, temp_path)
         if options[:debug]
@@ -152,7 +153,7 @@ module Wordmove
       def adapt_sql(save_to_path, local, remote)
         return if options[:no_adapt]
 
-        logger.task_step true, "Adapt dump"
+        logger.task_step true, 'Adapt dump'
         SqlAdapter::Default.new(save_to_path, local, remote).adapt! unless simulate?
       end
     end

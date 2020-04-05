@@ -2,9 +2,9 @@ module Wordmove
   class Guardian
     attr_reader :movefile, :environment, :action, :logger
 
-    def initialize(options: nil, action: nil)
-      @movefile = Wordmove::Movefile.new(options[:config])
-      @environment = @movefile.environment(options).to_sym
+    def initialize(cli_options: nil, action: nil)
+      @movefile = Wordmove::Movefile.new(cli_options, nil, false)
+      @environment = @movefile.environment.to_sym
       @action = action
       @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
     end
@@ -27,7 +27,7 @@ module Wordmove
     end
 
     def forbidden_tasks
-      environment_options = movefile.fetch(false)[environment]
+      environment_options = movefile.options[environment]
       return {} unless environment_options.key?(:forbid)
       return {} unless environment_options[:forbid].key?(action)
 

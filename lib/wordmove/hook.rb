@@ -5,10 +5,9 @@ module Wordmove
     end
 
     # rubocop:disable Metrics/MethodLength
-    def self.run(action, step, cli_options)
-      movefile = Wordmove::Movefile.new(cli_options[:config])
-      options = movefile.fetch(false)
-      environment = movefile.environment(cli_options)
+    def self.run(action, step, movefile:, simulate: false)
+      options = movefile.options
+      environment = movefile.environment
 
       hooks = Wordmove::Hook::Config.new(
         options[environment][:hooks],
@@ -21,17 +20,17 @@ module Wordmove
       logger.task "Running #{action}/#{step} hooks"
 
       hooks.all_commands.each do |command|
-        case command[:where]
+        case command.fetch(:where)
         when 'local'
-          Wordmove::Hook::Local.run(command, options[:local], cli_options[:simulate])
+          Wordmove::Hook::Local.run(command, options[:local], simulate)
         when 'remote'
           if options[environment][:ftp]
-            logger.debug "You have configured remote hooks to run over "\
-                         "an FTP connection, but this is not possible. Skipping."
+            logger.debug 'You have configured remote hooks to run over '\
+                         'an FTP connection, but this is not possible. Skipping.'
             next
           end
 
-          Wordmove::Hook::Remote.run(command, options[environment], cli_options[:simulate])
+          Wordmove::Hook::Remote.run(command, options[environment], simulate)
         else
           next
         end
@@ -78,7 +77,7 @@ module Wordmove
 
     class Local
       def self.logger
-        parent.logger
+        Wordmove::Hook.logger
       end
 
       def self.run(command_hash, options, simulate = false)
@@ -91,7 +90,7 @@ module Wordmove
         logger.task_step true, "Output: #{stdout_return}"
 
         if $CHILD_STATUS.exitstatus.zero?
-          logger.success ""
+          logger.success ''
         else
           logger.error "Error code: #{$CHILD_STATUS.exitstatus}"
           raise Wordmove::LocalHookException unless command_hash[:raise].eql? false
@@ -101,7 +100,7 @@ module Wordmove
 
     class Remote
       def self.logger
-        parent.logger
+        Wordmove::Hook.logger
       end
 
       def self.run(command_hash, options, simulate = false)
@@ -118,7 +117,7 @@ module Wordmove
 
         if exit_code.zero?
           logger.task_step false, "Output: #{stdout}"
-          logger.success ""
+          logger.success ''
         else
           logger.task_step false, "Output: #{stderr}"
           logger.error "Error code #{exit_code}"

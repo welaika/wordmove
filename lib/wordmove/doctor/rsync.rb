@@ -8,7 +8,7 @@ module Wordmove
       end
 
       def check!
-        logger.task "Checking rsync"
+        logger.task 'Checking rsync'
 
         if (version = /\d\.\d.\d/.match(`rsync --version | head -n1`)[0])
           logger.success "rsync is installed at version #{version}"

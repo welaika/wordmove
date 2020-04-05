@@ -35,10 +35,10 @@ module Wordmove
     class DefaultDBConfig
       def self.config
         {
-          name: "database_name",
-          user: "user",
-          password: "password",
-          host: "127.0.0.1"
+          name: 'database_name',
+          user: 'user',
+          password: 'password',
+          host: '127.0.0.1'
         }
       end
     end

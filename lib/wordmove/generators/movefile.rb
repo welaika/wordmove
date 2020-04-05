@@ -9,7 +9,7 @@ module Wordmove
       end
 
       def copy_movefile
-        template "movefile.yml"
+        template 'movefile.yml'
       end
     end
   end

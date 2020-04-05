@@ -8,13 +8,13 @@ module Wordmove
       end
 
       def check!
-        logger.task "Checking local wp-cli installation"
+        logger.task 'Checking local wp-cli installation'
 
         if in_path?
-          logger.success "wp-cli is correctly installed"
+          logger.success 'wp-cli is correctly installed'
 
           if up_to_date?
-            logger.success "wp-cli is up to date"
+            logger.success 'wp-cli is up to date'
           else
             logger.error <<-LONG
   wp-cli is not up to date.

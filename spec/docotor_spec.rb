@@ -1,6 +1,6 @@
 describe Wordmove::Doctor do
-  context "#start" do
-    it "calls all movefile doctors" do
+  context '#start' do
+    it 'calls all movefile doctors' do
       movefile_doctor = double(:movefile_doctor)
       allow(Wordmove::Doctor::Movefile).to receive(:new).and_return(movefile_doctor)
       expect(movefile_doctor).to receive(:validate!).exactly(1).times

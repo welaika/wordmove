@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7.1
   DisplayCopNames: true
   DisplayStyleGuide: true
 
@@ -26,10 +26,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Max: 10
-
-Style/StringLiterals:
-  Enabled: false
-  EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false
