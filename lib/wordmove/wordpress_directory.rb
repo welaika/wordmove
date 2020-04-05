@@ -1,11 +1,19 @@
-require 'wordmove/wordpress_directory/path'
-
 class WordpressDirectory
   attr_accessor :type, :options
 
   def initialize(type, options)
     @type = type
     @options = options
+  end
+
+  module Path
+    WP_CONTENT = :wp_content
+    WP_CONFIG  = :wp_config
+    PLUGINS    = :plugins
+    MU_PLUGINS = :mu_plugins
+    THEMES     = :themes
+    UPLOADS    = :uploads
+    LANGUAGES  = :languages
   end
 
   DEFAULT_PATHS = {
