@@ -1,6 +1,8 @@
 module Wordmove
   module Deployer
     class Base
+      include WordpressDirectory::HelperMethods
+
       attr_reader :options
       attr_reader :logger
       attr_reader :environment
@@ -109,54 +111,6 @@ module Wordmove
 
       def simulate?
         options[:simulate]
-      end
-
-      def remote_wp_content_dir
-        WordpressDirectory.new(:wp_content, remote_options)
-      end
-
-      def remote_plugins_dir
-        WordpressDirectory.new(:plugins, remote_options)
-      end
-
-      def remote_mu_plugins_dir
-        WordpressDirectory.new(:mu_plugins, remote_options)
-      end
-
-      def remote_themes_dir
-        WordpressDirectory.new(:themes, remote_options)
-      end
-
-      def remote_uploads_dir
-        WordpressDirectory.new(:uploads, remote_options)
-      end
-
-      def remote_languages_dir
-        WordpressDirectory.new(:languages, remote_options)
-      end
-
-      def local_wp_content_dir
-        WordpressDirectory.new(:wp_content, local_options)
-      end
-
-      def local_plugins_dir
-        WordpressDirectory.new(:plugins, local_options)
-      end
-
-      def local_mu_plugins_dir
-        WordpressDirectory.new(:mu_plugins, local_options)
-      end
-
-      def local_themes_dir
-        WordpressDirectory.new(:themes, local_options)
-      end
-
-      def local_uploads_dir
-        WordpressDirectory.new(:uploads, local_options)
-      end
-
-      def local_languages_dir
-        WordpressDirectory.new(:languages, local_options)
       end
 
       def mysql_dump_command(options, save_to_path)
