@@ -12,7 +12,7 @@ module Wordmove
           movefile = Wordmove::Movefile.new(cli_options[:config])
           movefile.load_dotenv(cli_options)
 
-          options = movefile.fetch.merge! cli_options
+          options = movefile.fetch.merge!(cli_options).freeze
           environment = movefile.environment(cli_options)
 
           return FTP.new(environment, options) if options[environment][:ftp]
@@ -170,11 +170,11 @@ module Wordmove
       end
 
       def remote_options
-        options[environment].clone
+        options[environment]
       end
 
       def local_options
-        options[:local].clone
+        options[:local]
       end
     end
   end
