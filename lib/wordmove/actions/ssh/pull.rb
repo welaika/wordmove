@@ -4,6 +4,7 @@ module Wordmove
       class Pull
         extend LightService::Organizer
         include Wordmove::Actions::Concerns
+        include Wordmove::Actions::Ssh::Concerns
 
         before_actions(lambda do |ctx|
           return unless ctx.guardian.allows(ctx.current_task)
@@ -12,20 +13,15 @@ module Wordmove
 
         def self.call(options:, movefile:)
           logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
-          ssh_options = remote_options(options: options)[:ssh]
-
-          if simulate?(options: options) && ssh_options[:rsync_options]
-            ssh_options[:rsync_options].concat(" --dry-run")
-          elsif simulate?(options: options)
-            ssh_options[:rsync_options] = "--dry-run"
-          end
 
           with(
             options: options,
             movefile: movefile,
             guardian: Wordmove::Guardian.new(options: options, action: :pull),
             logger: logger,
-            photocopier: Photocopier::SSH.new(ssh_options).tap { |c| c.logger = logger },
+            photocopier: Photocopier::SSH
+                          .new(ssh_options(options: options))
+                          .tap { |c| c.logger = logger },
             current_task: nil
           ).reduce(actions)
         end
