@@ -10,7 +10,6 @@ module Wordmove
       class << self
         def deployer_for(cli_options)
           movefile = Wordmove::Movefile.new(cli_options)
-          movefile.load_dotenv
 
           options = cli_options.merge!(movefile.options).freeze
           environment = movefile.environment

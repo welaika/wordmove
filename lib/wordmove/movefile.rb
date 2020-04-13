@@ -17,17 +17,6 @@ module Wordmove
                  .freeze
     end
 
-    def load_dotenv
-      env_files = Dir[File.join(start_dir, ".env{.#{environment},}")]
-
-      found_env = env_files.first
-
-      return false unless found_env.present?
-
-      logger.info("Using .env file: #{found_env}")
-      Dotenv.load(found_env)
-    end
-
     def environment
       available_enviroments = extract_available_envs(options)
 
@@ -63,6 +52,8 @@ module Wordmove
     private
 
     def fetch(verbose = true)
+      load_dotenv
+
       entries = if config_file_name.nil?
                   Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
                 else
@@ -82,6 +73,17 @@ module Wordmove
       found = entries.first
       logger.task("Using Movefile: #{found}") if verbose == true
       YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
+    end
+
+    def load_dotenv
+      env_files = Dir[File.join(start_dir, ".env")]
+
+      found_env = env_files.first
+
+      return false unless found_env.present?
+
+      logger.info("Using .env file: #{found_env}")
+      Dotenv.load(found_env)
     end
 
     def extract_available_envs(options)
