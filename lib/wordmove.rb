@@ -6,6 +6,7 @@ require 'colorize'
 require 'dotenv'
 require 'erb'
 require 'kwalify'
+require 'light-service'
 require 'logger'
 require 'open-uri'
 require 'ostruct'
@@ -41,6 +42,8 @@ require 'wordmove/deployer/ftp'
 require 'wordmove/deployer/ssh'
 require 'wordmove/deployer/ssh/default_sql_adapter'
 require 'wordmove/deployer/ssh/wpcli_sql_adapter'
+
+Dir[File.join(__dir__, "wordmove/actions/**/*.rb")].each { |file| require file }
 
 module Wordmove
 end
