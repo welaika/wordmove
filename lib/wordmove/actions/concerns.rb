@@ -1,11 +1,11 @@
 module Wordmove
   module Actions
-    class Concerns
+    module Helpers
       extend ActiveSupport::Concern
 
       class_methods do
-        def remote_options(context)
-          context.options[context.movefile.environment]
+        def remote_options(options:, movefile:)
+          options[movefile.environment]
         end
 
         def local_options(options:)
@@ -16,8 +16,8 @@ module Wordmove
           options[:simulate]
         end
 
-        def paths_to_exclude(context)
-          remote_options(context)[:exclude] || []
+        def paths_to_exclude(options:, movefile:)
+          remote_options(options: options, movefile: movefile)[:exclude] || []
         end
 
         def exclude_dir_contents(path:)
