@@ -16,13 +16,15 @@ module Wordmove
 
           return FTP.new(environment, options) if options[environment][:ftp]
 
-          if options[environment][:ssh] && options[:global][:sql_adapter] == 'wpcli'
-            return Ssh::WpcliSqlAdapter.new(environment, options)
-          end
+          # if options[environment][:ssh] && options[:global][:sql_adapter] == 'wpcli'
+          #   return Ssh::WpcliSqlAdapter.new(environment, options)
+          # end
 
-          if options[environment][:ssh] && options[:global][:sql_adapter] == 'default'
-            return Ssh::DefaultSqlAdapter.new(environment, options)
-          end
+          # if options[environment][:ssh] && options[:global][:sql_adapter] == 'default'
+          #   return Ssh::DefaultSqlAdapter.new(environment, options)
+          # end
+
+          Wordmove::Actions::Ssh::Pull.call(options: options, movefile: movefile)
 
           raise NoAdapterFound, "No valid adapter found."
         end
