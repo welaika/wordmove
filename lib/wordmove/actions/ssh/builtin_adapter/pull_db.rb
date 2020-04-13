@@ -1,7 +1,7 @@
 module Wordmove
   module Actions
     module Ssh
-      module Builtindapter
+      module BuiltinAdapter
         class PullDb
         end
       end
