@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'colorize', '~> 0.8.1'
   spec.add_runtime_dependency 'dotenv', '~> 2.7.5'
   spec.add_runtime_dependency 'kwalify', '~> 0'
+  spec.add_runtime_dependency 'light-service', '~> 0.12.0'
   spec.add_runtime_dependency 'photocopier', '~> 1.3', '>= 1.3.2'
   spec.add_runtime_dependency 'thor', '~> 0.20.3'
 

@@ -57,6 +57,7 @@ module Wordmove
       def remote_put_directory; end
 
       def exclude_dir_contents(path)
+        # moved into Wordmove::Actions::Concerns
         "#{path}/*"
       end
 
@@ -85,6 +86,7 @@ module Wordmove
       protected
 
       def paths_to_exclude
+        # moved into Wordmove::Actions::Concerns
         remote_options[:exclude] || []
       end
 
@@ -109,6 +111,7 @@ module Wordmove
       end
 
       def simulate?
+        # moved into Wordmove::Actions::Concerns
         options[:simulate]
       end
 
@@ -169,10 +172,12 @@ module Wordmove
       end
 
       def remote_options
+        # moved into Wordmove::Actions::Concerns
         options[environment]
       end
 
       def local_options
+        # moved into Wordmove::Actions::Concerns
         options[:local]
       end
     end

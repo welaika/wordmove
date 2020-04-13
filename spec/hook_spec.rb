@@ -252,7 +252,7 @@ describe Wordmove::Hook do
 end
 
 describe Wordmove::Hook::Config do
-  let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for('with_hooks')}, nil, false) }
+  let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for('with_hooks') }, nil, false) }
   let(:options) { movefile.options[:ssh_with_hooks][:hooks] }
   let(:config) { described_class.new(options, :push, :before) }
 
