@@ -5,12 +5,12 @@ module Wordmove
         extend ActiveSupport::Concern
 
         class_methods do
-          def ssh_options(options:, movefile:)
-            ssh_options = remote_options(options: options, movefile: movefile)[:ssh]
+          def ssh_options(remote_options:, simulate: false)
+            ssh_options = remote_options[:ssh]
 
-            if simulate?(options: options) && ssh_options[:rsync_options]
+            if simulate == true && ssh_options[:rsync_options]
               ssh_options[:rsync_options].concat(" --dry-run")
-            elsif simulate?(options: options)
+            elsif simulate == true
               ssh_options[:rsync_options] = "--dry-run"
             end
 
