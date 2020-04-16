@@ -11,10 +11,10 @@ module Wordmove
         def deployer_for(cli_options)
           movefile = Wordmove::Movefile.new(cli_options)
 
-          options = cli_options.merge!(movefile.options).freeze
+          # options = cli_options.merge!(movefile.options).freeze
           environment = movefile.environment
 
-          return FTP.new(environment, options) if options[environment][:ftp]
+          return FTP.new(environment, options) if movefile.options[environment][:ftp]
 
           # if options[environment][:ssh] && options[:global][:sql_adapter] == 'wpcli'
           #   return Ssh::WpcliSqlAdapter.new(environment, options)
@@ -24,7 +24,12 @@ module Wordmove
           #   return Ssh::DefaultSqlAdapter.new(environment, options)
           # end
 
-          Wordmove::Actions::Ssh::Pull.call(options: options, movefile: movefile)
+          if movefile.options[environment][:ssh]
+            result = Wordmove::Actions::Ssh::Pull.call(
+              cli_options: cli_options, options: movefile.options, movefile: movefile
+            )
+            return result.success?
+          end
 
           raise NoAdapterFound, "No valid adapter found."
         end
@@ -38,13 +43,13 @@ module Wordmove
         end
       end
 
-      def initialize(environment, options = {})
-        @environment = environment.to_sym
-        @options = options
+      # def initialize(environment, options = {})
+      #   @environment = environment.to_sym
+      #   @options = options
 
-        movefile_secrets = Wordmove::Movefile.new(options).secrets
-        @logger = self.class.logger(movefile_secrets)
-      end
+      #   movefile_secrets = Wordmove::Movefile.new(options).secrets
+      #   @logger = self.class.logger(movefile_secrets)
+      # end
 
       def push_db
         logger.task "Pushing Database"
@@ -54,9 +59,9 @@ module Wordmove
         logger.task "Pulling Database"
       end
 
-      def remote_get_directory; end
+      # def remote_get_directory; end
 
-      def remote_put_directory; end
+      # def remote_put_directory; end
 
       def exclude_dir_contents(path)
         # moved into Wordmove::Actions::Concerns
@@ -74,16 +79,16 @@ module Wordmove
         remote_put_directory(local_path, remote_path, exclude_paths)
       end
 
-      def pull_wordpress
-        logger.task "Pulling wordpress core"
+      # def pull_wordpress
+      #   logger.task "Pulling wordpress core"
 
-        local_path = local_options[:wordpress_path]
-        remote_path = remote_options[:wordpress_path]
-        exclude_wp_content = exclude_dir_contents(remote_wp_content_dir.relative_path)
-        exclude_paths = paths_to_exclude.push(exclude_wp_content)
+      #   local_path = local_options[:wordpress_path]
+      #   remote_path = remote_options[:wordpress_path]
+      #   exclude_wp_content = exclude_dir_contents(remote_wp_content_dir.relative_path)
+      #   exclude_paths = paths_to_exclude.push(exclude_wp_content)
 
-        remote_get_directory(remote_path, local_path, exclude_paths)
-      end
+      #   remote_get_directory(remote_path, local_path, exclude_paths)
+      # end
 
       protected
 

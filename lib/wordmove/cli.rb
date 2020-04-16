@@ -78,21 +78,19 @@ module Wordmove
     def pull
       ensure_wordpress_options_presence!(options)
       begin
-        deployer = Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
+        Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
       rescue MovefileNotFound => e
         logger.error(e.message)
         exit 1
       end
 
-      Wordmove::Hook.run(:pull, :before, options)
 
-      guardian = Wordmove::Guardian.new(options: options, action: :pull)
+      # guardian = Wordmove::Guardian.new(options: options, action: :pull)
 
-      handle_options(options) do |task|
-        deployer.send("pull_#{task}") if guardian.allows(task.to_sym)
-      end
+      # handle_options(options) do |task|
+      #   deployer.send("pull_#{task}") if guardian.allows(task.to_sym)
+      # end
 
-      Wordmove::Hook.run(:pull, :after, options)
     end
 
     desc "push", "Pushes WP data from local machine to remote host"

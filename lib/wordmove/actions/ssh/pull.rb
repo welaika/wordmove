@@ -8,20 +8,27 @@ module Wordmove
 
         before_actions(lambda do |ctx|
           task = ctx.fetch(:current_task)
-          return unless ctx.guardian.allows(task)
-          return unless ctx.options[task] || (ctx.options["all"] && ctx.options[task] != false)
+          return unless ctx.fetch(:guardian).allows(task)
+          return unless ctx.fetch(:options)[task] ||
+            (ctx.fetch(:options)["all"] && ctx.fetch(:options)[task] != false)
         end)
 
-        def self.call(options:, movefile:)
+        def self.call(options:, cli_options:, movefile:)
           logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
+          remote_options = options[movefile.environment]
+          ssh_opts = ssh_options(remote_options: remote_options, simulate: cli_options[:simulate])
 
           with(
             options: options,
+            cli_options: cli_options,
+            global_options: options[:global],
+            local_options: options[:local],
+            remote_options: remote_options,
             movefile: movefile,
             guardian: Wordmove::Guardian.new(options: options, action: :pull),
             logger: logger,
             photocopier: Photocopier::SSH
-                          .new(ssh_options(options: options, movefile: movefile))
+                          .new(ssh_opts)
                           .tap { |c| c.logger = logger },
             current_task: nil
           ).reduce(actions)
@@ -29,19 +36,23 @@ module Wordmove
 
         def self.actions
           [
+            Wordmove::Actions::RunBeforePullHook
+          ].concat [
             execute(->(ctx) { ctx[:current_task] = :wordpress }),
-            Wordmove::Actions::Ssh::Common::PullWordpress,
+            Wordmove::Actions::Ssh::PullWordpress,
             execute(->(ctx) { ctx[:current_task] = :uploads }),
-            Wordmove::Actions::Ssh::Common::PullUploads,
+            Wordmove::Actions::Ssh::PullUploads,
             execute(->(ctx) { ctx[:current_task] = :themes }),
-            Wordmove::Actions::Ssh::Common::PullThemes,
+            Wordmove::Actions::Ssh::PullThemes,
             execute(->(ctx) { ctx[:current_task] = :plugins }),
-            Wordmove::Actions::Ssh::Common::PullPlugins,
+            Wordmove::Actions::Ssh::PullPlugins,
             execute(->(ctx) { ctx[:current_task] = :mu_plugins }),
-            Wordmove::Actions::Ssh::Common::PullMuPlugins,
+            Wordmove::Actions::Ssh::PullMuPlugins,
             execute(->(ctx) { ctx[:current_task] = :languages }),
-            Wordmove::Actions::Ssh::Common::PullLanguages
-          ].concat(db_actions)
+            Wordmove::Actions::Ssh::PullLanguages
+          ].concat(db_actions).concat [
+            Wordmove::Actions::RunAfterPullHook
+          ]
         end
 
         def self.db_actions
