@@ -5,8 +5,7 @@ module Wordmove
     end
 
     # rubocop:disable Metrics/MethodLength
-    def self.run(action, step, cli_options)
-      movefile = Wordmove::Movefile.new(cli_options, nil, false)
+    def self.run(action, step, movefile:, simulate: false)
       options = movefile.options
       environment = movefile.environment
 
@@ -21,9 +20,9 @@ module Wordmove
       logger.task "Running #{action}/#{step} hooks"
 
       hooks.all_commands.each do |command|
-        case command[:where]
+        case command.fetch(:where)
         when 'local'
-          Wordmove::Hook::Local.run(command, options[:local], cli_options[:simulate])
+          Wordmove::Hook::Local.run(command, options[:local], simulate)
         when 'remote'
           if options[environment][:ftp]
             logger.debug "You have configured remote hooks to run over "\
@@ -31,7 +30,7 @@ module Wordmove
             next
           end
 
-          Wordmove::Hook::Remote.run(command, options[environment], cli_options[:simulate])
+          Wordmove::Hook::Remote.run(command, options[environment], simulate)
         else
           next
         end
