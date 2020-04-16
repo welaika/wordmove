@@ -47,61 +47,61 @@ class WordpressDirectory
     File.join(path, *args)
   end
 
-  module LocalHelperMethods
+  module RemoteHelperMethods
     extend ActiveSupport::Concern
 
-    included do
-      def remote_wp_content_dir
+    class_methods do
+      def remote_wp_content_dir(remote_options:)
         WordpressDirectory.new(:wp_content, remote_options)
       end
 
-      def remote_plugins_dir
+      def remote_plugins_dir(remote_options:)
         WordpressDirectory.new(:plugins, remote_options)
       end
 
-      def remote_mu_plugins_dir
+      def remote_mu_plugins_dir(remote_options:)
         WordpressDirectory.new(:mu_plugins, remote_options)
       end
 
-      def remote_themes_dir
+      def remote_themes_dir(remote_options:)
         WordpressDirectory.new(:themes, remote_options)
       end
 
-      def remote_uploads_dir
+      def remote_uploads_dir(remote_options:)
         WordpressDirectory.new(:uploads, remote_options)
       end
 
-      def remote_languages_dir
+      def remote_languages_dir(remote_options:)
         WordpressDirectory.new(:languages, remote_options)
       end
     end
   end
 
-  module RemoteHelperMethods
+  module LocalHelperMethods
     extend ActiveSupport::Concern
 
-    included do
-      def local_wp_content_dir
+    class_methods do
+      def local_wp_content_dir(local_options:)
         WordpressDirectory.new(:wp_content, local_options)
       end
 
-      def local_plugins_dir
+      def local_plugins_dir(local_options:)
         WordpressDirectory.new(:plugins, local_options)
       end
 
-      def local_mu_plugins_dir
+      def local_mu_plugins_dir(local_options:)
         WordpressDirectory.new(:mu_plugins, local_options)
       end
 
-      def local_themes_dir
+      def local_themes_dir(local_options:)
         WordpressDirectory.new(:themes, local_options)
       end
 
-      def local_uploads_dir
+      def local_uploads_dir(local_options:)
         WordpressDirectory.new(:uploads, local_options)
       end
 
-      def local_languages_dir
+      def local_languages_dir(local_options:)
         WordpressDirectory.new(:languages, local_options)
       end
     end
