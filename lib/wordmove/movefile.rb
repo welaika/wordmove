@@ -28,7 +28,7 @@ module Wordmove
       end
 
       # NOTE: This is Hash#fetch, not self.fetch.
-      options
+      options # Is this useless?
         .merge(cli_options)
         .fetch(:environment, available_enviroments.first).to_sym
     end
