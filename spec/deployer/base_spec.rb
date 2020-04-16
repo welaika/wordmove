@@ -12,6 +12,8 @@ describe Wordmove::Deployer::Base do
 
     context "with ftp remote connection" do
       it "returns an instance of FTP deployer" do
+        skip 'Moved this logic into service objects'
+
         options[:environment] = "production"
         expect(described_class.deployer_for(options)).to be_a Wordmove::Deployer::FTP
       end
@@ -23,12 +25,16 @@ describe Wordmove::Deployer::Base do
       end
 
       it "returns an instance of Ssh::Default deployer" do
+        skip 'Moved this logic into service objects'
+
         expect(described_class.deployer_for(options))
           .to be_a Wordmove::Deployer::Ssh::DefaultSqlAdapter
       end
 
       context "when Movefile is configured with 'wpcli' sql_adapter" do
         it "returns an instance of Ssh::WpcliSqlAdapter deployer" do
+          skip 'Moved this logic into service objects'
+
           options[:config] = movefile_path_for('multi_environments_wpcli_sql_adapter')
 
           expect(described_class.deployer_for(options))
@@ -40,9 +46,11 @@ describe Wordmove::Deployer::Base do
         it "rsync_options will contain --dry-run" do
           options[:environment] = "staging"
           options[:simulate] = true
-          copier = double(:copier)
+          copier = double(:copier).as_null_object
 
           allow(copier).to receive(:logger=)
+          allow(Wordmove::Guardian).to receive(:new)
+            .and_return(double(:guardian).as_null_object)
 
           expect(Photocopier::SSH).to receive(:new)
             .with(hash_including(rsync_options: '--dry-run'))
@@ -65,6 +73,8 @@ describe Wordmove::Deployer::Base do
     let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid mysqldump command" do
+      skip 'This logic will no longer exists in this class'
+
       command = deployer.send(
         :mysql_dump_command,
         {
@@ -93,6 +103,8 @@ describe Wordmove::Deployer::Base do
     let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid mysql import command" do
+      skip 'This logic will no longer exists in this class'
+
       command = deployer.send(
         :mysql_import_command,
         "./my dump.sql",
@@ -119,6 +131,8 @@ describe Wordmove::Deployer::Base do
     let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "cerates a valid gzip command" do
+      skip 'This logic will no longer exists in this class'
+
       command = deployer.send(
         :compress_command,
         "dummy file.sql"
@@ -132,6 +146,8 @@ describe Wordmove::Deployer::Base do
     let(:deployer) { described_class.new(:dummy_env, options) }
 
     it "creates a valid gunzip command" do
+      skip 'This logic will no longer exists in this class'
+
       command = deployer.send(
         :uncompress_command,
         "dummy file.sql"

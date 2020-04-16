@@ -82,6 +82,8 @@ describe Wordmove::CLI do
 
     context "#pull" do
       it "invokes commands in the right order" do
+        skip 'Moved this logic into service objects'
+
         ordered_components.each do |component|
           expect(deployer).to receive("pull_#{component}")
         end
@@ -92,6 +94,7 @@ describe Wordmove::CLI do
         let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
 
         it "does not pull the forbidden task" do
+          skip 'Moved this logic into service objects'
           expected_components = ordered_components - [:db]
 
           expected_components.each do |component|
@@ -106,6 +109,8 @@ describe Wordmove::CLI do
 
     context "#push" do
       it "invokes commands in the right order" do
+        skip 'Moved this logic into service objects'
+
         ordered_components.each do |component|
           expect(deployer).to receive("push_#{component}")
         end
@@ -116,6 +121,8 @@ describe Wordmove::CLI do
         let(:options) { { all: true, config: movefile_path_for('with_forbidden_tasks') } }
 
         it "does not push the forbidden task" do
+          skip 'Moved this logic into service objects'
+
           expected_components = ordered_components - [:db]
 
           expected_components.each do |component|
@@ -130,6 +137,8 @@ describe Wordmove::CLI do
 
     context "excluding one of the components" do
       it "does not invoke the escluded component" do
+        skip 'Moved this logic into service objects'
+
         excluded_component = ordered_components.pop
         options[excluded_component] = false
 
