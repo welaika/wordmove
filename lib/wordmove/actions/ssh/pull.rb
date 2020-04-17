@@ -6,13 +6,6 @@ module Wordmove
         include Wordmove::Actions::Helpers
         include Wordmove::Actions::Ssh::Helpers
 
-        before_actions(lambda do |ctx|
-          task = ctx.fetch(:current_task)
-          return unless ctx.fetch(:guardian).allows(task)
-          return unless ctx.fetch(:options)[task] ||
-            (ctx.fetch(:options)["all"] && ctx.fetch(:options)[task] != false)
-        end)
-
         def self.call(options:, cli_options:, movefile:)
           logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = options[movefile.environment]
@@ -39,17 +32,29 @@ module Wordmove
             Wordmove::Actions::RunBeforePullHook
           ].concat [
             execute(->(ctx) { ctx[:current_task] = :wordpress }),
-            Wordmove::Actions::Ssh::PullWordpress,
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullWordpress
+            ]),
             execute(->(ctx) { ctx[:current_task] = :uploads }),
-            Wordmove::Actions::Ssh::PullUploads,
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullUploads
+            ]),
             execute(->(ctx) { ctx[:current_task] = :themes }),
-            Wordmove::Actions::Ssh::PullThemes,
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullThemes
+            ]),
             execute(->(ctx) { ctx[:current_task] = :plugins }),
-            Wordmove::Actions::Ssh::PullPlugins,
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullPlugins
+            ]),
             execute(->(ctx) { ctx[:current_task] = :mu_plugins }),
-            Wordmove::Actions::Ssh::PullMuPlugins,
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullMuPlugins
+            ]),
             execute(->(ctx) { ctx[:current_task] = :languages }),
-            Wordmove::Actions::Ssh::PullLanguages
+            reduce_if(-> (ctx) { barrage(ctx) }, [
+              Wordmove::Actions::Ssh::PullLanguages
+            ]),
           ].concat(db_actions).concat [
             Wordmove::Actions::RunAfterPullHook
           ]
@@ -58,15 +63,24 @@ module Wordmove
         def self.db_actions
           [
             execute(->(ctx) { ctx[:current_task] = :db }),
-            reduce_if(->(ctx) { ctx.options[:global][:sql_adapter] == 'wpcli' },
-                      [
-                        Wordmove::Actions::Ssh::WpcliAdapter::PullDb
-                      ]),
-            reduce_if(->(ctx) { ctx.options[:global][:sql_adapter] == 'default' },
-                      [
-                        Wordmove::Actions::Ssh::BuiltinAdapter::PullDb
-                      ])
+            reduce_if(->(ctx) {
+                                barrage(ctx) &&
+                                ctx[:options][:global][:sql_adapter] == 'wpcli'
+                              }, [Wordmove::Actions::Ssh::WpcliAdapter::PullDb]),
+            reduce_if(->(ctx) {
+                                barrage(ctx) &&
+                                ctx[:options][:global][:sql_adapter] == 'default'
+                              }, [Wordmove::Actions::Ssh::BuiltinAdapter::PullDb])
           ]
+        end
+
+        def self.barrage(ctx)
+          task = ctx.fetch(:current_task)
+
+          return false unless ctx.fetch(:guardian).allows(task)
+
+          ctx.fetch(:cli_options)[task] ||
+            (ctx.fetch(:cli_options)["all"] && ctx.fetch(:cli_options)[task] != false)
         end
       end
     end
