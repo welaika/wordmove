@@ -114,6 +114,7 @@ module Wordmove
       end
 
       def push_inlcude_paths(task)
+        # moved into Wordmove::Actions::Ssh::Helpers
         Pathname.new(send(:"local_#{task}_dir").relative_path)
                 .ascend
                 .each_with_object([]) do |directory, array|
@@ -125,6 +126,7 @@ module Wordmove
       end
 
       def push_exclude_paths(task)
+        # moved into Wordmove::Actions::Ssh::Helpers
         Pathname.new(send(:"local_#{task}_dir").relative_path)
                 .dirname
                 .ascend
@@ -140,6 +142,7 @@ module Wordmove
       end
 
       def pull_include_paths(task)
+        # moved into Wordmove::Actions::Ssh::Helpers
         Pathname.new(send(:"remote_#{task}_dir").relative_path)
                 .ascend
                 .each_with_object([]) do |directory, array|
@@ -151,6 +154,7 @@ module Wordmove
       end
 
       def pull_exclude_paths(task)
+        # moved into Wordmove::Actions::Ssh::Helpers
         Pathname.new(send(:"remote_#{task}_dir").relative_path)
                 .dirname
                 .ascend

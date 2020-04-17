@@ -1,3 +1,6 @@
+require 'pathname'
+
+# rubocop:disable Metrics/BlockLength
 module Wordmove
   module Actions
     module Ssh
@@ -16,8 +19,63 @@ module Wordmove
 
             ssh_options
           end
+
+          def push_inlcude_paths(task)
+            # This firm will be updated
+            Pathname.new(send(:"local_#{task}_dir").relative_path)
+                    .ascend
+                    .each_with_object([]) do |directory, array|
+                      path = directory.to_path
+                      path.prepend('/') unless path.match? %r{^/}
+                      path.concat('/') unless path.match? %r{/$}
+                      array << path
+                    end
+          end
+
+          def push_exclude_paths(task)
+            # This firm will be updated
+            Pathname.new(send(:"local_#{task}_dir").relative_path)
+                    .dirname
+                    .ascend
+                    .each_with_object([]) do |directory, array|
+                      path = directory.to_path
+                      path.prepend('/') unless path.match? %r{^/}
+                      path.concat('/') unless path.match? %r{/$}
+                      path.concat('*')
+                      array << path
+                    end
+                    .concat(paths_to_exclude)
+                    .concat(['/*'])
+          end
+
+          def pull_include_paths(remote_task_dir:)
+            Pathname.new(remote_task_dir.relative_path)
+                    .ascend
+                    .each_with_object([]) do |directory, array|
+                      path = directory.to_path
+                      path.prepend('/') unless path.match? %r{^/}
+                      path.concat('/') unless path.match? %r{/$}
+                      array << path
+                    end
+          end
+
+          def pull_exclude_paths(remote_task_dir:, paths_to_exclude:)
+            Pathname.new(remote_task_dir.relative_path)
+                    .dirname
+                    .ascend
+                    .each_with_object([]) do |directory, array|
+                      path = directory.to_path
+                      path.prepend('/') unless path.match? %r{^/}
+                      path.concat('/') unless path.match? %r{/$}
+                      path.concat('*')
+                      array << path
+                    end
+                    .concat(paths_to_exclude)
+                    .concat(['/*'])
+          end
         end
       end
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
