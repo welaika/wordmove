@@ -36,17 +36,19 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
-        wordpress_options.each do |task|
+        self.class.wordpress_options.each do |task|
           yield task if options[task] || (options["all"] && options[task] != false)
         end
       end
 
-      def wordpress_options
-        %w[wordpress uploads themes plugins mu_plugins languages db]
+      def self.wordpress_options
+        %i[wordpress uploads themes plugins mu_plugins languages db]
       end
 
       def ensure_wordpress_options_presence!(options)
-        return if (options.keys & (wordpress_options + ["all"])).present?
+        return if (
+          options.deep_symbolize_keys.keys & (self.class.wordpress_options + [:all])
+        ).present?
 
         puts "No options given. See wordmove --help"
         exit 1
