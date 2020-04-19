@@ -13,8 +13,6 @@ module Wordmove
         expects :photocopier
 
         executed do |context|
-          context.logger.task "Pulling wordpress core"
-
           local_path = context.local_options[:wordpress_path]
 
           remote_path = context.remote_options[:wordpress_path]
@@ -31,10 +29,13 @@ module Wordmove
             remote_options: context.remote_options
           ).push(exclude_wp_content)
 
-          Wordmove::Actions::GetDirectory.execute(
+          Wordmove::Actions::Ssh::GetDirectory.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [remote_path, local_path, exclude_paths]
+            command_args: [remote_path, local_path, exclude_paths],
+            folder_task: :wordpress,
+            local_options: context.local_options,
+            remote_options: context.remote_options
           )
         end
       end
