@@ -26,7 +26,7 @@ module Wordmove
 
           if movefile.options[environment][:ssh]
             result = Wordmove::Actions::Ssh::Pull.call(
-              cli_options: cli_options, options: movefile.options, movefile: movefile
+              cli_options: cli_options, movefile: movefile
             )
             return result.success?
           end

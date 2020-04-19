@@ -7,18 +7,24 @@ module Wordmove
         include Wordmove::Actions::Ssh::Helpers
 
         def self.call(options:, cli_options:, movefile:)
+        def self.call(cli_options:, movefile:)
           logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = options[movefile.environment]
+          remote_options = movefile.options[movefile.environment]
           ssh_opts = ssh_options(remote_options: remote_options, simulate: cli_options[:simulate])
 
           with(
             options: options,
+            options: movefile.options,
             cli_options: cli_options,
             global_options: options[:global],
             local_options: options[:local],
+            global_options: movefile.options[:global],
+            local_options: movefile.options[:local],
             remote_options: remote_options,
             movefile: movefile,
             guardian: Wordmove::Guardian.new(options: options, action: :pull),
+            guardian: Wordmove::Guardian.new(options: movefile.options, action: :pull),
             logger: logger,
             photocopier: Photocopier::SSH
                           .new(ssh_opts)
