@@ -28,8 +28,7 @@ module Wordmove
 
         def self.actions
           [
-            Wordmove::Actions::RunBeforePullHook
-          ].concat [
+            Wordmove::Actions::RunBeforePullHook,
             Wordmove::Actions::FilterAndSetupTasksToRun,
             reduce_if(
               ->(ctx) { ctx.wordpress_task },
