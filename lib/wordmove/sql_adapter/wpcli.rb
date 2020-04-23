@@ -15,14 +15,24 @@ module Wordmove
           raise UnmetPeerDependencyError, "WP-CLI is not installed or not in your $PATH"
         end
 
-        "wp search-replace --path=#{local_path} #{from} #{to} --quiet "\
-        "--skip-columns=guid --all-tables --allow-root"
+        opts = [
+            "--quiet",
+            "--skip-columns=guid",
+            "--all-tables",
+            "--allow-root",
+            cli_config_exists? ? "" : "--path=#{local_path}"
+        ]
+        "wp search-replace #{from} #{to} #{opts.join(' ')}"
       end
 
       private
 
       def wp_in_path?
         system('which wp > /dev/null 2>&1')
+      end
+      def cli_config_exists?
+        cli_config_path = File.join(local_path, "wp-cli.yml")
+        File.exist?(cli_config_path)
       end
     end
   end
