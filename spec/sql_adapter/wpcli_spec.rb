@@ -12,7 +12,20 @@ describe Wordmove::SqlAdapter::Wpcli do
     )
   end
 
-  context "#command" do
+  context "#command_with_wp-cli.yml" do
+    before do
+      allow(adapter).to receive(:wp_in_path?).and_return(true)
+      allow(adapter).to receive(:cli_config_exists?).and_return(true)
+    end
+
+    it "returns the right command as a string" do
+      expect(adapter.command)
+        .to eq("wp search-replace sausage bacon --quiet "\
+               "--skip-columns=guid --all-tables --allow-root")
+    end
+  end
+
+  context "#command_without_wp-cli.yml" do
     before do
       allow(adapter).to receive(:wp_in_path?).and_return(true)
       allow(adapter).to receive(:cli_config_exists?).and_return(false)
@@ -20,7 +33,7 @@ describe Wordmove::SqlAdapter::Wpcli do
 
     it "returns the right command as a string" do
       expect(adapter.command)
-        .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
+          .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
                "--skip-columns=guid --all-tables --allow-root")
     end
   end
