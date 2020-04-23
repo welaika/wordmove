@@ -25,7 +25,7 @@ module Wordmove
           "--allow-root"
         ]
 
-        if cli_config_exists?
+        unless cli_config_exists?
           opts.unshift("--path=#{local_path}")
         end
 
