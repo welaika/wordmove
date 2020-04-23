@@ -15,6 +15,7 @@ describe Wordmove::SqlAdapter::Wpcli do
   context "#command" do
     before do
       allow(adapter).to receive(:wp_in_path?).and_return(true)
+      allow(adapter).to receive(:cli_config_exists?).and_return(false)
     end
 
     it "returns the right command as a string" do
