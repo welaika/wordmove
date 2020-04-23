@@ -16,15 +16,15 @@ module Wordmove
         end
 
         [
-            "wp",
-            "search-replace",
-            cli_config_exists? ? "" : "--path=#{local_path}",
-            from,
-            to,
-            "--quiet",
-            "--skip-columns=guid",
-            "--all-tables",
-            "--allow-root",
+          "wp",
+          "search-replace",
+          cli_config_exists? ? "" : "--path=#{local_path}",
+          from,
+          to,
+          "--quiet",
+          "--skip-columns=guid",
+          "--all-tables",
+          "--allow-root"
         ].join(' ')
       end
 
@@ -33,6 +33,7 @@ module Wordmove
       def wp_in_path?
         system('which wp > /dev/null 2>&1')
       end
+
       def cli_config_exists?
         cli_config_path = File.join(local_path, "wp-cli.yml")
         File.exist?(cli_config_path)
