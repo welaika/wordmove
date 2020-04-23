@@ -33,8 +33,8 @@ describe Wordmove::SqlAdapter::Wpcli do
 
     it "returns the right command as a string" do
       expect(adapter.command)
-          .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
-               "--skip-columns=guid --all-tables --allow-root")
+        .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
+           "--skip-columns=guid --all-tables --allow-root")
     end
   end
 end
