@@ -55,9 +55,11 @@ module Wordmove
           )
         end
 
-        unless available_enviroments.include? options[:environment].to_sym
-          raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
-                                      "Available Environments: #{available_enviroments.join(' ')}"
+        if options[:environment].present?
+          unless available_enviroments.include?(options[:environment].to_sym)
+            raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
+                                        "Available Environments: #{available_enviroments.join(' ')}"
+          end
         end
       end
 
