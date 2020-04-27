@@ -47,8 +47,8 @@ module Wordmove
       available_enviroments = extract_available_envs(options)
       options.merge!(cli_options).deep_symbolize_keys!
 
-      if available_enviroments.size > 1 && options[:environment] != 'local'
-        if options[:environment].nil?
+      if options[:environment] != 'local'
+        if available_enviroments.size > 1 && options[:environment].nil?
           raise(
             UndefinedEnvironment,
             "You need to specify an environment with --environment parameter"
