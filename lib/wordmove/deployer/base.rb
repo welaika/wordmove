@@ -13,16 +13,6 @@ module Wordmove
           options = movefile.fetch.merge! cli_options
           environment = movefile.environment(cli_options)
 
-          if options[environment].nil?
-            raise(
-              UndefinedEnvironment,
-              %W[
-                No environment found for #{environment}.
-                Available Environments: #{movefile.extract_available_envs(options).join(' ')}
-              ].join(' ')
-            )
-          end
-
           return FTP.new(environment, options) if options[environment][:ftp]
 
           if options[environment][:ssh] && options[:global][:sql_adapter] == 'wpcli'
