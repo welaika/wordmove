@@ -40,6 +40,8 @@ module Wordmove
       end
 
       def pull_db
+        # Moved into Wordmove::Actions::Ssh::WpcliAdapter::PullDb
+        # Still to write Wordmove::Actions::Ssh::BuiltinAdapter::PullDb
         super
 
         return true if simulate?
@@ -60,6 +62,7 @@ module Wordmove
       end
 
       def remote_run(command)
+        # moved into Wordmove::Actions::Ssh::RunRemoteCommand
         logger.task_step false, command
         return true if simulate?
 
@@ -74,6 +77,7 @@ module Wordmove
       end
 
       def download_remote_db(local_gizipped_dump_path)
+        # moved into Wordmove::Actions::Ssh::DownloadRemoteDb
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
         # dump remote db into file
         remote_run mysql_dump_command(remote_options[:database], remote_dump_path)
@@ -85,6 +89,7 @@ module Wordmove
       end
 
       def import_remote_dump(local_gizipped_dump_path)
+        # moved into Wordmove::Actions::Ssh::ImportRemoteDump
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
         remote_gizipped_dump_path = remote_dump_path + '.gz'
 
@@ -105,6 +110,7 @@ module Wordmove
         end
 
         define_method "pull_#{task}" do
+          # All moved into Wordmove::Actions::Ssh:* actions
           logger.task "Pulling #{task.titleize}"
           local_path = local_options[:wordpress_path]
           remote_path = remote_options[:wordpress_path]
