@@ -18,7 +18,7 @@ module Wordmove
             local_options: movefile.options[:local],
             remote_options: remote_options,
             movefile: movefile,
-            guardian: Wordmove::Guardian.new(options: movefile.options, action: :pull),
+            guardian: Wordmove::Guardian.new(cli_options: cli_options, action: :pull),
             logger: logger,
             photocopier: Photocopier::SSH
                           .new(ssh_opts)
