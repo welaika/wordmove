@@ -43,6 +43,7 @@ describe Wordmove::SqlAdapter::Wpcli do
     before do
       allow(adapter).to receive(:wp_in_path?).and_return(true)
       allow(File).to receive(:exist?).and_return(false)
+      allow(adapter).to receive(:`).and_return("{}")
     end
 
     it "returns the right command as a string" do
