@@ -16,7 +16,7 @@ module Wordmove
         end
 
         opts = [
-          "--path=#{get_cli_config_path}",
+          "--path=#{cli_config_path}",
           from,
           to,
           "--quiet",
@@ -34,15 +34,13 @@ module Wordmove
         system('which wp > /dev/null 2>&1')
       end
 
-      def get_cli_config_path
+      def cli_config_path
         load_from_yml || load_from_cli || local_path
       end
 
       def load_from_yml
         cli_config_path = File.join(local_path, "wp-cli.yml")
-        if File.exist?(cli_config_path)
-          YAML.load_file(cli_config_path).with_indifferent_access["path"]
-        end
+        YAML.load_file(cli_config_path).with_indifferent_access["path"] unless File.exist?(cli_config_path)
       end
 
       def load_from_cli
