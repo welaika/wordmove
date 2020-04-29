@@ -40,7 +40,8 @@ module Wordmove
 
       def load_from_yml
         cli_config_path = File.join(local_path, "wp-cli.yml")
-        YAML.load_file(cli_config_path).with_indifferent_access["path"] if File.exist?(cli_config_path)
+        return unless File.exist?(cli_config_path)
+        YAML.load_file(cli_config_path).with_indifferent_access["path"]
       end
 
       def load_from_cli
