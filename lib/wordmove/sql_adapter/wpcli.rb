@@ -16,6 +16,7 @@ module Wordmove
         end
 
         opts = [
+          "--path=#{get_cli_config_path}",
           from,
           to,
           "--quiet",
@@ -23,8 +24,6 @@ module Wordmove
           "--all-tables",
           "--allow-root"
         ]
-
-        opts.unshift("--path=#{local_path}") unless cli_config_exists?
 
         "wp search-replace #{opts.join(' ')}"
       end
@@ -35,9 +34,20 @@ module Wordmove
         system('which wp > /dev/null 2>&1')
       end
 
-      def cli_config_exists?
+      def get_cli_config_path
+        load_from_yml || load_from_cli || local_path
+      end
+
+      def load_from_yml
         cli_config_path = File.join(local_path, "wp-cli.yml")
-        File.exist?(cli_config_path)
+        if File.exist?(cli_config_path)
+          YAML.load_file(cli_config_path).with_indifferent_access["path"]
+        end
+      end
+
+      def load_from_cli
+        cli_config = JSON.parse(`wp cli param-dump --with-values`, symbolize_names: true)
+        cli_config.dig(:path, :current)
       end
     end
   end

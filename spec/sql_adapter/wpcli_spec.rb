@@ -15,20 +15,34 @@ describe Wordmove::SqlAdapter::Wpcli do
   context "#command_with_wp-cli.yml" do
     before do
       allow(adapter).to receive(:wp_in_path?).and_return(true)
-      allow(adapter).to receive(:cli_config_exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
+      allow(YAML).to receive(:load_file).and_return(path: "/path/to/steak")
     end
 
     it "returns the right command as a string" do
       expect(adapter.command)
-        .to eq("wp search-replace sausage bacon --quiet "\
+        .to eq("wp search-replace --path=/path/to/steak sausage bacon --quiet "\
                "--skip-columns=guid --all-tables --allow-root")
     end
   end
 
-  context "#command_without_wp-cli.yml" do
+  context "#command_with_params" do
     before do
       allow(adapter).to receive(:wp_in_path?).and_return(true)
-      allow(adapter).to receive(:cli_config_exists?).and_return(false)
+      allow(adapter).to receive(:`).and_return("{\"path\":{\"current\":\"\/path\/to\/pudding\"}}")
+    end
+
+    it "returns the right command as a string" do
+      expect(adapter.command)
+        .to eq("wp search-replace --path=/path/to/pudding sausage bacon --quiet "\
+               "--skip-columns=guid --all-tables --allow-root")
+    end
+  end
+
+  context "#command_with_no_configured_path" do
+    before do
+      allow(adapter).to receive(:wp_in_path?).and_return(true)
+      allow(File).to receive(:exist?).and_return(false)
     end
 
     it "returns the right command as a string" do
