@@ -34,7 +34,7 @@ describe Wordmove::Movefile do
     end
 
     context "when .env is present" do
-      let(:movefile) do
+      let!(:movefile) do
         described_class.new(
           {
             config: 'movefile.yml',
@@ -45,8 +45,6 @@ describe Wordmove::Movefile do
       end
 
       it "loads environment variables" do
-        movefile.load_dotenv
-
         expect(ENV['OBIWAN']).to eq('KENOBI')
       end
     end
