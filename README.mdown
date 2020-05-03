@@ -2,16 +2,15 @@
 
 ![logo](https://raw.githubusercontent.com/welaika/wordmove/master/assets/images/wordmove.png)
 
-Wordmove is a gem that lets you automatically mirror local WordPress
+Wordmove is a command line tool that lets you automatically mirror local WordPress
 installations and DB data back and forth from your local development machine to
-the remote server.
+one or more remote servers.
 
-Wordmove has also a neat hook system which enables you to run arbitrary commands
-before and after push/pull actions. Local and remote commands are both supported, but remote
-ones will be run only if using SSH protocol. Read the [dedicated wiki page](https://github.com/welaika/wordmove/wiki/Hooks) for more info.
+Wordmove has also a neat [hook](https://github.com/welaika/wordmove/wiki/Hooks) system which enables you to run arbitrary commands
+before and after push/pull actions. Local and remote commands are both supported (remote
+ones only on SSH protocol).
 
-[FTP support has been discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), thus most recent features won't work,
-while base functionalities are granted.
+[FTP support development has been discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), thus not all features are granted when using this protocol.
 
 [![Build Status](https://travis-ci.org/welaika/wordmove.svg?branch=master)](https://travis-ci.org/welaika/wordmove)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
@@ -21,7 +20,9 @@ while base functionalities are granted.
 
 ## Installation
 
-That's easy:
+Wordmove is developed in ruby and packaged and distributed as a gem.
+
+To install:
 
     gem install wordmove
 
@@ -29,17 +30,21 @@ And to update:
 
     gem update wordmove
 
+You can read more about ruby gems ecosystem on the official site https://rubygems.org/.
+
 ## Peer dependencies
 
-Wordmove just acts as automation glue between tools you already have and love. These are its peer dependencies which you need to have installed and in your $PATH:
+Wordmove acts as automation glue between tools you already have and love. These are its peer dependencies which **you need to have installed** and executable through your system $PATH:
 
-| Program   | Actions                      | Mandatory?                      |
-| -------   | ---------------------------- | ------------------------------- |
-| rsync     | Mirror files and dirs        | Yes for SSH connections         |
-| mysql     | Import database              | Yes                             |
-| mysqldump | Dump database                | Yes                             |
-| wp-cli    | Adapt database               | Yes by default, but configurable|
-| lftp      | all                          | Yes, for FTP connections        |
+| Program   | Mandatory?                       |
+| --------- | -------------------------------- |
+| rsync     | Yes for SSH protocol             |
+| mysql     | Yes                              |
+| mysqldump | Yes                              |
+| wp-cli    | Yes by default, but configurable |
+| lftp      | Yes, for FTP protocol            |
+
+Wordmove also expect that the remote server will have the following commands: `gzip`, `nice`, `mysql`, `rsync`. All of these should be always present by default on any WordPress hosting.
 
 ## Usage
 
@@ -59,11 +64,17 @@ Move inside the WordPress folder and use `wordmove init` to generate a new `move
 
 **See the wiki article: [Usage and flags explained](https://github.com/welaika/wordmove/wiki/Usage-and-flags-explained) for more info.**
 
-### Screencasts
 
-* Push all WordPress, including database and uploads: http://vimeo.com/74648079
-* Pull database and uploads, adapting paths and urls: http://vimeo.com/74646861
-* Push only theme, transfer only modified files: http://vimeo.com/74647529
+
+### Multistage
+
+You can define multiple remote environments in your `movefile.yml`, such as production, staging, etc. Every first level key in the YAML other than the defaults and mandatory `global` and `local` will be interpreted as a remote environment.
+
+Use `-e` with `pull` or `push` to run the command on the specified environment.
+
+For example: `wordmove push -e staging -d` will push your local database to the staging environment.
+
+We warmly **recommend to read the wiki article**: [Multiple environments explained](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
 
 ## movefile.yml
 
@@ -141,24 +152,12 @@ production:
 #          where: remote
 ```
 
-**We warmly recommend to read the wiki article [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained) if you need multi-stage support,
-and the wiki article [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained)
-to understand about the supported configurations.**
+We warmly **recommend to read the wiki articles**
 
-## Multistage
+* [Multiple environments explained](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
+* [Movefile configurations explained](https://github.com/welaika/wordmove/wiki/movefile.yml-configurations-explained)
 
-You can define multiple environments in your `movefile.yml`, such as production, staging, etc.
-Use `-e` with `pull` or `push` to run the command on the specified environment.
-
-For example:
-
-    wordmove push -e staging -d
-
-will push your local database to the staging environment only.
-
-We warmly **recommend** to read the wiki article: [Multiple environments explained
-](https://github.com/welaika/wordmove/wiki/Multiple-environments-explained)
+to understand more about  supported configurations.
 
 ## Environment Variables
 
@@ -171,6 +170,7 @@ Environment variables are written using the **ERB tags** syntax:
 ```
 
 ### Variables set up
+
 Environment variables can be set up using two methods:
 
 #### Using the shell:
