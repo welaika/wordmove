@@ -1,4 +1,12 @@
 module FixtureHelpers
+  def fixture_folder_path
+    File.join(__dir__, '..', 'fixtures')
+  end
+
+  def fixture_folder_root_relative_path
+    File.join('spec', 'fixtures')
+  end
+
   def fixture_path_for(filename)
     File.join(__dir__, '..', 'fixtures', filename)
   end
