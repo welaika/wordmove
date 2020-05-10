@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Wordmove::SqlAdapter::Wpcli do
   let(:config_key) { :vhost }
   let(:source_config) { { vhost: 'sausage' } }
@@ -12,44 +14,47 @@ describe Wordmove::SqlAdapter::Wpcli do
     )
   end
 
-  context "#command_with_wp-cli.yml" do
-    before do
-      allow(adapter).to receive(:wp_in_path?).and_return(true)
-      allow(File).to receive(:exist?).and_return(true)
-      allow(YAML).to receive(:load_file).and_return(path: "/path/to/steak")
-    end
-
-    it "returns the right command as a string" do
-      expect(adapter.command)
-        .to eq("wp search-replace --path=/path/to/steak sausage bacon --quiet "\
-               "--skip-columns=guid --all-tables --allow-root")
-    end
+  before do
+    allow(adapter).to receive(:wp_in_path?).and_return(true)
+    allow(adapter)
+      .to receive(:`)
+      .with('wp cli param-dump --with-values')
+      .and_return("{}")
   end
 
-  context "#command_with_params" do
-    before do
-      allow(adapter).to receive(:wp_in_path?).and_return(true)
-      allow(adapter).to receive(:`).and_return("{\"path\":{\"current\":\"\/path\/to\/pudding\"}}")
+  context "#command" do
+    context "having wp-cli.yml in local_path" do
+      let(:local_path) { fixture_folder_root_relative_path }
+
+      it "returns the right command as a string" do
+        expect(adapter.command)
+          .to eq("wp search-replace --path=/path/to/steak sausage bacon --quiet "\
+                "--skip-columns=guid --all-tables --allow-root")
+      end
     end
 
-    it "returns the right command as a string" do
-      expect(adapter.command)
-        .to eq("wp search-replace --path=/path/to/pudding sausage bacon --quiet "\
-               "--skip-columns=guid --all-tables --allow-root")
+    context "without wp-cli.yml in local_path" do
+      before do
+        allow(adapter)
+          .to receive(:`)
+          .with('wp cli param-dump --with-values')
+          .and_return("{\"path\":{\"current\":\"\/path\/to\/pudding\"}}")
+      end
+      context "but still reachable by wp-cli" do
+        it "returns the right command as a string" do
+          expect(adapter.command)
+            .to eq("wp search-replace --path=/path/to/pudding sausage bacon --quiet "\
+                  "--skip-columns=guid --all-tables --allow-root")
+        end
+      end
     end
-  end
 
-  context "#command_with_no_configured_path" do
-    before do
-      allow(adapter).to receive(:wp_in_path?).and_return(true)
-      allow(File).to receive(:exist?).and_return(false)
-      allow(adapter).to receive(:`).and_return("{}")
-    end
-
-    it "returns the right command as a string" do
-      expect(adapter.command)
-        .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
-               "--skip-columns=guid --all-tables --allow-root")
+    context "without any wp-cli configuration" do
+      it "returns the right command with '--path' flag set to local_path" do
+        expect(adapter.command)
+          .to eq("wp search-replace --path=/path/to/ham sausage bacon --quiet "\
+                 "--skip-columns=guid --all-tables --allow-root")
+      end
     end
   end
 end
