@@ -10,6 +10,16 @@ describe Wordmove::Deployer::Base do
       end
     end
 
+    context "with more then one environment, but invalid chosen" do
+      it "raises an exception" do
+        options[:environment] = "doesnotexist"
+        options[:simulate] = true
+
+        expect { described_class.deployer_for(options) }
+          .to raise_exception(Wordmove::UndefinedEnvironment)
+      end
+    end
+
     context "with ftp remote connection" do
       it "returns an instance of FTP deployer" do
         options[:environment] = "production"
