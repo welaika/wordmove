@@ -80,19 +80,26 @@ module Wordmove
     def pull
       ensure_wordpress_options_presence!(options)
       begin
-        Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
+        cli_options = options.deep_symbolize_keys
+        movefile = Wordmove::Movefile.new(cli_options)
+        environment = movefile.environment
+
+        result = if movefile.options[environment][:ssh]
+                   Wordmove::Actions::Ssh::Pull.call(cli_options: cli_options, movefile: movefile)
+                 elsif movefile.options[environment][:ftp]
+                   p 'To be implemented'
+                 else
+                   raise NoAdapterFound, "No valid adapter found."
+                 end
+
+        result.success? ? exit(0) : exit(1)
       rescue MovefileNotFound => e
         logger.error(e.message)
         exit 1
+      rescue NoAdapterFound => e
+        logger.error(e.message)
+        exit 1
       end
-
-
-      # guardian = Wordmove::Guardian.new(options: options, action: :pull)
-
-      # handle_options(options) do |task|
-      #   deployer.send("pull_#{task}") if guardian.allows(task.to_sym)
-      # end
-
     end
 
     desc "push", "Pushes WP data from local machine to remote host"

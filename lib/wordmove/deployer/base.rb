@@ -98,6 +98,7 @@ module Wordmove
       end
 
       def run(command)
+        # moved into Wordmove::Actions::RunLocalCommand
         logger.task_step true, command
         return true if simulate?
 
@@ -139,6 +140,7 @@ module Wordmove
       end
 
       def mysql_import_command(dump_path, options)
+        # moved into Wordmove::Actions::Helpers
         command = ["mysql"]
         command << "--host=#{Shellwords.escape(options[:host])}" if options[:host].present?
         command << "--port=#{Shellwords.escape(options[:port])}" if options[:port].present?
@@ -153,6 +155,7 @@ module Wordmove
       end
 
       def compress_command(path)
+        # moved into Wordmove::Actions::Helpers
         command = ["gzip"]
         command << "-9"
         command << "-f"
@@ -161,6 +164,7 @@ module Wordmove
       end
 
       def uncompress_command(path)
+        # moved into Wordmove::Actions::Helpers
         command = ["gzip"]
         command << "-d"
         command << "-f"
@@ -169,11 +173,13 @@ module Wordmove
       end
 
       def local_delete(path)
+        # moved into Wordmove::Actions::DeleteLocalFile
         logger.task_step true, "delete: '#{path}'"
         File.delete(path) unless simulate?
       end
 
       def save_local_db(local_dump_path)
+        # Should be useless now
         # dump local mysql into file
         run mysql_dump_command(local_options[:database], local_dump_path)
       end
