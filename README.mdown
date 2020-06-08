@@ -12,7 +12,7 @@ ones only on SSH protocol).
 
 [FTP support development has been discontinued](https://github.com/welaika/wordmove/wiki/FTP-support-disclaimer), thus not all features are granted when using this protocol.
 
-[![Build Status](https://travis-ci.org/welaika/wordmove.svg?branch=master)](https://travis-ci.org/welaika/wordmove)
+[![Tests](https://github.com/welaika/wordmove/workflows/Tests/badge.svg)](https://github.com/welaika/wordmove/actions)
 [![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
 [![Gem Version](https://badge.fury.io/rb/wordmove.svg)](https://rubygems.org/gems/wordmove)
 [![Docker Build Status](https://img.shields.io/docker/automated/welaika/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
