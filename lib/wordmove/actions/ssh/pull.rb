@@ -42,6 +42,7 @@ module Wordmove
           ]
         end
 
+        # rubocop:disable Metrics/MethodLength
         def self.db_actions
           [
             reduce_if(
@@ -49,7 +50,12 @@ module Wordmove
                 ctx.database_task &&
                 ctx.dig(:global_options, :sql_adapter) == 'wpcli'
               end,
-              [Wordmove::Actions::Ssh::WpcliAdapter::PullDb]
+              [
+                Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForPullDb,
+                Wordmove::Actions::Ssh::WpcliAdapter::BackupLocalDb,
+                Wordmove::Actions::Ssh::WpcliAdapter::AdaptRemoteDb,
+                Wordmove::Actions::Ssh::CleanupAfterPull
+              ]
             ),
             reduce_if(
               lambda do |ctx|
@@ -60,6 +66,7 @@ module Wordmove
             )
           ]
         end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end
