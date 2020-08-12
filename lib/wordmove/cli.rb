@@ -2,33 +2,33 @@ module Wordmove
   class CLI < Thor
     map %w[--version -v] => :__print_version
 
-    desc "--version, -v", "Print the version"
+    desc '--version, -v', 'Print the version'
     def __print_version
       puts Wordmove::VERSION
     end
 
-    desc "init", "Generates a brand new movefile.yml"
+    desc 'init', 'Generates a brand new movefile.yml'
     def init
       Wordmove::Generators::Movefile.start
     end
 
-    desc "doctor", "Do some local configuration and environment checks"
+    desc 'doctor', 'Do some local configuration and environment checks'
     def doctor
       Wordmove::Doctor.start
     end
 
     shared_options = {
-      wordpress: { aliases: "-w", type: :boolean },
-      uploads: { aliases: "-u", type: :boolean },
-      themes: { aliases: "-t", type: :boolean },
-      plugins: { aliases: "-p", type: :boolean },
-      mu_plugins: { aliases: "-m", type: :boolean },
-      languages: { aliases: "-l", type: :boolean },
-      db: { aliases: "-d", type: :boolean },
-      verbose: { aliases: "-v", type: :boolean },
-      simulate: { aliases: "-s", type: :boolean },
-      environment: { aliases: "-e" },
-      config: { aliases: "-c" },
+      wordpress: { aliases: '-w', type: :boolean },
+      uploads: { aliases: '-u', type: :boolean },
+      themes: { aliases: '-t', type: :boolean },
+      plugins: { aliases: '-p', type: :boolean },
+      mu_plugins: { aliases: '-m', type: :boolean },
+      languages: { aliases: '-l', type: :boolean },
+      db: { aliases: '-d', type: :boolean },
+      verbose: { aliases: '-v', type: :boolean },
+      simulate: { aliases: '-s', type: :boolean },
+      environment: { aliases: '-e' },
+      config: { aliases: '-c' },
       debug: { type: :boolean },
       no_adapt: { type: :boolean },
       all: { type: :boolean }
@@ -37,7 +37,7 @@ module Wordmove
     no_tasks do
       def handle_options(options)
         self.class.wordpress_options.each do |task|
-          yield task if options[task] || (options["all"] && options[task] != false)
+          yield task if options[task] || (options['all'] && options[task] != false)
         end
       end
 
@@ -50,7 +50,7 @@ module Wordmove
           options.deep_symbolize_keys.keys & (self.class.wordpress_options + [:all])
         ).present?
 
-        puts "No options given. See wordmove --help"
+        puts 'No options given. See wordmove --help'
         exit 1
       end
 
@@ -59,7 +59,7 @@ module Wordmove
       end
     end
 
-    desc "list", "List all environments and vhosts"
+    desc 'list', 'List all environments and vhosts'
     shared_options.each do |option, args|
       method_option option, args
     end
@@ -73,7 +73,7 @@ module Wordmove
       exit 1
     end
 
-    desc "pull", "Pulls WP data from remote host to the local machine"
+    desc 'pull', 'Pulls WP data from remote host to the local machine'
     shared_options.each do |option, args|
       method_option option, args
     end
@@ -89,7 +89,7 @@ module Wordmove
                  elsif movefile.options[environment][:ftp]
                    p 'To be implemented'
                  else
-                   raise NoAdapterFound, "No valid adapter found."
+                   raise NoAdapterFound, 'No valid adapter found.'
                  end
 
         result.success? ? exit(0) : exit(1)
@@ -102,7 +102,7 @@ module Wordmove
       end
     end
 
-    desc "push", "Pushes WP data from local machine to remote host"
+    desc 'push', 'Pushes WP data from local machine to remote host'
     shared_options.each do |option, args|
       method_option option, args
     end

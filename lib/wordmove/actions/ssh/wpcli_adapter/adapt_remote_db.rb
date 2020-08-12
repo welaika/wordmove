@@ -11,10 +11,10 @@ module Wordmove
           expects :local_dump_path
 
           executed do |context| # rubocop:disable Metrics/BlockLength
-            context.logger.task_step true, "Adapt URL and paths in DB"
+            context.logger.task_step true, 'Adapt URL and paths in DB'
 
             unless wp_in_path?
-              raise UnmetPeerDependencyError, "WP-CLI is not installed or not in your $PATH"
+              raise UnmetPeerDependencyError, 'WP-CLI is not installed or not in your $PATH'
             end
 
             next context if simulate?(cli_options: context.cli_options)

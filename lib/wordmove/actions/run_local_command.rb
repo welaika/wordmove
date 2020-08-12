@@ -14,7 +14,7 @@ module Wordmove
 
         system(context.command)
 
-        raise ShellCommandError, "Return code reports an error" unless $CHILD_STATUS.success?
+        raise ShellCommandError, 'Return code reports an error' unless $CHILD_STATUS.success?
       end
     end
   end

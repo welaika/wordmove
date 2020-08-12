@@ -21,12 +21,13 @@ module Wordmove
 
         allowed_tasks = required_tasks.select { |task| context.guardian.allows task }
 
-        # Since we `promises` the following valiables, we cannot set them as `nil`
+        # Since we `promises` the following variables, we cannot set them as `nil`
         context.database_task = allowed_tasks.delete(:db) || false
         context.wordpress_task = allowed_tasks.delete(:wordpress) || false
-        context.folder_tasks = allowed_tasks # :db and :wordpress were just removed, so we consider
-                                             # the reminders as folder tasks. It's a weak assumption
-                                             # though.
+        # :db and :wordpress were just removed, so we consider
+        # the reminders as folder tasks. It's a weak assumption
+        # though.
+        context.folder_tasks = allowed_tasks
       end
     end
   end
