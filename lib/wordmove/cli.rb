@@ -36,6 +36,7 @@ module Wordmove
 
     no_tasks do
       def handle_options(options)
+        # DELETE: moved into organizers
         self.class.wordpress_options.each do |task|
           yield task if options[task] || (options['all'] && options[task] != false)
         end
@@ -87,7 +88,7 @@ module Wordmove
         result = if movefile.options[environment][:ssh]
                    Wordmove::Actions::Ssh::Pull.call(cli_options: cli_options, movefile: movefile)
                  elsif movefile.options[environment][:ftp]
-                   p 'To be implemented'
+                   raise NotImplementedError
                  else
                    raise NoAdapterFound, 'No valid adapter found.'
                  end
@@ -109,21 +110,26 @@ module Wordmove
     def push
       ensure_wordpress_options_presence!(options)
       begin
-        deployer = Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
+        cli_options = options.deep_symbolize_keys
+        movefile = Wordmove::Movefile.new(cli_options)
+        environment = movefile.environment
+
+        result = if movefile.options[environment][:ssh]
+                   Wordmove::Actions::Ssh::Push.call(cli_options: cli_options, movefile: movefile)
+                 elsif movefile.options[environment][:ftp]
+                   raise NotImplementedError
+                 else
+                   raise NoAdapterFound, 'No valid adapter found.'
+                 end
+
+        result.success? ? exit(0) : exit(1)
       rescue MovefileNotFound => e
         logger.error(e.message)
         exit 1
+      rescue NoAdapterFound => e
+        logger.error(e.message)
+        exit 1
       end
-
-      Wordmove::Hook.run(:push, :before, options.deep_symbolize_keys)
-
-      guardian = Wordmove::Guardian.new(options: options, action: :push)
-
-      handle_options(options) do |task|
-        deployer.send("push_#{task}") if guardian.allows(task.to_sym)
-      end
-
-      Wordmove::Hook.run(:push, :after, options)
     end
   end
 end
