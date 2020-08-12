@@ -17,10 +17,15 @@ module Wordmove
           cli_options.fetch(:simulate, false)
         end
 
+        # Returns the path to be excluded as per movefile.yml configuration.
+        # `remote_options` is always valid for both push and pull actions,
+        # because path exclusions are configured only on remote environments
         def paths_to_exclude(remote_options:)
           remote_options.fetch(:exclude, [])
         end
 
+        # Given a path, it will append the `/*` string to it. This is how
+        # folder content - thus not the folder itself - is represented by rsync
         def exclude_dir_contents(path:)
           "#{path}/*"
         end
