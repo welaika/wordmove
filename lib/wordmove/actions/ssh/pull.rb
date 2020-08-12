@@ -51,7 +51,7 @@ module Wordmove
                 ctx.dig(:global_options, :sql_adapter) == 'wpcli'
               end,
               [
-                Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForPullDb,
+                Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
                 Wordmove::Actions::Ssh::WpcliAdapter::BackupLocalDb,
                 Wordmove::Actions::Ssh::WpcliAdapter::AdaptRemoteDb,
                 Wordmove::Actions::Ssh::CleanupAfterPull
