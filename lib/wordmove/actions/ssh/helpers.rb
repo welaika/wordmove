@@ -20,9 +20,8 @@ module Wordmove
             ssh_options
           end
 
-          def push_inlcude_paths(task)
-            # This firm will be updated
-            Pathname.new(send(:"local_#{task}_dir").relative_path)
+          def push_include_paths(local_task_dir:)
+            Pathname.new(local_task_dir.relative_path)
                     .ascend
                     .each_with_object([]) do |directory, array|
                       path = directory.to_path
@@ -32,9 +31,8 @@ module Wordmove
                     end
           end
 
-          def push_exclude_paths(task)
-            # This firm will be updated
-            Pathname.new(send(:"local_#{task}_dir").relative_path)
+          def push_exclude_paths(local_task_dir:, paths_to_exclude:)
+            Pathname.new(local_task_dir.relative_path)
                     .dirname
                     .ascend
                     .each_with_object([]) do |directory, array|
