@@ -1,9 +1,9 @@
 module Wordmove
   module Actions
     module Ssh
-      class CleanupAfterPull
+      class CleanupAfterAdapt
         extend ::LightService::Action
-        expects :local_dump_path,
+        expects :db_paths,
                 :cli_options,
                 :logger
 
@@ -11,7 +11,7 @@ module Wordmove
           Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,
             cli_options: context.cli_options,
-            file_path: context.local_dump_path
+            file_path: context.db_paths.local.path
           )
         end
       end
