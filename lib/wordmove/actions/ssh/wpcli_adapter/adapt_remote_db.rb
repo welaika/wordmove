@@ -5,10 +5,13 @@ module Wordmove
         class AdaptRemoteDb
           extend ::LightService::Action
           include Wordmove::Actions::Helpers
-          expects :local_gzipped_dump_path
-          expects :local_options
-          expects :cli_options
-          expects :local_dump_path
+
+          expects :local_options,
+                  :remote_options,
+                  :cli_options,
+                  :logger,
+                  :photocopier,
+                  :db_paths
 
           executed do |context| # rubocop:disable Metrics/BlockLength
             context.logger.task_step true, 'Adapt URL and paths in DB'
@@ -24,14 +27,14 @@ module Wordmove
             Wordmove::Actions::RunLocalCommand.execute(
               cli_options: context.cli_options,
               logger: context.logger,
-              command: uncompress_command(context.local_gzipped_dump_path)
+              command: uncompress_command(file_path: context.db_paths.local.gzipped_path)
             )
 
             Wordmove::Actions::RunLocalCommand.execute(
               cli_options: context.cli_options,
               logger: context.logger,
               command: mysql_import_command(
-                dump_path: context.local_dump_path,
+                dump_path: context.db_paths.local.path,
                 env_db_options: context.local_options[:database]
               )
             )
