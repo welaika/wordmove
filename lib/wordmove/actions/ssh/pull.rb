@@ -11,6 +11,8 @@ module Wordmove
           remote_options = movefile.options[movefile.environment]
           ssh_opts = ssh_options(remote_options: remote_options, simulate: cli_options[:simulate])
 
+          LightService::Configuration.logger = ::Logger.new(STDOUT) if cli_options[:debug]
+
           with(
             options: movefile.options,
             cli_options: cli_options,
