@@ -35,13 +35,6 @@ module Wordmove
     }
 
     no_tasks do
-      def handle_options(options)
-        # DELETE: moved into organizers
-        self.class.wordpress_options.each do |task|
-          yield task if options[task] || (options['all'] && options[task] != false)
-        end
-      end
-
       def self.wordpress_options
         %i[wordpress uploads themes plugins mu_plugins languages db]
       end
@@ -53,6 +46,13 @@ module Wordmove
 
         puts 'No options given. See wordmove --help'
         exit 1
+      end
+
+      def initial_context
+        cli_options = options.deep_symbolize_keys
+        movefile = Wordmove::Movefile.new(cli_options)
+
+        [cli_options, movefile]
       end
 
       def logger
@@ -80,14 +80,13 @@ module Wordmove
     end
     def pull
       ensure_wordpress_options_presence!(options)
-      begin
-        cli_options = options.deep_symbolize_keys
-        movefile = Wordmove::Movefile.new(cli_options)
-        environment = movefile.environment
 
-        result = if movefile.options[environment][:ssh]
+      begin
+        cli_options, movefile = initial_context
+
+        result = if movefile.options[movefile.environment][:ssh]
                    Wordmove::Actions::Ssh::Pull.call(cli_options: cli_options, movefile: movefile)
-                 elsif movefile.options[environment][:ftp]
+                 elsif movefile.options[movefile.environment][:ftp]
                    raise NotImplementedError
                  else
                    raise NoAdapterFound, 'No valid adapter found.'
@@ -109,14 +108,13 @@ module Wordmove
     end
     def push
       ensure_wordpress_options_presence!(options)
-      begin
-        cli_options = options.deep_symbolize_keys
-        movefile = Wordmove::Movefile.new(cli_options)
-        environment = movefile.environment
 
-        result = if movefile.options[environment][:ssh]
+      begin
+        cli_options, movefile = initial_context
+
+        result = if movefile.options[movefile.environment][:ssh]
                    Wordmove::Actions::Ssh::Push.call(cli_options: cli_options, movefile: movefile)
-                 elsif movefile.options[environment][:ftp]
+                 elsif movefile.options[movefile.environment][:ftp]
                    raise NotImplementedError
                  else
                    raise NoAdapterFound, 'No valid adapter found.'
