@@ -89,7 +89,7 @@ module Wordmove
           command.join(' ')
         end
 
-        def uncompress_command(file_path)
+        def uncompress_command(file_path:)
           command = ["gzip"]
           command << "-d"
           command << "-f"
