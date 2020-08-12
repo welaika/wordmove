@@ -2,7 +2,7 @@ module Wordmove
   module Actions
     module Ssh
       module BuiltinAdapter
-        class PullDb
+        class PushDb
           extend ::LightService::Action
 
           executed do |_context|
