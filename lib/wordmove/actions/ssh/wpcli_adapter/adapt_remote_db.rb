@@ -54,6 +54,7 @@ module Wordmove
             )
           end
 
+          # This should be extracted into a concern
           def self.wpcli_search_replace_command(context)
             wordpress_path = context.local_options[:wordpress_path]
 
@@ -69,6 +70,7 @@ module Wordmove
             ].join(' ')
           end
 
+          # This should be extracted into a concern
           def self.wp_in_path?
             system('which wp > /dev/null 2>&1')
           end

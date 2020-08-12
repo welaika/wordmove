@@ -29,8 +29,6 @@ require 'wordmove/guardian'
 require 'wordmove/hook'
 require 'wordmove/logger'
 require 'wordmove/movefile'
-require 'wordmove/sql_adapter/default'
-require 'wordmove/sql_adapter/wpcli'
 require 'wordmove/wordpress_directory'
 require 'wordmove/version'
 require 'wordmove/environments_list'
@@ -39,13 +37,8 @@ require 'wordmove/generators/movefile_adapter'
 require 'wordmove/generators/movefile'
 
 require 'wordmove/db_paths_config'
-require 'wordmove/deployer/base'
-require 'wordmove/deployer/ftp'
-require 'wordmove/deployer/ssh'
-require 'wordmove/deployer/ssh/default_sql_adapter'
-require 'wordmove/deployer/ssh/wpcli_sql_adapter'
 
-Dir[File.join(__dir__, "wordmove/actions/**/*.rb")].each { |file| require file }
+Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].each { |file| require file }
 
 module Wordmove
 end
