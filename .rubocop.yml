@@ -27,10 +27,6 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 10
 
-Style/StringLiterals:
-  Enabled: false
-  EnforcedStyle: double_quotes
-
 Style/Documentation:
   Enabled: false
 
