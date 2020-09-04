@@ -18,10 +18,8 @@ module Wordmove
 
           next context if exit_code.zero?
 
-          raise(
-            ShellCommandError,
-            "Error code #{exit_code} returned by command \"#{context.command_args.join}\": #{stderr}"
-          )
+          context.fail! "Error code #{exit_code} returned by command "\
+                        "#{context.command_args.join}: #{stderr}"
         end
       end
     end

@@ -10,7 +10,11 @@ module Wordmove
         command = 'put'
 
         context.logger.task_step false, "#{command}: #{context.command_args.join(' ')}"
-        context.photocopier.send(command, *context.command_args)
+        result = context.photocopier.send(command, *context.command_args)
+
+        next context if result == true
+
+        context.fail! "Failed to upload file: #{context.command_args.first}"
       end
     end
   end

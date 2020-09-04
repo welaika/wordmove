@@ -27,7 +27,7 @@ module Wordmove
             remote_options: context.remote_options
           ).push(exclude_wp_content)
 
-          Wordmove::Actions::Ssh::PutDirectory.execute(
+          result = Wordmove::Actions::Ssh::PutDirectory.execute(
             photocopier: context.photocopier,
             logger: context.logger,
             command_args: [local_path, remote_path, exclude_paths],
@@ -35,6 +35,7 @@ module Wordmove
             local_options: context.local_options,
             remote_options: context.remote_options
           )
+          context.fail_and_return!(result.message) if result.failure?
         end
       end
     end

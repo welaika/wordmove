@@ -12,7 +12,12 @@ module Wordmove
 
         next context if simulate?(cli_options: context.cli_options)
 
-        File.delete(context.file_path) unless simulate?(cli_options: context.cli_options)
+        unless File.exist?(context.file_path)
+          context.logger.warning 'File does not exist'
+          next context
+        end
+
+        File.delete(context.file_path)
       end
     end
   end

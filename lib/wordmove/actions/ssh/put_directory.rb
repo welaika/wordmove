@@ -45,7 +45,11 @@ module Wordmove
           ]
 
           context.logger.task_step false, "#{command}: #{command_args.join(' ')}"
-          context.photocopier.send(command, *command_args)
+          result = context.photocopier.send(command, *command_args)
+
+          next context if result == true
+
+          context.fail!("Failed to push #{context.folder_task}")
         end
       end
     end

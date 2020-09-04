@@ -14,36 +14,40 @@ module Wordmove
                 :db_paths
 
         executed do |context| # rubocop:disable Metrics/BlockLength
-          Wordmove::Actions::Ssh::RunRemoteCommand.execute(
+          result = Wordmove::Actions::Ssh::RunRemoteCommand.execute(
             cli_options: context.cli_options,
             photocopier: context.photocopier,
             logger: context.logger,
             command_args: [
               mysql_dump_command(
                 env_db_options: context.remote_options[:database],
-                save_to_path: db_paths.remote.path
+                save_to_path: context.db_paths.remote.path
               )
             ]
           )
+          context.fail_and_return!(result.message) if result.failure?
 
-          Wordmove::Actions::Ssh::RunRemoteCommand.execute(
+          result = Wordmove::Actions::Ssh::RunRemoteCommand.execute(
             cli_options: context.cli_options,
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [compress_command(file_path: db_paths.remote.path)]
+            command_args: [compress_command(file_path: context.db_paths.remote.path)]
           )
+          context.fail_and_return!(result.message) if result.failure?
 
-          Wordmove::Actions::GetFile.execute(
+          result = Wordmove::Actions::GetFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [db_paths.remote.gzipped_path, db_paths.local.gzipped_path]
+            command_args: [context.db_paths.remote.gzipped_path, context.db_paths.local.gzipped_path]
           )
+          context.fail_and_return!(result.message) if result.failure?
 
-          Wordmove::Actions::DeleteRemoteFile.execute(
+          result = Wordmove::Actions::DeleteRemoteFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [db_paths.remote.gzipped_path]
+            command_args: [context.db_paths.remote.gzipped_path]
           )
+          context.fail_and_return!(result.message) if result.failure?
         end
       end
     end
