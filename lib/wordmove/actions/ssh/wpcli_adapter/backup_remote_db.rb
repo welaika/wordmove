@@ -17,7 +17,10 @@ module Wordmove
             Wordmove::Actions::Ssh::DownloadRemoteDb.execute(context)
             # DownloadRemoteDB will save the file in `db_paths.local.gzipped_path`
             begin
-              FileUtils.mv(db_paths.local.gzipped_path, db_paths.backup.remote.gzipped_path)
+              FileUtils.mv(
+                context.db_paths.local.gzipped_path,
+                context.db_paths.backup.remote.gzipped_path
+              )
             rescue Errno::ENOENT => e
               context.fail_and_return! e.massage
             end
