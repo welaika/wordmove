@@ -56,6 +56,7 @@ module Wordmove
                 Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
                 Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
                 Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
+                Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
                 Wordmove::Actions::Ssh::CleanupAfterAdapt
               ]
             ),
