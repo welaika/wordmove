@@ -71,12 +71,10 @@ module Wordmove
           end
 
           # This should be extracted into a concern
-          def self.wpcli_search_replace_command(context)
-            wordpress_path = context.local_options[:wordpress_path]
-
+          def self.wpcli_search_replace_command(context, config_key)
             [
               'wp search-replace',
-              "--path=#{wordpress_path}",
+              "--path=#{context.local_options[:wordpress_path]}",
               context.remote_options[config_key],
               context.local_options[config_key],
               '--quiet',
