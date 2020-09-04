@@ -60,12 +60,6 @@ module Wordmove
               command: compress_command(file_path: context.db_paths.local.adapted_path)
             )
 
-            Wordmove::Actions::DeleteLocalFile.execute(
-              cli_options: context.cli_options,
-              logger: context.logger,
-              file_path: context.db_paths.local.adapted_gzipped_path
-            )
-
             Wordmove::Actions::RunLocalCommand.execute(
               cli_options: context.cli_options,
               logger: context.logger,

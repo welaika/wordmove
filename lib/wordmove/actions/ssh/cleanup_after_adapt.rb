@@ -13,6 +13,12 @@ module Wordmove
             cli_options: context.cli_options,
             file_path: context.db_paths.local.path
           )
+
+          Wordmove::Actions::DeleteLocalFile.execute(
+            cli_options: context.cli_options,
+            logger: context.logger,
+            file_path: context.db_paths.local.gzipped_adapted_path
+          )
         end
       end
     end
