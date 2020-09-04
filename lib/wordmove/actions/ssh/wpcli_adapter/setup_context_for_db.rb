@@ -25,7 +25,9 @@ module Wordmove
 
             DbPathsConfig.local.path = content_dir.path('dump.sql')
             DbPathsConfig.local.gzipped_path = DbPathsConfig.local.path + '.gz'
-            DbPathsConfig.remote.path = remote_wp_content_dir.path('dump.sql')
+            DbPathsConfig.remote.path = remote_wp_content_dir(
+              remote_options: context.remote_options
+            ).path('dump.sql')
             DbPathsConfig.remote.gzipped_path = DbPathsConfig.remote.path + '.gz'
             DbPathsConfig.local.adapted_path = content_dir.path('search_replace_dump.sql')
             DbPathsConfig.local.gzipped_adapted_path = DbPathsConfig.local.adapted_path + '.gz'
