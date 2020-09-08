@@ -18,6 +18,9 @@ module Wordmove
           context.logger.task "Pushing #{context.folder_task}"
 
           command = 'put_directory'
+          # For this action `local_path` and `remote_path` will always be
+          # `:wordpress_path`; specific folder for `context.folder_task` will be included by
+          # `push_include_paths`
           local_path = context.local_options[:wordpress_path]
           remote_path = context.remote_options[:wordpress_path]
 
@@ -27,7 +30,7 @@ module Wordmove
           # Note that we do not use the second argument to `fetch`
           # to express a default value, because it would be greedly interpreted
           # but if `command_args` is already defined by context, then it's
-          # possible that `"remote_#{context.folder_task}_dir"` could
+          # possible that `"local_#{context.folder_task}_dir"` could
           # not be defined.
           command_args = context.fetch(:command_args) || [
             local_path,

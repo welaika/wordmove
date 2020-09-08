@@ -12,9 +12,9 @@ module Wordmove
             ssh_options = remote_options[:ssh]
 
             if simulate == true && ssh_options[:rsync_options]
-              ssh_options[:rsync_options].concat(" --dry-run")
+              ssh_options[:rsync_options].concat(' --dry-run')
             elsif simulate == true
-              ssh_options[:rsync_options] = "--dry-run"
+              ssh_options[:rsync_options] = '--dry-run'
             end
 
             ssh_options

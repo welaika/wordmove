@@ -18,6 +18,9 @@ module Wordmove
           context.logger.task "Pulling #{context.folder_task}"
 
           command = 'get_directory'
+          # For this action `local_path` and `remote_path` will always be
+          # `:wordpress_path`; specific folder for `context.folder_task` will be included by
+          # `pull_include_paths`
           local_path = context.local_options[:wordpress_path]
           remote_path = context.remote_options[:wordpress_path]
 
