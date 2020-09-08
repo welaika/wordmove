@@ -3,6 +3,7 @@ module Wordmove
     class DeleteLocalFile
       extend LightService::Action
       include Wordmove::Actions::Helpers
+
       expects :file_path,
               :logger,
               :cli_options

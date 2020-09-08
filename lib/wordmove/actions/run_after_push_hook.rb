@@ -3,8 +3,9 @@ module Wordmove
     class RunAfterPushHook
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
-      expects :movefile
-      expects :cli_options
+
+      expects :movefile,
+              :cli_options
 
       executed do |context|
         Wordmove::Hook.run(

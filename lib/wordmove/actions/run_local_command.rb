@@ -3,6 +3,7 @@ module Wordmove
     class RunLocalCommand
       extend LightService::Action
       include Wordmove::Actions::Helpers
+
       expects :command,
               :cli_options,
               :logger

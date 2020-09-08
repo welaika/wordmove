@@ -3,6 +3,7 @@ module Wordmove
     module Ssh
       class CleanupAfterAdapt
         extend ::LightService::Action
+
         expects :db_paths,
                 :cli_options,
                 :logger

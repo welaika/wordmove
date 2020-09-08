@@ -4,10 +4,11 @@ module Wordmove
       class RunRemoteCommand
         extend LightService::Action
         include Wordmove::Actions::Helpers
-        expects :photocopier
-        expects :logger
-        expects :command_args
-        expects :cli_options
+
+        expects :photocopier,
+                :logger,
+                :command_args,
+                :cli_options
 
         executed do |context|
           context.logger.task_step false, *context.command_args

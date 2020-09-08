@@ -2,9 +2,10 @@ module Wordmove
   module Actions
     class DeleteRemoteFile
       extend LightService::Action
-      expects :photocopier
-      expects :logger
-      expects :command_args
+
+      expects :photocopier,
+              :logger,
+              :command_args
 
       executed do |context|
         command = 'delete'

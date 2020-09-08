@@ -5,6 +5,7 @@ module Wordmove
       include Wordmove::Actions::Helpers
       include Wordmove::Actions::Ssh::Helpers
       include WordpressDirectory::RemoteHelperMethods
+
       expects :guardian,
               :cli_options
       promises :folder_tasks,

@@ -5,6 +5,7 @@ module Wordmove
         class BackupLocalDb
           extend ::LightService::Action
           include Wordmove::Actions::Helpers
+
           expects :local_options
           expects :cli_options
           expects :db_paths

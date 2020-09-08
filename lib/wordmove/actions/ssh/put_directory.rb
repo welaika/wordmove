@@ -6,6 +6,7 @@ module Wordmove
         include Wordmove::Actions::Helpers
         include Wordmove::Actions::Ssh::Helpers
         include WordpressDirectory::LocalHelperMethods
+
         # :folder_task is expected to be one symbol from Wordmove::CLI.wordpress_options array
         expects :logger,
                 :local_options,

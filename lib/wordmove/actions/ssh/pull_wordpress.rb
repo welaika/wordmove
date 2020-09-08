@@ -5,12 +5,13 @@ module Wordmove
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
         include WordpressDirectory::RemoteHelperMethods
-        expects :options
-        expects :remote_options
-        expects :local_options
-        expects :logger
-        expects :movefile
-        expects :photocopier
+
+        expects :options,
+                :remote_options,
+                :local_options,
+                :logger,
+                :movefile,
+                :photocopier
 
         executed do |context|
           local_path = context.local_options[:wordpress_path]
