@@ -47,7 +47,7 @@ module Wordmove
             logger: context.logger,
             command_args: [context.db_paths.remote.gzipped_path]
           )
-          context.fail_and_return!(result.message) if result.failure?
+          context.fail!(result.message) if result.failure?
         end
       end
     end

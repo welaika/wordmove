@@ -35,7 +35,7 @@ module Wordmove
             local_options: context.local_options,
             remote_options: context.remote_options
           )
-          context.fail_and_return!(result.message) if result.failure?
+          context.fail!(result.message) if result.failure?
         end
       end
     end

@@ -22,7 +22,7 @@ module Wordmove
                 context.db_paths.backup.remote.gzipped_path
               )
             rescue Errno::ENOENT => e
-              context.fail_and_return! e.massage
+              context.fail! e.massage
             end
           end
         end
