@@ -14,7 +14,6 @@ module Wordmove
           LightService::Configuration.logger = ::Logger.new(STDOUT) if cli_options[:debug]
 
           with(
-            options: movefile.options,
             cli_options: cli_options,
             global_options: movefile.options[:global],
             local_options: movefile.options[:local],
