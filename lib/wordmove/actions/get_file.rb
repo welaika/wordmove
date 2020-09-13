@@ -2,7 +2,8 @@ module Wordmove
   module Actions
     # Download a single file from the remote server.
     #
-    # The remote server is already configured inside the Photocopier object
+    # @note The remote server is already configured inside the Photocopier object
+    # @note This action is *not* meant to be organized, but as a standalone one.
     class GetFile
       extend LightService::Action
 
