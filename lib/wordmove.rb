@@ -43,4 +43,15 @@ require 'wordmove/actions/ssh/helpers'
 Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].sort.each { |file| require file }
 
 module Wordmove
+  # Interactors' namespce. Interactors are called "Actions", following the LightService convention.
+  # In this namespace there are two kinds of "Actions":
+  # * local environment actions
+  # * protocol agnostic remote environment actions
+  # @see https://github.com/adomokos/light-service/blob/master/README.md LightService README
+  module Actions
+    # Ssh actions' namespace. Here are SSH protocol specific actions and organizers
+    # for remote environments
+    module Ssh
+    end
+  end
 end
