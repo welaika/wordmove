@@ -13,9 +13,7 @@ module Wordmove
 
         next context if simulate?(cli_options: context.cli_options)
 
-        system(context.command)
-
-        context.fail!('Return code reports an error') unless $CHILD_STATUS.success?
+        context.fail!('Local command status reports an error') unless system(context.command)
       end
     end
   end
