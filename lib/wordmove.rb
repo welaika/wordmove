@@ -38,7 +38,9 @@ require 'wordmove/generators/movefile'
 
 require 'wordmove/db_paths_config'
 
-Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].each { |file| require file }
+require 'wordmove/actions/helpers'
+require 'wordmove/actions/ssh/helpers'
+Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].sort.each { |file| require file }
 
 module Wordmove
 end
