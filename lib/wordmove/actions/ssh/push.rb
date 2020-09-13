@@ -7,11 +7,11 @@ module Wordmove
         include Wordmove::Actions::Ssh::Helpers
 
         def self.call(cli_options:, movefile:)
-          logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
+          logger = Logger.new($stdout, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = movefile.options[movefile.environment]
           ssh_opts = ssh_options(remote_options: remote_options, simulate: cli_options[:simulate])
 
-          LightService::Configuration.logger = ::Logger.new(STDOUT) if cli_options[:debug]
+          LightService::Configuration.logger = ::Logger.new($stdout) if cli_options[:debug]
 
           with(
             cli_options: cli_options,
