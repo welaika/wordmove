@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Wordmove::Actions::GetFile do
   let(:context) do
-    PushOrganizerContextFactory.make_for(described_class)
+    OrganizerContextFactory.make_for(described_class, :push)
   end
 
   before do

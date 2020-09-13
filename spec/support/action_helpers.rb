@@ -1,7 +1,7 @@
 require 'support/fixture_helpers'
 require 'light-service/testing'
 
-class PushOrganizerContextFactory
+class OrganizerContextFactory
   extend ::FixtureHelpers
   include Wordmove::Actions::Ssh::Helpers
 
@@ -22,18 +22,18 @@ class PushOrganizerContextFactory
       all: false
     }
 
-  def self.make_for(action, cli_options: {})
+  def self.make_for(action, wordmove_action, cli_options: {})
     cli_options = DEFAULT_OPTIONS.merge(cli_options)
     movefile = Wordmove::Movefile.new(cli_options, nil, false)
 
     LightService::Configuration.logger = ::Logger.new($stdout) if cli_options[:debug]
 
     LightService::Testing::ContextFactory
-      .make_from(Wordmove::Actions::Ssh::Push)
+      .make_from("Wordmove::Actions::Ssh::#{wordmove_action.to_s.camelize}".constantize)
       .for(action)
       .with(
-          {cli_options: cli_options,
-          movefile: movefile}
+          cli_options: cli_options,
+          movefile: movefile
       )
   end
 end
