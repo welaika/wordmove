@@ -28,7 +28,7 @@ module Wordmove
             cli_options: context.cli_options,
             logger: context.logger,
             photocopier: context.photocopier,
-            command_args: [uncompress_command(file_path: context.db_paths.remote.gzipped_path)]
+            command: uncompress_command(file_path: context.db_paths.remote.gzipped_path)
           )
           context.fail_and_return!(result.message) if result.failure?
 
@@ -36,10 +36,10 @@ module Wordmove
             cli_options: context.cli_options,
             logger: context.logger,
             photocopier: context.photocopier,
-            command_args: [mysql_import_command(
+            command: mysql_import_command(
               dump_path: context.db_paths.remote.path,
               env_db_options: context.remote_options[:database]
-            )]
+            )
           )
           context.fail_and_return!(result.message) if result.failure?
 

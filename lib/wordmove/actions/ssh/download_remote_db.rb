@@ -18,12 +18,10 @@ module Wordmove
             cli_options: context.cli_options,
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [
-              mysql_dump_command(
-                env_db_options: context.remote_options[:database],
-                save_to_path: context.db_paths.remote.path
-              )
-            ]
+            command: mysql_dump_command(
+              env_db_options: context.remote_options[:database],
+              save_to_path: context.db_paths.remote.path
+            )
           )
           context.fail_and_return!(result.message) if result.failure?
 
@@ -31,7 +29,7 @@ module Wordmove
             cli_options: context.cli_options,
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [compress_command(file_path: context.db_paths.remote.path)]
+            command: compress_command(file_path: context.db_paths.remote.path)
           )
           context.fail_and_return!(result.message) if result.failure?
 

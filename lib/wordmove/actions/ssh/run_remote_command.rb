@@ -7,20 +7,20 @@ module Wordmove
 
         expects :photocopier,
                 :logger,
-                :command_args,
-                :cli_options
+                :cli_options,
+                :command
 
         executed do |context|
-          context.logger.task_step false, *context.command_args
+          context.logger.task_step false, context.command
 
           next context if simulate?(cli_options: context.cli_options)
 
-          _stdout, stderr, exit_code = context.photocopier.exec!(*context.command_args)
+          _stdout, stderr, exit_code = context.photocopier.exec!(context.command)
 
           next context if exit_code.zero?
 
           context.fail! "Error code #{exit_code} returned by command "\
-                        "#{context.command_args.join}: #{stderr}"
+                        "#{context.command}: #{stderr}"
         end
       end
     end
