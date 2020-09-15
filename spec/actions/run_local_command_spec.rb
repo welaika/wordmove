@@ -4,6 +4,8 @@ describe Wordmove::Actions::RunLocalCommand do
   let(:context) do
     OrganizerContextFactory.make_for(described_class, :push)
   end
+  let(:good_command) { 'echo "Test if echo works"' }
+  let(:bad_command) { 'exit 1' }
 
   before do
     silence_logger!
@@ -13,7 +15,7 @@ describe Wordmove::Actions::RunLocalCommand do
     result = described_class.execute(
       cli_options: context.fetch(:cli_options),
       logger: context.fetch(:logger),
-      command: 'echo "Test if echo works"'
+      command: good_command
     )
 
     expect(result).to be_success
@@ -24,7 +26,7 @@ describe Wordmove::Actions::RunLocalCommand do
       result = described_class.execute(
         cli_options: context.fetch(:cli_options),
         logger: context.fetch(:logger),
-        command: 'exit 1'
+        command: bad_command
       )
 
       expect(result).to be_failure
@@ -39,7 +41,7 @@ describe Wordmove::Actions::RunLocalCommand do
       result = described_class.execute(
         cli_options: context.fetch(:cli_options),
         logger: context.fetch(:logger),
-        command: 'exit 1'
+        command: bad_command
       )
 
       expect(result).to be_success
