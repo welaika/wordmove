@@ -1,5 +1,6 @@
 module Wordmove
   module Deployer
+    # This whole deployer still has to be rewritten
     class FTP < Base
       def initialize(environment, options)
         super(environment, options)

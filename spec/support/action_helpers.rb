@@ -7,21 +7,21 @@ class OrganizerContextFactory
   include Wordmove::Actions::Ssh::Helpers
 
   DEFAULT_OPTIONS = {
-      wordpress: false,
-      uploads: false,
-      themes: false,
-      plugins: false,
-      mu_plugins: false,
-      languages: false,
-      db: false,
-      verbose: false,
-      simulate: false,
-      # environment is not set neither `nil`,
-      config: movefile_path_for('Movefile'),
-      debug: false,
-      no_adapt: false,
-      all: false
-    }
+    wordpress: false,
+    uploads: false,
+    themes: false,
+    plugins: false,
+    mu_plugins: false,
+    languages: false,
+    db: false,
+    verbose: false,
+    simulate: false,
+    # environment is not set neither `nil`,
+    config: movefile_path_for('Movefile'),
+    debug: false,
+    no_adapt: false,
+    all: false
+  }.freeze
 
   # Build the context for Push or Pull organizer.
   # @param [String] action
@@ -46,8 +46,8 @@ class OrganizerContextFactory
       .make_from("Wordmove::Actions::Ssh::#{wordmove_action.to_s.camelize}".constantize)
       .for(action)
       .with(
-          cli_options: cli_options,
-          movefile: movefile
+        cli_options: cli_options,
+        movefile: movefile
       )
   end
 end

@@ -5,14 +5,6 @@ module Wordmove
 
       # rubocop:disable Metrics/BlockLength
       class_methods do
-        # def remote_options(options:, environment:)
-        #   options[environment]
-        # end
-
-        # def local_options(options:)
-        #   options[:local]
-        # end
-
         def simulate?(cli_options:)
           cli_options.fetch(:simulate, false)
         end
