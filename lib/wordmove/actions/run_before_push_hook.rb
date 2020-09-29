@@ -1,5 +1,7 @@
 module Wordmove
   module Actions
+    # Runs before push hooks by invoking the external service
+    # Wordmove::Hook
     class RunBeforePushHook
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
@@ -7,6 +9,10 @@ module Wordmove
       expects :movefile,
               :cli_options
 
+      # @!method execute
+      #   @param movefile [Wordmove::Movefile]
+      #   @param cli_options [Hash]
+      #   @return [LightService::Context] Action's context
       executed do |context|
         Wordmove::Hook.run(
           :push,
