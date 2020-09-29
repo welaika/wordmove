@@ -6,8 +6,7 @@ module Wordmove
         include Wordmove::Actions::Helpers
         include WordpressDirectory::RemoteHelperMethods
 
-        expects :options,
-                :remote_options,
+        expects :remote_options,
                 :local_options,
                 :logger,
                 :movefile,
