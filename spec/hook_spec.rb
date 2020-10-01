@@ -3,6 +3,8 @@ require 'tmpdir'
 
 describe Wordmove::Hook do
   let(:common_options) { { wordpress: true, config: movefile_path_for('with_hooks') } }
+  # +options+ is meant to be defined into every single spec +context+ (I mean rspec's context
+  # not service objects' context ;) )
   let(:context) do
     {
       cli_options: options,

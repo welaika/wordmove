@@ -13,7 +13,8 @@ module Wordmove
                   :remote_options,
                   :logger,
                   :photocopier,
-                  :movefile
+                  :movefile,
+                  :database_task
           promises :db_paths
 
           executed do |context|
@@ -38,6 +39,8 @@ module Wordmove
             DbPathsConfig.backup.remote.gzipped_path = DbPathsConfig.backup.remote.path + '.gz'
 
             context.db_paths = DbPathsConfig
+
+            context.skip_remaining! if context.database_task == false
           end
         end
       end

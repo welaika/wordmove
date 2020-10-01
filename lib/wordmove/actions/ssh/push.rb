@@ -36,39 +36,16 @@ module Wordmove
               [Wordmove::Actions::Ssh::PushWordpress]
             ),
             iterate(:folder_tasks, [Wordmove::Actions::Ssh::PutDirectory])
-          ].concat(
-            db_actions
-          ).concat [
+          ].concat [
+            Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
+            Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
+            Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
+            Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
+            Wordmove::Actions::Ssh::CleanupAfterAdapt
+          ].concat [
             Wordmove::Actions::RunAfterPushHook
           ]
         end
-
-        # rubocop:disable Metrics/MethodLength
-        def self.db_actions
-          [
-            reduce_if(
-              lambda do |ctx|
-                ctx.database_task &&
-                ctx.dig(:global_options, :sql_adapter) == 'wpcli'
-              end,
-              [
-                Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
-                Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
-                Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
-                Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
-                Wordmove::Actions::Ssh::CleanupAfterAdapt
-              ]
-            ),
-            reduce_if(
-              lambda do |ctx|
-                ctx.database_task &&
-                ctx.dig(:global_options, :sql_adapter) == 'default'
-              end,
-              [Wordmove::Actions::Ssh::BuiltinAdapter::PushDb]
-            )
-          ]
-        end
-        # rubocop:enable Metrics/MethodLength
       end
     end
   end
