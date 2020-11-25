@@ -23,7 +23,7 @@ module Wordmove
       if available_enviroments.size > 1 && cli_options[:environment].nil?
         raise(
           UndefinedEnvironment,
-          "You need to specify an environment with --environment parameter"
+          'You need to specify an environment with --environment parameter'
         )
       end
 
@@ -60,7 +60,7 @@ module Wordmove
 
       if entries.empty?
         if last_dir?(start_dir)
-          raise MovefileNotFound, "Could not find a valid Movefile. Searched"\
+          raise MovefileNotFound, 'Could not find a valid Movefile. Searched'\
                                   " for filename \"#{config_file_name}\" in folder \"#{start_dir}\""
         end
 
@@ -74,7 +74,7 @@ module Wordmove
     end
 
     def load_dotenv
-      env_files = Dir[File.join(start_dir, ".env")]
+      env_files = Dir[File.join(start_dir, '.env')]
 
       found_env = env_files.first
 
@@ -89,7 +89,7 @@ module Wordmove
     end
 
     def last_dir?(directory)
-      directory == "/" || File.exist?(File.join(directory, 'wp-config.php'))
+      directory == '/' || File.exist?(File.join(directory, 'wp-config.php'))
     end
 
     def upper_dir(directory)

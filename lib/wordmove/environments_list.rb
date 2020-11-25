@@ -43,7 +43,7 @@ module Wordmove
     def output_string(vhost_list:)
       return 'vhost list is empty' if vhost_list.empty?
 
-      vhost_list.each_with_object("") do |entry, retval|
+      vhost_list.each_with_object('') do |entry, retval|
         retval << "#{entry[:env]}: #{entry[:vhost]}\n"
       end
     end

@@ -1,20 +1,20 @@
 describe Wordmove::Movefile do
   let(:path) { File.join(TMPDIR, 'movefile.yml') }
-  let(:movefile) { described_class.new(config: movefile_path_for("Movefile")) }
+  let(:movefile) { described_class.new(config: movefile_path_for('Movefile')) }
 
-  context ".initialize" do
-    it "instantiate a logger instance" do
+  context '.initialize' do
+    it 'instantiate a logger instance' do
       expect(movefile.logger).to be_an_instance_of(Wordmove::Logger)
     end
   end
 
-  context ".load_env" do
-    TMPDIR = "/tmp/wordmove".freeze
+  context '.load_env' do
+    TMPDIR = '/tmp/wordmove'.freeze
 
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:dotenv_path) { File.join(TMPDIR, '.env') }
     let(:yaml) { "name: Waldo\njob: Hider" }
-    let(:dotenv) { "OBIWAN=KENOBI" }
+    let(:dotenv) { 'OBIWAN=KENOBI' }
     let(:movefile) { described_class.new({ config: 'movefile.yml' }, path) }
 
     before do
@@ -33,7 +33,7 @@ describe Wordmove::Movefile do
       FileUtils.rm_rf(TMPDIR)
     end
 
-    context "when .env is present" do
+    context 'when .env is present' do
       let!(:movefile) do
         described_class.new(
           {
@@ -44,14 +44,14 @@ describe Wordmove::Movefile do
         )
       end
 
-      it "loads environment variables" do
+      it 'loads environment variables' do
         expect(ENV['OBIWAN']).to eq('KENOBI')
       end
     end
   end
 
-  context ".fetch" do
-    TMPDIR = "/tmp/wordmove".freeze
+  context '.fetch' do
+    TMPDIR = '/tmp/wordmove'.freeze
 
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:yaml) { "name: Waldo\njob: Hider" }
@@ -72,20 +72,20 @@ describe Wordmove::Movefile do
       FileUtils.rm_rf(TMPDIR)
     end
 
-    context "when Movefile is missing" do
+    context 'when Movefile is missing' do
       it 'raises an exception' do
         expect { described_class.new({}, '/tmp') }.to raise_error(Wordmove::MovefileNotFound)
       end
     end
 
-    context "when Movefile is present" do
+    context 'when Movefile is present' do
       it 'finds a Movefile in current dir' do
         result = movefile.options
         expect(result[:name]).to eq('Waldo')
         expect(result[:job]).to eq('Hider')
       end
 
-      context "when movefile has no extensions" do
+      context 'when movefile has no extensions' do
         let(:path) { File.join(TMPDIR, 'movefile') }
 
         it 'finds it aswell' do
@@ -95,7 +95,7 @@ describe Wordmove::Movefile do
         end
       end
 
-      context "when Movefile has no extensions and has first capital" do
+      context 'when Movefile has no extensions and has first capital' do
         let(:path) { File.join(TMPDIR, 'Movefile') }
 
         it 'finds it aswell' do
@@ -105,7 +105,7 @@ describe Wordmove::Movefile do
         end
       end
 
-      context "when movefile.yaml has long extension" do
+      context 'when movefile.yaml has long extension' do
         let(:path) { File.join(TMPDIR, 'movefile.yaml') }
 
         it 'finds it aswell' do
@@ -115,9 +115,9 @@ describe Wordmove::Movefile do
         end
       end
 
-      context "directories traversal" do
+      context 'directories traversal' do
         before do
-          @test_dir = File.join(TMPDIR, "test")
+          @test_dir = File.join(TMPDIR, 'test')
           FileUtils.mkdir(@test_dir)
         end
 
@@ -140,7 +140,7 @@ describe Wordmove::Movefile do
           let(:movefile) { described_class.new({}, '/tmp') }
 
           before do
-            FileUtils.touch(File.join(@test_dir, "wp-config.php"))
+            FileUtils.touch(File.join(@test_dir, 'wp-config.php'))
           end
 
           it 'raises an exception' do
@@ -151,10 +151,10 @@ describe Wordmove::Movefile do
     end
   end
 
-  context ".secrets" do
+  context '.secrets' do
     let(:path) { movefile_path_for('with_secrets') }
 
-    it "returns all the secrets found in movefile" do
+    it 'returns all the secrets found in movefile' do
       movefile = described_class.new(config: path)
       expect(movefile.secrets).to eq(
         %w[
@@ -175,7 +175,7 @@ describe Wordmove::Movefile do
       )
     end
 
-    it "returns all the secrets found in movefile excluding empty string values" do
+    it 'returns all the secrets found in movefile excluding empty string values' do
       path = movefile_path_for('with_secrets_with_empty_local_db_password')
       movefile = described_class.new(config: path)
       expect(movefile.secrets).to eq(

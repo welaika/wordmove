@@ -11,10 +11,10 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
     silence_logger!
     allow(context[:photocopier])
       .to receive(:exec!).with(good_command)
-      .and_return([nil, nil, 0])
+                         .and_return([nil, nil, 0])
     allow(context[:photocopier])
       .to receive(:exec!).with(bad_command)
-      .and_return([nil, 'Evil error', 666])
+                         .and_return([nil, 'Evil error', 666])
   end
 
   it 'works like it should' do

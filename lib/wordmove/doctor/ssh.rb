@@ -8,10 +8,10 @@ module Wordmove
       end
 
       def check!
-        logger.task "Checking SSH client"
+        logger.task 'Checking SSH client'
 
         if system('which ssh', out: File::NULL, err: File::NULL)
-          logger.success "SSH command found"
+          logger.success 'SSH command found'
         else
           logger.error "SSH command not found. And belive me: it's really strange it's not there."
         end

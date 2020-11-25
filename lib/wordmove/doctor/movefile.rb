@@ -11,10 +11,10 @@ module Wordmove
           @contents = movefile.options
           @root_keys = contents.keys
         rescue Psych::SyntaxError
-          movefile.logger.error "Your movefile is not parsable due to a syntax error"\
+          movefile.logger.error 'Your movefile is not parsable due to a syntax error'\
                                 "so we can't continue to validate it."
-          movefile.logger.debug "You could try to use https://yamlvalidator.com/ to"\
-                                "get a clue about the problem."
+          movefile.logger.debug 'You could try to use https://yamlvalidator.com/ to'\
+                                'get a clue about the problem.'
         end
       end
 
@@ -40,7 +40,7 @@ module Wordmove
         errors = validator.validate(contents[key].deep_stringify_keys)
 
         if errors&.empty?
-          movefile.logger.success "Formal validation passed"
+          movefile.logger.success 'Formal validation passed'
 
           return true
         end
@@ -69,7 +69,7 @@ module Wordmove
       def validate_protocol_presence(keys)
         return true if keys.include?(:ssh) || keys.include?(:ftp)
 
-        movefile.logger.error "This remote has not ssh nor ftp protocol defined"
+        movefile.logger.error 'This remote has not ssh nor ftp protocol defined'
 
         false
       end

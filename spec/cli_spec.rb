@@ -49,8 +49,8 @@ describe Wordmove::CLI do
           # Ref. https://github.com/ruby/psych/blob/master/lib/psych/syntax_error.rb#L8
           # Arguments for initialization: file, line, col, offset, problem, context
           args = [nil, 1, 5, 0,
-                  "found character that cannot start any token",
-                  "while scanning for the next token"]
+                  'found character that cannot start any token',
+                  'while scanning for the next token']
           allow(list_class).to receive(:print).and_raise(Psych::SyntaxError.new(*args))
         end
 

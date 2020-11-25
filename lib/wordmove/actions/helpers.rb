@@ -82,11 +82,11 @@ module Wordmove
         end
 
         def uncompress_command(file_path:)
-          command = ["gzip"]
-          command << "-d"
-          command << "-f"
+          command = ['gzip']
+          command << '-d'
+          command << '-f'
           command << "\"#{file_path}\""
-          command.join(" ")
+          command.join(' ')
         end
       end
       # rubocop:enable Metrics/BlockLength

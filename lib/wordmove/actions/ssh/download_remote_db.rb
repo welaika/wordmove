@@ -36,7 +36,10 @@ module Wordmove
           result = Wordmove::Actions::GetFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [context.db_paths.remote.gzipped_path, context.db_paths.local.gzipped_path]
+            command_args: [
+              context.db_paths.remote.gzipped_path,
+              context.db_paths.local.gzipped_path
+            ]
           )
           context.fail_and_return!(result.message) if result.failure?
 

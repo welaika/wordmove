@@ -1,6 +1,6 @@
 describe Wordmove::Generators::Movefile do
   let(:movefile) { 'movefile.yml' }
-  let(:tmpdir) { "/tmp/wordmove" }
+  let(:tmpdir) { '/tmp/wordmove' }
 
   before do
     @pwd = Dir.pwd
@@ -13,7 +13,7 @@ describe Wordmove::Generators::Movefile do
     FileUtils.rm_rf(tmpdir)
   end
 
-  context "::start" do
+  context '::start' do
     before do
       silence_stream(STDOUT) { Wordmove::Generators::Movefile.start }
     end
@@ -43,11 +43,11 @@ describe Wordmove::Generators::Movefile do
     end
   end
 
-  context "database configuration" do
-    let(:wp_config) { File.join(File.dirname(__FILE__), "../fixtures/wp-config.php") }
+  context 'database configuration' do
+    let(:wp_config) { File.join(File.dirname(__FILE__), '../fixtures/wp-config.php') }
 
     before do
-      FileUtils.cp(wp_config, ".")
+      FileUtils.cp(wp_config, '.')
       silence_stream(STDOUT) { Wordmove::Generators::Movefile.start }
     end
 

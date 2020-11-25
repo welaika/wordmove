@@ -25,7 +25,7 @@ describe WordpressDirectory do
   end
 
   context '.path' do
-    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for("Movefile") }, nil, false) }
+    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for('Movefile') }, nil, false) }
     let(:options) { movefile.options[:local] }
 
     context 'given an additional path as a string' do
@@ -44,7 +44,7 @@ describe WordpressDirectory do
   end
 
   context '.url' do
-    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for("Movefile") }, nil, false) }
+    let(:movefile) { Wordmove::Movefile.new({ config: movefile_path_for('Movefile') }, nil, false) }
     let(:options) { movefile.options[:local] }
 
     context 'given an additional path as a string' do
@@ -65,7 +65,7 @@ describe WordpressDirectory do
   context '.relative_path' do
     context 'given a movefile with custom paths defined' do
       let(:movefile) do
-        Wordmove::Movefile.new({ config: movefile_path_for("custom_paths") }, nil, false)
+        Wordmove::Movefile.new({ config: movefile_path_for('custom_paths') }, nil, false)
       end
       let(:options) { movefile.options[:remote] }
 
