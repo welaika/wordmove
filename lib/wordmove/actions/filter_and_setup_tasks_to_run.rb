@@ -1,5 +1,7 @@
 module Wordmove
   module Actions
+    # Given the command line options and given the denied-by-config actions,
+    # selects the actions to be run altering the context.
     class FilterAndSetupTasksToRun
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
@@ -12,6 +14,10 @@ module Wordmove
                :database_task,
                :wordpress_task
 
+      # @!method execute
+      #   @param guardian [Wordmove::Guardian]
+      #   @param cli_options [Hash]
+      #   @return [LightService::Context] Action's context
       executed do |context|
         all_taks = Wordmove::CLI.wordpress_options
 
