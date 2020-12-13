@@ -29,13 +29,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'activesupport', '~> 5.1', '>= 5.1.1'
+  spec.add_runtime_dependency 'activesupport', '~> 6.1'
   spec.add_runtime_dependency 'colorize', '~> 0.8.1'
   spec.add_runtime_dependency 'dotenv', '~> 2.7.5'
   spec.add_runtime_dependency 'dry-configurable'
   spec.add_runtime_dependency 'kwalify', '~> 0'
   spec.add_runtime_dependency 'light-service', '~> 0.12.0'
-  spec.add_runtime_dependency 'photocopier', '~> 1.3', '>= 1.3.2'
+  spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.0'
   spec.add_runtime_dependency 'thor', '~> 0.20.3'
 
   spec.required_ruby_version = '>= 2.6.0' # rubocop:disable Gemspec/RequiredRubyVersion
