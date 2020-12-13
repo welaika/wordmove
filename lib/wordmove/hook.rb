@@ -77,7 +77,7 @@ module Wordmove
 
     class Local
       def self.logger
-        parent.logger
+        Wordmove::Hook.logger
       end
 
       def self.run(command_hash, options, simulate = false)
@@ -100,7 +100,7 @@ module Wordmove
 
     class Remote
       def self.logger
-        parent.logger
+        Wordmove::Hook.logger
       end
 
       def self.run(command_hash, options, simulate = false)
