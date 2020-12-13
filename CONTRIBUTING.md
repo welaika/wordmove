@@ -85,7 +85,6 @@ Please, stick with this practice when you're implementing new code. If you want 
 documentation locally
 
 ```
-gem install yard
 yard server -r
 ```
 
