@@ -162,7 +162,7 @@ mapping:
             type: bool
           uploads:
             type: bool
-          mu-plugins:
+          mu_plugins:
             type: bool
       push:
         type: map
@@ -177,5 +177,5 @@ mapping:
             type: bool
           uploads:
             type: bool
-          mu-plugins:
+          mu_plugins:
             type: bool
