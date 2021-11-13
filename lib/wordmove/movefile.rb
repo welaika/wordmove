@@ -20,11 +20,19 @@ module Wordmove
     def environment
       available_enviroments = extract_available_envs(options)
 
-      if available_enviroments.size > 1 && cli_options[:environment].nil?
-        raise(
-          UndefinedEnvironment,
-          'You need to specify an environment with --environment parameter'
-        )
+      if options[:environment] != 'local'
+        if available_enviroments.size > 1 && cli_options[:environment].nil?
+          raise(
+            UndefinedEnvironment,
+            'You need to specify an environment with --environment parameter'
+          )
+        end
+
+        if cli_options[:environment].present? &&
+           !available_enviroments.include?(cli_options[:environment].to_sym)
+          raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
+                                        "Available Environments: #{available_enviroments.join(' ')}"
+        end
       end
 
       # NOTE: This is Hash#fetch, not self.fetch.

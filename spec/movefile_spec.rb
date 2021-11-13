@@ -8,7 +8,7 @@ describe Wordmove::Movefile do
     end
   end
 
-  context '.load_env' do
+  context '#load_env' do
     TMPDIR = '/tmp/wordmove'.freeze
 
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
@@ -50,7 +50,7 @@ describe Wordmove::Movefile do
     end
   end
 
-  context '.fetch' do
+  context '#fetch' do
     TMPDIR = '/tmp/wordmove'.freeze
 
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
@@ -151,7 +151,7 @@ describe Wordmove::Movefile do
     end
   end
 
-  context '.secrets' do
+  context '#secrets' do
     let(:path) { movefile_path_for('with_secrets') }
 
     it 'returns all the secrets found in movefile' do
@@ -193,6 +193,39 @@ describe Wordmove::Movefile do
           /var/www/your_site
         ]
       )
+    end
+  end
+
+  context '#environment' do
+    let!(:movefile) do
+      described_class.new(
+        {
+          config: movefile_path_for('multi_environments'),
+          environment: nil
+        }
+      )
+    end
+
+    context 'with more then one environment, but none chosen' do
+      it 'raises an exception' do
+        expect { movefile.environment }
+          .to raise_exception(Wordmove::UndefinedEnvironment)
+      end
+    end
+
+    context 'with more then one environment, but invalid chosen' do
+      let!(:movefile) do
+        described_class.new(
+          {
+            config: movefile_path_for('multi_environments'),
+            environment: 'doesnotexist'
+          }
+        )
+      end
+      it 'raises an exception' do
+        expect { movefile.environment }
+          .to raise_exception(Wordmove::UndefinedEnvironment)
+      end
     end
   end
 end
