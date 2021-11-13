@@ -39,7 +39,10 @@ module Wordmove
               )
             )
 
-            next context if context.cli_options[:no_adapt]
+            if context.cli_options[:no_adapt]
+              context.logger.warn 'Skipping DB adapt'
+              next context
+            end
 
             Wordmove::Actions::RunLocalCommand.execute(
               cli_options: context.cli_options,
