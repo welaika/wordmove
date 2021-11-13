@@ -55,7 +55,7 @@ module Wordmove
           end
 
           # This should be extracted into a concern
-          def self.wpcli_search_replace_command(context)
+          def self.wpcli_search_replace_command(context, config_key)
             wordpress_path = context.local_options[:wordpress_path]
 
             [
