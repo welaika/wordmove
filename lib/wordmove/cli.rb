@@ -87,7 +87,7 @@ module Wordmove
         result = if movefile.options[movefile.environment][:ssh]
                    Wordmove::Actions::Ssh::Pull.call(cli_options: cli_options, movefile: movefile)
                  elsif movefile.options[movefile.environment][:ftp]
-                   raise NotImplementedError
+                   raise FtpNotSupportedException
                  else
                    raise NoAdapterFound, 'No valid adapter found.'
                  end
@@ -97,6 +97,9 @@ module Wordmove
         logger.error(e.message)
         exit 1
       rescue NoAdapterFound => e
+        logger.error(e.message)
+        exit 1
+      rescue FtpNotSupportedException => e
         logger.error(e.message)
         exit 1
       end
@@ -115,7 +118,7 @@ module Wordmove
         result = if movefile.options[movefile.environment][:ssh]
                    Wordmove::Actions::Ssh::Push.call(cli_options: cli_options, movefile: movefile)
                  elsif movefile.options[movefile.environment][:ftp]
-                   raise NotImplementedError
+                   raise FtpNotSupportedException
                  else
                    raise NoAdapterFound, 'No valid adapter found.'
                  end
@@ -125,6 +128,9 @@ module Wordmove
         logger.error(e.message)
         exit 1
       rescue NoAdapterFound => e
+        logger.error(e.message)
+        exit 1
+      rescue FtpNotSupportedException => e
         logger.error(e.message)
         exit 1
       end
