@@ -22,7 +22,7 @@ module Wordmove
         next context if simulate?(cli_options: context.cli_options)
 
         unless File.exist?(context.file_path)
-          context.logger.warning 'File does not exist'
+          context.logger.warn "File #{context.file_path} does not exist. Nothing done."
           next context
         end
 
