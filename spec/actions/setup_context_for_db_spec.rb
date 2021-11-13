@@ -26,6 +26,7 @@ describe Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb do
     it 'skips remaining actions' do
       result = described_class.execute(context)
       expect(result.skip_remaining?).to be true
+      expect(result.db_paths).to be false
     end
   end
 

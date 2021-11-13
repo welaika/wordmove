@@ -18,7 +18,11 @@ module Wordmove
           promises :db_paths
 
           executed do |context|
-            context.logger.task 'Pushing Database'
+            if context.database_task == false
+              context.skip_remaining!
+              context.db_paths = false
+              next context
+            end
 
             next context if simulate?(cli_options: context.cli_options)
 
@@ -39,8 +43,6 @@ module Wordmove
             DbPathsConfig.backup.remote.gzipped_path = DbPathsConfig.backup.remote.path + '.gz'
 
             context.db_paths = DbPathsConfig
-
-            context.skip_remaining! if context.database_task == false
           end
         end
       end
