@@ -4,7 +4,7 @@ module Wordmove
       attr_reader :logger
 
       def initialize
-        @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
+        @logger = Logger.new($stdout).tap { |l| l.level = Logger::INFO }
       end
 
       def check!

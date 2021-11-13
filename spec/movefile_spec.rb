@@ -1,5 +1,5 @@
 describe Wordmove::Movefile do
-  let(:path) { File.join(TMPDIR, 'movefile.yml') }
+  let(:path) { File.join(tmpdir, 'movefile.yml') }
   let(:movefile) { described_class.new(config: movefile_path_for('Movefile')) }
 
   context '.initialize' do
@@ -9,28 +9,27 @@ describe Wordmove::Movefile do
   end
 
   context '#load_env' do
-    TMPDIR = '/tmp/wordmove'.freeze
-
-    let(:path) { File.join(TMPDIR, 'movefile.yml') }
-    let(:dotenv_path) { File.join(TMPDIR, '.env') }
+    let(:tmpdir) { '/tmp/wordmove'.freeze }
+    let(:path) { File.join(tmpdir, 'movefile.yml') }
+    let(:dotenv_path) { File.join(tmpdir, '.env') }
     let(:yaml) { "name: Waldo\njob: Hider" }
     let(:dotenv) { 'OBIWAN=KENOBI' }
     let(:movefile) { described_class.new({ config: 'movefile.yml' }, path) }
 
     before do
-      FileUtils.mkdir(TMPDIR)
-      File.open(path, 'w') { |f| f.write(yaml) }
-      File.open(dotenv_path, 'w') { |f| f.write(dotenv) }
+      FileUtils.mkdir(tmpdir)
+      File.write(path, yaml)
+      File.write(dotenv_path, dotenv)
       allow_any_instance_of(described_class)
         .to receive(:current_dir)
-        .and_return(TMPDIR)
+        .and_return(tmpdir)
       allow_any_instance_of(described_class)
         .to receive(:logger)
         .and_return(double('logger').as_null_object)
     end
 
     after do
-      FileUtils.rm_rf(TMPDIR)
+      FileUtils.rm_rf(tmpdir)
     end
 
     context 'when .env is present' do
@@ -51,25 +50,25 @@ describe Wordmove::Movefile do
   end
 
   context '#fetch' do
-    TMPDIR = '/tmp/wordmove'.freeze
+    let(:tmpdir) { '/tmp/wordmove'.freeze }
 
-    let(:path) { File.join(TMPDIR, 'movefile.yml') }
+    let(:path) { File.join(tmpdir, 'movefile.yml') }
     let(:yaml) { "name: Waldo\njob: Hider" }
     let(:movefile) { described_class.new({}, path) }
 
     before do
-      FileUtils.mkdir(TMPDIR)
-      File.open(path, 'w') { |f| f.write(yaml) }
+      FileUtils.mkdir(tmpdir)
+      File.write(path, yaml)
       allow_any_instance_of(described_class)
         .to receive(:current_dir)
-        .and_return(TMPDIR)
+        .and_return(tmpdir)
       allow_any_instance_of(described_class)
         .to receive(:logger)
         .and_return(double('logger').as_null_object)
     end
 
     after do
-      FileUtils.rm_rf(TMPDIR)
+      FileUtils.rm_rf(tmpdir)
     end
 
     context 'when Movefile is missing' do
@@ -86,7 +85,7 @@ describe Wordmove::Movefile do
       end
 
       context 'when movefile has no extensions' do
-        let(:path) { File.join(TMPDIR, 'movefile') }
+        let(:path) { File.join(tmpdir, 'movefile') }
 
         it 'finds it aswell' do
           result = movefile.options
@@ -96,7 +95,7 @@ describe Wordmove::Movefile do
       end
 
       context 'when Movefile has no extensions and has first capital' do
-        let(:path) { File.join(TMPDIR, 'Movefile') }
+        let(:path) { File.join(tmpdir, 'Movefile') }
 
         it 'finds it aswell' do
           result = movefile.options
@@ -106,7 +105,7 @@ describe Wordmove::Movefile do
       end
 
       context 'when movefile.yaml has long extension' do
-        let(:path) { File.join(TMPDIR, 'movefile.yaml') }
+        let(:path) { File.join(tmpdir, 'movefile.yaml') }
 
         it 'finds it aswell' do
           result = movefile.options
@@ -117,7 +116,7 @@ describe Wordmove::Movefile do
 
       context 'directories traversal' do
         before do
-          @test_dir = File.join(TMPDIR, 'test')
+          @test_dir = File.join(tmpdir, 'test')
           FileUtils.mkdir(@test_dir)
         end
 
@@ -199,27 +198,23 @@ describe Wordmove::Movefile do
   context '#environment' do
     let!(:movefile) do
       described_class.new(
-        {
-          config: movefile_path_for('multi_environments'),
-          environment: nil
-        }
+        config: movefile_path_for('multi_environments'),
+        environment: nil
       )
     end
 
-    context 'with more then one environment, but none chosen' do
+    context 'with more than one environment, but none chosen' do
       it 'raises an exception' do
         expect { movefile.environment }
           .to raise_exception(Wordmove::UndefinedEnvironment)
       end
     end
 
-    context 'with more then one environment, but invalid chosen' do
+    context 'with more than one environment, but invalid chosen' do
       let!(:movefile) do
         described_class.new(
-          {
-            config: movefile_path_for('multi_environments'),
-            environment: 'doesnotexist'
-          }
+          config: movefile_path_for('multi_environments'),
+          environment: 'doesnotexist'
         )
       end
       it 'raises an exception' do

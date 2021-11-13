@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ssh
+      # Uploads a DB dump to remote host and import it in the remote database over SSH protocol
       class PutAndImportDumpRemotely
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -13,10 +14,22 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
+        # @!method execute
+        # @param remote_options [Hash] Remote host options fetched from
+        #        movefile (with symbolized keys)
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::SSH]
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
+          context.logger.task 'Upload and import adapted DB'
+
           result = Wordmove::Actions::PutFile.execute(
             logger: context.logger,
             photocopier: context.photocopier,
+            cli_options: context.cli_options,
             command_args: [
               context.db_paths.local.gzipped_adapted_path,
               context.db_paths.remote.gzipped_path
@@ -46,7 +59,8 @@ module Wordmove
           result = Wordmove::Actions::DeleteRemoteFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [context.db_paths.remote.path]
+            cli_options: context.cli_options,
+            remote_file: context.db_paths.remote.path
           )
           context.fail!(result.message) if result.failure?
         end

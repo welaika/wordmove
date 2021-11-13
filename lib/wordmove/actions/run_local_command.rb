@@ -1,3 +1,5 @@
+require 'English'
+
 module Wordmove
   module Actions
     # Run a command on the local system.
@@ -21,7 +23,11 @@ module Wordmove
 
         next context if simulate?(cli_options: context.cli_options)
 
-        context.fail!('Local command status reports an error') unless system(context.command)
+        begin
+          system(context.command, exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail!("Local command status reports an error: #{e.message}")
+        end
       end
     end
   end

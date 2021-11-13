@@ -12,17 +12,18 @@ module Wordmove
               :cli_options
 
       # @!method execute
-      #   @param file_path [String]
-      #   @param logger [Wordmove::Logger]
-      #   @param cli_options [Hash] Command line options (with symbolized keys)
-      #   @return [LightService::Context] Action's context
+      # @param file_path [String]
+      # @param logger [Wordmove::Logger]
+      # @param cli_options [Hash] Command line options (with symbolized keys)
+      # @!scope class
+      # @return [LightService::Context] Action's context
       executed do |context|
         context.logger.task_step true, "delete: '#{context.file_path}'"
 
         next context if simulate?(cli_options: context.cli_options)
 
         unless File.exist?(context.file_path)
-          context.logger.warning 'File does not exist'
+          context.logger.info "File #{context.file_path} does not exist. Nothing done."
           next context
         end
 

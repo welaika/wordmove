@@ -15,6 +15,7 @@ describe Wordmove::Actions::GetFile do
     result = described_class.execute(
       photocopier: context.fetch(:photocopier),
       logger: context.fetch(:logger),
+      cli_options: context.fetch(:cli_options),
       command_args: %w[foo bar]
     )
     expect(result).to be_success
@@ -27,6 +28,7 @@ describe Wordmove::Actions::GetFile do
       result = described_class.execute(
         photocopier: context.fetch(:photocopier),
         logger: context.fetch(:logger),
+        cli_options: context.fetch(:cli_options),
         command_args: %w[foo bar]
       )
       expect(result).to be_failure

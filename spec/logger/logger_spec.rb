@@ -1,7 +1,7 @@
 describe Wordmove::Logger do
   context '#info' do
     context 'having some string to filter' do
-      let(:logger) { described_class.new(STDOUT, ['hidden']) }
+      let(:logger) { described_class.new($stdout, ['hidden']) }
 
       it 'will hide the passed strings' do
         expect { logger.info('What I write is hidden') }
@@ -11,7 +11,7 @@ describe Wordmove::Logger do
     end
 
     context 'having a string with regexp special characters' do
-      let(:logger) { described_class.new(STDOUT, ['comp/3xPa((w0r]']) }
+      let(:logger) { described_class.new($stdout, ['comp/3xPa((w0r]']) }
 
       it 'will hide the passed strings' do
         expect { logger.info('What I write is comp/3xPa((w0r]') }

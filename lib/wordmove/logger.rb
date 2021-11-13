@@ -4,7 +4,8 @@ module Wordmove
 
     def initialize(device, strings_to_hide = [])
       super(device, formatter: proc { |_severity, _datetime, _progname, message|
-        formatted_message = if strings_to_hide.empty?
+        formatted_message = if strings_to_hide.empty? ||
+                               ENV.fetch('WORDMOVE_REVEAL_SECRETS', nil).present?
                               message
                             else
                               message.gsub(

@@ -1,17 +1,17 @@
 module Wordmove
-  module Actions
-    module Ssh
+  module Organizers
+    module Ftp
       class Pull
         extend ::LightService::Organizer
         include Wordmove::Actions::Helpers
-        include Wordmove::Actions::Ssh::Helpers
+        include Wordmove::Actions::Ftp::Helpers
 
         def self.call(cli_options:, movefile:)
-          logger = Logger.new(STDOUT, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
+          logger = Logger.new($stdout, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = movefile.options[movefile.environment]
-          ssh_opts = ssh_options(remote_options: remote_options, simulate: cli_options[:simulate])
+          ftp_opts = ftp_options(remote_options: remote_options)
 
-          LightService::Configuration.logger = ::Logger.new(STDOUT) if cli_options[:debug]
+          LightService::Configuration.logger = ::Logger.new($stdout) if cli_options[:debug]
 
           with(
             cli_options: cli_options,
@@ -21,28 +21,29 @@ module Wordmove
             movefile: movefile,
             guardian: Wordmove::Guardian.new(cli_options: cli_options, action: :pull),
             logger: logger,
-            photocopier: Photocopier::SSH
-                          .new(ssh_opts)
+            photocopier: Photocopier::FTP
+                          .new(ftp_opts)
                           .tap { |c| c.logger = logger }
           ).reduce(actions)
         end
 
         def self.actions
           [
-            Wordmove::Actions::RunBeforePullHook,
+            Wordmove::Actions::RunBeforePullHook, # Will fail and warn the user
             Wordmove::Actions::FilterAndSetupTasksToRun,
             reduce_if(
               ->(ctx) { ctx.wordpress_task },
-              [Wordmove::Actions::Ssh::PullWordpress]
+              [Wordmove::Actions::Ftp::PullWordpress]
             ),
-            iterate(:folder_tasks, [Wordmove::Actions::Ssh::GetDirectory])
+            iterate(:folder_tasks, [Wordmove::Actions::Ftp::GetDirectory])
           ].concat [
-            Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
-            Wordmove::Actions::Ssh::WpcliAdapter::BackupLocalDb,
-            Wordmove::Actions::Ssh::WpcliAdapter::AdaptRemoteDb,
-            Wordmove::Actions::Ssh::CleanupAfterAdapt
+            Wordmove::Actions::SetupContextForDb,
+            Wordmove::Actions::BackupLocalDb,
+            Wordmove::Actions::Ftp::DownloadRemoteDb,
+            Wordmove::Actions::AdaptRemoteDb,
+            Wordmove::Actions::Ftp::CleanupAfterAdapt
           ].concat [
-            Wordmove::Actions::RunAfterPullHook
+            Wordmove::Actions::RunAfterPullHook # Will fail and warn the user
           ]
         end
       end

@@ -43,7 +43,7 @@ class OrganizerContextFactory
     LightService::Configuration.logger = ::Logger.new($stdout) if cli_options[:debug]
 
     LightService::Testing::ContextFactory
-      .make_from("Wordmove::Actions::Ssh::#{wordmove_action.to_s.camelize}".constantize)
+      .make_from("Wordmove::Organizers::Ssh::#{wordmove_action.to_s.camelize}".constantize)
       .for(action)
       .with(
         cli_options: cli_options,

@@ -15,11 +15,12 @@ module Wordmove
                 :command
 
         # @!method execute
-        #   @param photocopier [Photocopier]
-        #   @param logger [Wordmove::Logger]
-        #   @param cli_options [Hash] The hash of command line options
-        #   @param command [String] the command to run
-        #   @return [LightService::Context] Action's context
+        # @param photocopier [Photocopier]
+        # @param logger [Wordmove::Logger]
+        # @param cli_options [Hash] The hash of command line options
+        # @param command [String] the command to run
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context|
           context.logger.task_step false, context.command
 

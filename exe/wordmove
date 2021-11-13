@@ -3,4 +3,5 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'wordmove'
-Wordmove::CLI.start
+
+Dry::CLI.new(Wordmove::CLI::Commands).call

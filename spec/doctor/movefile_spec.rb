@@ -27,7 +27,7 @@ describe Wordmove::Doctor::Movefile do
         expect(doctor).to receive(:validate_section).exactly(4).times
         expect_any_instance_of(Wordmove::Logger).to receive(:task).exactly(5).times
 
-        silence_stream(STDOUT) { doctor.validate! }
+        silence_stream($stdout) { doctor.validate! }
       end
     end
   end

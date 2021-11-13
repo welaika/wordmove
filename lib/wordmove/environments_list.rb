@@ -9,7 +9,7 @@ module Wordmove
     end
 
     def initialize(options)
-      @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
+      @logger = Logger.new($stdout).tap { |l| l.level = Logger::INFO }
       @movefile = Wordmove::Movefile.new(options)
       @remote_vhosts = []
       @local_vhost = []

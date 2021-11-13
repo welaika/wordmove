@@ -24,4 +24,21 @@ class DbPathsConfig
       setting :gzipped_path
     end
   end
+
+  # FTP settings are intentionally taken apart
+  setting :ftp, reader: true do
+    setting :remote, reader: true do
+      setting :dump_script_path
+      setting :dump_script_url
+      setting :dumped_path
+      setting :import_script_path
+      setting :import_script_url
+    end
+    setting :local, reader: true do
+      setting :generated_dump_script_path
+      setting :generated_import_script_path
+      setting :temp_path
+    end
+    setting :token
+  end
 end

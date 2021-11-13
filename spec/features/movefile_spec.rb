@@ -15,7 +15,7 @@ describe Wordmove::Generators::Movefile do
 
   context '::start' do
     before do
-      silence_stream(STDOUT) { Wordmove::Generators::Movefile.start }
+      silence_stream($stdout) { Wordmove::Generators::Movefile.generate }
     end
 
     it 'creates a Movefile' do
@@ -48,7 +48,7 @@ describe Wordmove::Generators::Movefile do
 
     before do
       FileUtils.cp(wp_config, '.')
-      silence_stream(STDOUT) { Wordmove::Generators::Movefile.start }
+      silence_stream($stdout) { Wordmove::Generators::Movefile.generate }
     end
 
     it 'fills database configuration from wp-config' do

@@ -2,7 +2,6 @@ $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'tempfile'
 require 'pry-byebug'
-require 'priscilla'
 
 require 'simplecov'
 SimpleCov.start do
@@ -36,6 +35,7 @@ RSpec.configure do |config|
 
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
+    mocks.verify_doubled_constant_names = true
   end
 
   config.example_status_persistence_file_path = './spec/examples.txt'

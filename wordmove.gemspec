@@ -5,6 +5,7 @@ require 'wordmove/version'
 Gem::Specification.new do |spec|
   spec.name          = 'wordmove'
   spec.version       = Wordmove::VERSION
+  spec.metadata      = { 'rubygems_mfa_required' => 'true' }
   spec.authors       = [
     'Stefano Verna', 'Ju Liu', 'Fabrizio Monti', 'Alessandro Fazzi', 'Filippo Gangi Dino'
   ]
@@ -32,21 +33,23 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', '~> 6.1'
   spec.add_runtime_dependency 'colorize', '~> 0.8.1'
   spec.add_runtime_dependency 'dotenv', '~> 2.7.5'
-  spec.add_runtime_dependency 'dry-configurable'
-  spec.add_runtime_dependency 'kwalify', '~> 0'
-  spec.add_runtime_dependency 'light-service', '~> 0.12.0'
+  spec.add_runtime_dependency 'dry-configurable', '~> 0.13.0'
+  spec.add_runtime_dependency 'kwalify', '~> 0.7.2'
+  spec.add_runtime_dependency 'light-service', '~> 0.17.0'
   spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.0'
-  spec.add_runtime_dependency 'thor', '~> 0.20.3'
+  # spec.add_runtime_dependency 'thor', '~> 0.20.3'
+  spec.add_runtime_dependency 'dry-cli', '~> 0.7.0'
+  spec.add_runtime_dependency 'dry-files', '~> 0.1.0'
 
   spec.required_ruby_version = '>= 2.6.0' # rubocop:disable Gemspec/RequiredRubyVersion
 
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'priscilla', '~> 1.0'
+  spec.add_development_dependency 'bundler', '~> 2.3.3'
   spec.add_development_dependency 'pry-byebug', '~> 3.1'
   spec.add_development_dependency 'rake', '~> 13.0.1'
   spec.add_development_dependency 'rspec', '~> 3.9'
-  spec.add_development_dependency 'rubocop', '~> 0.76.0'
-  spec.add_development_dependency 'simplecov', '~> 0.17.1'
+  spec.add_development_dependency 'rubocop', '~> 1.24.0'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.6.0'
+  spec.add_development_dependency 'simplecov', '~> 0.21.2'
   spec.add_development_dependency 'yard'
   spec.add_development_dependency 'yard-activesupport-concern'
 
