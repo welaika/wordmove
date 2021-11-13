@@ -12,6 +12,8 @@ module Wordmove
           expects :logger
 
           executed do |context|
+            context.logger.task 'Backup local DB'
+
             Wordmove::Actions::RunLocalCommand.execute(
               cli_options: context.cli_options,
               logger: context.logger,
