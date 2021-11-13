@@ -199,10 +199,8 @@ describe Wordmove::Movefile do
   context '#environment' do
     let!(:movefile) do
       described_class.new(
-        {
-          config: movefile_path_for('multi_environments'),
-          environment: nil
-        }
+        config: movefile_path_for('multi_environments'),
+        environment: nil
       )
     end
 
@@ -216,10 +214,8 @@ describe Wordmove::Movefile do
     context 'with more then one environment, but invalid chosen' do
       let!(:movefile) do
         described_class.new(
-          {
-            config: movefile_path_for('multi_environments'),
-            environment: 'doesnotexist'
-          }
+          config: movefile_path_for('multi_environments'),
+          environment: 'doesnotexist'
         )
       end
       it 'raises an exception' do
