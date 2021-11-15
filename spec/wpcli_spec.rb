@@ -43,5 +43,12 @@ describe Wordmove::Wpcli do
         .to eq('wp search-replace --path=/path/to/steak /var/www/your_site spec/fixtures --quiet '\
               '--skip-columns=guid --all-tables --allow-root')
     end
+
+    context 'when wrong config_key is passed' do
+      it 'raises an error' do
+        expect { subject.wpcli_search_replace_command(a_context, :wrong) }
+          .to raise_error(ArgumentError)
+      end
+    end
   end
 end

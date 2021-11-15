@@ -12,6 +12,11 @@ module Wordmove
       end
 
       def wpcli_search_replace_command(context, config_key)
+        unless %i[vhost wordpress_path].include?(config_key)
+          raise ArgumentError, "Unexpected `config_key` #{config_key}.:vhost" \
+                               'or :wordpress_path expected'
+        end
+
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
