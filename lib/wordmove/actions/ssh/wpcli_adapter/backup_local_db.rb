@@ -28,6 +28,11 @@ module Wordmove
               logger: context.logger,
               command: compress_command(file_path: context.db_paths.backup.local.path)
             )
+
+            context.logger.task_step(
+              true,
+              "Backup saved at #{context.db_paths.backup.local.gzipped_path}"
+            )
           end
         end
       end

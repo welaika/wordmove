@@ -15,7 +15,7 @@ module Wordmove
                   :db_paths
 
           executed do |context| # rubocop:disable Metrics/BlockLength
-            context.logger.task 'Pull remote DB'
+            context.logger.task 'Pull and adapt remote DB'
 
             unless wp_in_path?
               raise UnmetPeerDependencyError, 'WP-CLI is not installed or not in your $PATH'
