@@ -1,27 +1,30 @@
 require 'spec_helper'
 
 describe Wordmove::CLI do
-  let(:cli) { described_class.new }
+  let(:cli) { Dry::CLI.new(Wordmove::CLI::Commands) }
   let(:options) { {} }
 
   context '#init' do
     it 'delagates the command to the Movefile Generator' do
-      expect(Wordmove::Generators::Movefile).to receive(:start)
-      cli.invoke(:init, [], options)
+      expect(Wordmove::Generators::Movefile).to receive(:generate)
+
+      silence_stream($stdout) do
+        cli.call(arguments: %w[init])
+      end
     end
   end
 
   context '#doctor' do
     it 'delagates the command to Doctor class' do
       expect(Wordmove::Doctor).to receive(:start)
-      cli.invoke(:doctor, [], options)
+      cli.call(arguments: %w[doctor])
     end
   end
 
   context '#pull' do
     context 'without a movefile' do
       it 'it rescues from a MovefileNotFound exception' do
-        expect { cli.invoke(:pull, []) }.to raise_error SystemExit
+        expect { cli.call(arguments: %w[pull]) }.to raise_error SystemExit
       end
     end
   end
@@ -29,11 +32,11 @@ describe Wordmove::CLI do
   context '#list' do
     subject do
       silence_stream($stdout) do
-        cli.invoke(:list, [])
+        cli.call(arguments: %w[list])
       end
     end
     let(:list_class) { Wordmove::EnvironmentsList }
-    # Werdmove::EnvironmentsList.print should be called
+
     it 'delagates the command to EnvironmentsList class' do
       expect(list_class).to receive(:print)
       subject
@@ -59,10 +62,13 @@ describe Wordmove::CLI do
     end
 
     context 'with a movefile' do
-      subject { cli.invoke(:list, [], options) }
       let(:options) { { config: movefile_path_for('Movefile') } }
+      subject { cli.call(arguments: ['list', "--config=#{movefile_path_for('Movefile')}"]) }
+
       it 'invoke list without error' do
-        expect { subject }.not_to raise_error
+        silence_stream($stdout) do
+          expect { subject }.not_to raise_error
+        end
       end
     end
   end
@@ -70,7 +76,7 @@ describe Wordmove::CLI do
   context '#push' do
     context 'without a movefile' do
       it 'it rescues from a MovefileNotFound exception' do
-        expect { cli.invoke(:pull, []) }.to raise_error SystemExit
+        expect { cli.call(arguments: %w[push]) }.to raise_error SystemExit
       end
     end
   end

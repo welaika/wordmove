@@ -36,7 +36,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'kwalify', '~> 0'
   spec.add_runtime_dependency 'light-service', '~> 0.12.0'
   spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.0'
-  spec.add_runtime_dependency 'thor', '~> 0.20.3'
+  # spec.add_runtime_dependency 'thor', '~> 0.20.3'
+  spec.add_runtime_dependency 'dry-cli', '~> 0.7.0'
+  spec.add_runtime_dependency 'dry-files', '~> 0.1.0'
 
   spec.required_ruby_version = '>= 2.6.0' # rubocop:disable Gemspec/RequiredRubyVersion
 

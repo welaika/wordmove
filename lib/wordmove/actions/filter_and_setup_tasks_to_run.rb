@@ -19,7 +19,7 @@ module Wordmove
       #   @param cli_options [Hash]
       #   @return [LightService::Context] Action's context
       executed do |context|
-        all_taks = Wordmove::CLI.wordpress_options
+        all_taks = Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS
 
         required_tasks = all_taks.select do |task|
           context.cli_options[task] ||

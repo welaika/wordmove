@@ -1,15 +1,17 @@
 module Wordmove
   module Generators
-    class Movefile < Thor::Group
-      include Thor::Actions
+    class Movefile
       include MovefileAdapter
 
-      def self.source_root
-        File.dirname(__FILE__)
+      def self.generate
+        new.copy_movefile
       end
 
       def copy_movefile
-        template 'movefile.yml'
+        content = ERB.new(File.read(File.join(__dir__, 'movefile.yml'))).result(binding)
+        files = Dry::Files.new
+
+        files.write('movefile.yml', content)
       end
     end
   end
