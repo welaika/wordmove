@@ -5,6 +5,7 @@ module Wordmove
         class AdaptRemoteDb
           extend ::LightService::Action
           include Wordmove::Actions::Helpers
+          include Wordmove::Wpcli
 
           expects :local_options,
                   :remote_options,
@@ -55,27 +56,6 @@ module Wordmove
               logger: context.logger,
               command: wpcli_search_replace_command(context, :wordpress_path)
             )
-          end
-
-          # This should be extracted into a concern
-          def self.wpcli_search_replace_command(context, config_key)
-            wordpress_path = context.local_options[:wordpress_path]
-
-            [
-              'wp search-replace',
-              "--path=#{wordpress_path}",
-              context.remote_options[config_key],
-              context.local_options[config_key],
-              '--quiet',
-              '--skip-columns=guid',
-              '--all-tables',
-              '--allow-root'
-            ].join(' ')
-          end
-
-          # This should be extracted into a concern
-          def self.wp_in_path?
-            system('which wp > /dev/null 2>&1')
           end
         end
       end

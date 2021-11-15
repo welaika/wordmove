@@ -32,6 +32,7 @@ require 'wordmove/movefile'
 require 'wordmove/wordpress_directory'
 require 'wordmove/version'
 require 'wordmove/environments_list'
+require 'wordmove/wpcli'
 
 require 'wordmove/generators/movefile_adapter'
 require 'wordmove/generators/movefile'

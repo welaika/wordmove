@@ -5,6 +5,7 @@ module Wordmove
         class AdaptLocalDb
           extend ::LightService::Action
           include Wordmove::Actions::Helpers
+          include Wordmove::Wpcli
 
           expects :local_options,
                   :remote_options,
@@ -31,7 +32,7 @@ module Wordmove
               )
             )
 
-            unless context.cli_options[:no_adapt]
+            if !context.cli_options[:no_adapt]
               Wordmove::Actions::RunLocalCommand.execute(
                 cli_options: context.cli_options,
                 logger: context.logger,
@@ -43,6 +44,8 @@ module Wordmove
                 logger: context.logger,
                 command: wpcli_search_replace_command(context, :wordpress_path)
               )
+            else
+              context.logger.warn 'Skipping DB adapt'
             end
 
             Wordmove::Actions::RunLocalCommand.execute(
@@ -68,25 +71,6 @@ module Wordmove
                 env_db_options: context.local_options[:database]
               )
             )
-          end
-
-          # This should be extracted into a concern
-          def self.wpcli_search_replace_command(context, config_key)
-            [
-              'wp search-replace',
-              "--path=#{context.local_options[:wordpress_path]}",
-              context.remote_options[config_key],
-              context.local_options[config_key],
-              '--quiet',
-              '--skip-columns=guid',
-              '--all-tables',
-              '--allow-root'
-            ].join(' ')
-          end
-
-          # This should be extracted into a concern
-          def self.wp_in_path?
-            system('which wp > /dev/null 2>&1')
           end
         end
       end
