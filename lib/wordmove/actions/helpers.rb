@@ -16,6 +16,7 @@ module Wordmove
         # @param cli_options [Hash] Command line options hash (deep symbolized).
         #        Generally you will find this into action's context
         # @return [Boolean]
+        # @!scope class
         def simulate?(cli_options:)
           cli_options.fetch(:simulate, false)
         end
@@ -27,6 +28,7 @@ module Wordmove
         # @param remote_options [Hash] The options hash for the selected remote
         #        remote environment. Generally you will find this into action's context.
         # @return [Array<String>]
+        # @!scope class
         def paths_to_exclude(remote_options:)
           remote_options.fetch(:exclude, [])
         end
@@ -38,6 +40,7 @@ module Wordmove
         #
         # @param path [String]
         # @return [String]
+        # @!scope class
         def exclude_dir_contents(path:)
           "#{path}/*"
         end
@@ -47,6 +50,7 @@ module Wordmove
         # @param env_db_options [Hash] This hash is defined by the user through movefile.yml
         # @param save_to_path [String] The path where the db dump will be saved
         # @return [String] The full composed mysql command
+        # @!scope class
         def mysql_dump_command(env_db_options:, save_to_path:)
           command = ['mysqldump']
 
@@ -82,6 +86,7 @@ module Wordmove
         # @param dump_path [String] The path where the dump to import is located
         # @param env_db_options [Hash] This hash is defined by the user through movefile.yml
         # @return [String] The full composed mysql command
+        # @!scope class
         def mysql_import_command(dump_path:, env_db_options:)
           command = ['mysql']
           %i[host port user].each do |option|
@@ -106,6 +111,7 @@ module Wordmove
         #
         # @param file_path [String] The path where the file to be compressed is located
         # @return [String] the command
+        # @!scope class
         def compress_command(file_path:)
           command = ['nice']
           command << '-n'
@@ -121,6 +127,7 @@ module Wordmove
         #
         # @param file_path [String] The path where the file to be deflated is located
         # @return [String] the command
+        # @!scope class
         def uncompress_command(file_path:)
           command = ['gzip']
           command << '-d'
