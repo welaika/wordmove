@@ -23,7 +23,7 @@ module Wordmove
 
         required_tasks = all_taks.select do |task|
           context.cli_options[task] ||
-            (context.cli_options['all'] && context.cli_options[task] != false)
+            (context.cli_options[:all] && context.cli_options[task] != false)
         end
 
         allowed_tasks = required_tasks.select { |task| context.guardian.allows task }
