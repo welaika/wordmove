@@ -106,9 +106,4 @@ class WordpressDirectory
       end
     end
   end
-
-  module HelperMethods
-    include LocalHelperMethods
-    include RemoteHelperMethods
-  end
 end
