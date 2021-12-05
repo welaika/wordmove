@@ -18,7 +18,7 @@ module Wordmove
         option :no_adapt, type: :boolean
         option :all, type: :boolean
         # option :verbose, type: :boolean, aliases: %w[v]
-        # option :debug, type: :boolean
+        option :debug, type: :boolean
 
         private
 
