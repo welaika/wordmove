@@ -1,5 +1,5 @@
 module Wordmove
-  module Actions
+  module Organizers
     module Ssh
       class Pull
         extend ::LightService::Organizer

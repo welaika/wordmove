@@ -111,7 +111,7 @@ module Wordmove
         include Wordmove::CLI::PullPushShared
 
         def call(**cli_options)
-          call_organizer_with(Wordmove::Actions::Ssh::Pull, **cli_options)
+          call_organizer_with(Wordmove::Organizers::Ssh::Pull, **cli_options)
         end
       end
 
@@ -121,7 +121,7 @@ module Wordmove
         include Wordmove::CLI::PullPushShared
 
         def call(**cli_options)
-          call_organizer_with(Wordmove::Actions::Ssh::Push, **cli_options)
+          call_organizer_with(Wordmove::Organizers::Ssh::Push, **cli_options)
         end
       end
 

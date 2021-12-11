@@ -1,5 +1,5 @@
 module Wordmove
-  module Actions
+  module Organizers
     module Ssh
       class Push
         extend ::LightService::Organizer

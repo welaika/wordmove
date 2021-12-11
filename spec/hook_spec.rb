@@ -45,7 +45,7 @@ describe Wordmove::Hook do
     end
 
     it 'checks the order' do
-      Wordmove::Actions::Ssh::Push.call(context)
+      Wordmove::Organizers::Ssh::Push.call(context)
 
       expect(Wordmove::Hook::Local).to(
         have_received(:run).with(
@@ -98,31 +98,31 @@ describe Wordmove::Hook do
       let(:options) { common_options.merge(environment: 'ssh_with_hooks') }
 
       it 'runs registered before local hooks' do
-        expect { Wordmove::Actions::Ssh::Push.call(context) }
+        expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push before local/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered before local hooks in the wordpress folder' do
-        expect { Wordmove::Actions::Ssh::Push.call(context) }
+        expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/#{Dir.tmpdir}/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered before remote hooks' do
-        expect { Wordmove::Actions::Ssh::Push.call(context) }
+        expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push before remote/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered after local hooks' do
-        expect { Wordmove::Actions::Ssh::Push.call(context) }
+        expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push after local/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered after remote hooks' do
-        expect { Wordmove::Actions::Ssh::Push.call(context) }
+        expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push after remote/)
           .to_stdout_from_any_process
       end
@@ -133,7 +133,7 @@ describe Wordmove::Hook do
         end
 
         it 'does not really run any commands' do
-          expect { Wordmove::Actions::Ssh::Push.call(context) }
+          expect { Wordmove::Organizers::Ssh::Push.call(context) }
             .not_to output(/Output:/)
             .to_stdout_from_any_process
         end
@@ -145,7 +145,7 @@ describe Wordmove::Hook do
         it 'logs an error and raises a LocalHookException' do
           expect do
             expect do
-              Wordmove::Actions::Ssh::Push.call(context)
+              Wordmove::Organizers::Ssh::Push.call(context)
             end.to raise_exception(Wordmove::LocalHookException)
           end.to output(/Error code: 127/).to_stdout_from_any_process
         end
@@ -158,7 +158,7 @@ describe Wordmove::Hook do
           it 'logs an error without raising an exeption' do
             expect do
               expect do
-                Wordmove::Actions::Ssh::Push.call(context)
+                Wordmove::Organizers::Ssh::Push.call(context)
               end.to_not raise_exception
             end.to output(/Error code: 127/)
               .to_stdout_from_any_process
@@ -178,31 +178,31 @@ describe Wordmove::Hook do
       let(:options) { common_options.merge(environment: 'ssh_with_hooks') }
 
       it 'runs registered before local hooks' do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull before local/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered before remote hooks' do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull before remote/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered after local hooks' do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull after local/)
           .to_stdout_from_any_process
       end
 
       it 'runs registered after remote hooks' do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull after remote/)
           .to_stdout_from_any_process
       end
 
       it 'return remote stdout' do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Stubbed remote stdout/)
           .to_stdout_from_any_process
       end
@@ -218,7 +218,7 @@ describe Wordmove::Hook do
         it 'returns remote stdout and raise an exception' do
           expect do
             expect do
-              Wordmove::Actions::Ssh::Pull.call(context)
+              Wordmove::Organizers::Ssh::Pull.call(context)
             end.to raise_exception(Wordmove::RemoteHookException)
           end.to output(/Stubbed remote stderr/)
             .to_stdout_from_any_process
@@ -227,7 +227,7 @@ describe Wordmove::Hook do
         it 'raises a RemoteHookException' do
           expect do
             silence_stream(STDOUT) do
-              Wordmove::Actions::Ssh::Pull.call(context)
+              Wordmove::Organizers::Ssh::Pull.call(context)
             end
           end.to raise_exception(Wordmove::RemoteHookException)
         end
@@ -249,7 +249,7 @@ describe Wordmove::Hook do
             .to_not receive(:run)
 
           silence_stream(STDOUT) do
-            Wordmove::Actions::Ssh::Push.call(context)
+            Wordmove::Organizers::Ssh::Push.call(context)
           end
         end
       end
@@ -265,12 +265,12 @@ describe Wordmove::Hook do
           .to_not receive(:run)
 
         silence_stream(STDOUT) do
-          Wordmove::Actions::Ssh::Push.call(context)
+          Wordmove::Organizers::Ssh::Push.call(context)
         end
       end
 
       it "works silently ignoring 'before' step is not present" do
-        expect { Wordmove::Actions::Ssh::Pull.call(context) }
+        expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/I've partially configured my hooks/)
           .to_stdout_from_any_process
       end
