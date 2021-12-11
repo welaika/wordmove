@@ -1,5 +1,3 @@
-require 'pry-byebug'
-
 module Wordmove
   module CLI
     module PullPushShared
@@ -53,52 +51,6 @@ module Wordmove
           result = klass.call(cli_options: cli_options, movefile: movefile)
 
           result.success? ? exit(0) : exit(1)
-        end
-
-        def call_pull_organizer_with(**cli_options)
-          movefile = movefile_from(**cli_options)
-
-          if movefile.options.dig(movefile.environment, :ssh)
-            call_organizer_with(
-              klass: Wordmove::Organizers::Ssh::Pull,
-              movefile: movefile,
-              **cli_options
-            )
-          elsif movefile.options.dig(movefile.environment, :ftp)
-            call_organizer_with(
-              klass: Wordmove::Organizers::Ftp::Pull,
-              movefile: movefile,
-              **cli_options
-            )
-          else
-            raise NoAdapterFound, 'No valid adapter found.'
-          end
-        rescue NoAdapterFound => e
-          Logger.new($stdout).error(e.message)
-          exit 1
-        end
-
-        def call_push_organizer_with(**cli_options)
-          movefile = movefile_from(cli_options)
-
-          if movefile.options.dig(movefile.environment, :ssh)
-            call_organizer_with(
-              klass: Wordmove::Organizers::Ssh::Push,
-              movefile: movefile,
-              **cli_options
-            )
-          elsif movefile.options.dig(movefile.environment, :ftp)
-            call_organizer_with(
-              klass: Wordmove::Organizers::Ftp::Push,
-              movefile: movefile,
-              **cli_options
-            )
-          else
-            raise NoAdapterFound, 'No valid adapter found.'
-          end
-        rescue NoAdapterFound => e
-          Logger.new($stdout).error(e.message)
-          exit 1
         end
       end
     end
@@ -155,6 +107,31 @@ module Wordmove
         def call(**cli_options)
           call_pull_organizer_with(**cli_options)
         end
+
+        private
+
+        def call_pull_organizer_with(**cli_options)
+          movefile = movefile_from(**cli_options)
+
+          if movefile.options.dig(movefile.environment, :ssh)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ssh::Pull,
+              movefile: movefile,
+              **cli_options
+            )
+          elsif movefile.options.dig(movefile.environment, :ftp)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ftp::Pull,
+              movefile: movefile,
+              **cli_options
+            )
+          else
+            raise NoAdapterFound, 'No valid adapter found.'
+          end
+        rescue NoAdapterFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
+        end
       end
 
       class Push < Dry::CLI::Command
@@ -164,6 +141,31 @@ module Wordmove
 
         def call(**cli_options)
           call_push_organizer_with(**cli_options)
+        end
+
+        private
+
+        def call_push_organizer_with(**cli_options)
+          movefile = movefile_from(cli_options)
+
+          if movefile.options.dig(movefile.environment, :ssh)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ssh::Push,
+              movefile: movefile,
+              **cli_options
+            )
+          elsif movefile.options.dig(movefile.environment, :ftp)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ftp::Push,
+              movefile: movefile,
+              **cli_options
+            )
+          else
+            raise NoAdapterFound, 'No valid adapter found.'
+          end
+        rescue NoAdapterFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
         end
       end
 
