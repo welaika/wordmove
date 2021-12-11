@@ -1,6 +1,6 @@
 module Wordmove
   module Actions
-    module Ssh
+    module Ftp
       module Helpers
         extend ActiveSupport::Concern
 

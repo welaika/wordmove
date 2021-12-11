@@ -1,7 +1,7 @@
 module Wordmove
   module Organizers
     module Ftp
-      class Pull
+      class Push
         extend ::LightService::Organizer
         include Wordmove::Actions::Helpers
         include Wordmove::Actions::Ftp::Helpers
@@ -19,7 +19,7 @@ module Wordmove
             local_options: movefile.options[:local],
             remote_options: remote_options,
             movefile: movefile,
-            guardian: Wordmove::Guardian.new(cli_options: cli_options, action: :pull),
+            guardian: Wordmove::Guardian.new(cli_options: cli_options, action: :push),
             logger: logger,
             photocopier: Photocopier::FTP
                           .new(ftp_opts)
@@ -29,20 +29,21 @@ module Wordmove
 
         def self.actions
           [
-            Wordmove::Actions::RunBeforePullHook, # Will fail and warn the user
+            Wordmove::Actions::RunBeforePushHook, # Will fail and warn the user
             Wordmove::Actions::FilterAndSetupTasksToRun,
             reduce_if(
               ->(ctx) { ctx.wordpress_task },
-              [Wordmove::Actions::Ftp::PullWordpress]
+              [Wordmove::Actions::Ftp::PushWordpress]
             ),
-            iterate(:folder_tasks, [Wordmove::Actions::Ftp::GetDirectory])
+            iterate(:folder_tasks, [Wordmove::Actions::Ftp::PutDirectory])
           ].concat [
-            # Wordmove::Actions::Ftp::SetupContextForDb,
-            # Wordmove::Actions::Ftp::BackupLocalDb,
-            # Wordmove::Actions::Ftp::AdaptRemoteDb,
-            # Wordmove::Actions::Ftp::CleanupAfterAdapt
+            # Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
+            # Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
+            # Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
+            # Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
+            # Wordmove::Actions::Ssh::CleanupAfterAdapt
           ].concat [
-            Wordmove::Actions::RunAfterPullHook # Will fail and warn the user
+            Wordmove::Actions::RunAfterPushHook # Will fail and warn the user
           ]
         end
       end

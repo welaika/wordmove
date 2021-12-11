@@ -146,7 +146,7 @@ module Wordmove
         private
 
         def call_push_organizer_with(**cli_options)
-          movefile = movefile_from(cli_options)
+          movefile = movefile_from(**cli_options)
 
           if movefile.options.dig(movefile.environment, :ssh)
             call_organizer_with(
