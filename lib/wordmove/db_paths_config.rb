@@ -24,4 +24,12 @@ class DbPathsConfig
       setting :gzipped_path
     end
   end
+
+  setting :ftp, reader: true do
+    setting :remote_dump_script_path
+    setting :remote_import_script_path
+    setting :one_time_password
+    setting :dump_script
+    # TBD
+  end
 end
