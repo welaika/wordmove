@@ -19,14 +19,15 @@ module Wordmove
       #   @param cli_options [Hash]
       #   @return [LightService::Context] Action's context
       executed do |context|
-        all_taks = Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS
+        all_tasks = Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS
 
-        required_tasks = all_taks.select do |task|
+        requested_tasks = all_tasks.select do |task|
+          # binding.pry
           context.cli_options[task] ||
             (context.cli_options[:all] && context.cli_options[task] != false)
         end
 
-        allowed_tasks = required_tasks.select { |task| context.guardian.allows task }
+        allowed_tasks = requested_tasks.select { |task| context.guardian.allows task }
 
         # Since we `promises` the following variables, we cannot set them as `nil`
         context.database_task = allowed_tasks.delete(:db) || false
