@@ -41,6 +41,7 @@ require 'wordmove/db_paths_config'
 
 require 'wordmove/actions/helpers'
 require 'wordmove/actions/ssh/helpers'
+require 'wordmove/actions/ftp/helpers'
 Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].sort.each { |file| require file }
 Dir[File.join(__dir__, 'wordmove/organizers/**/*.rb')].sort.each { |file| require file }
 

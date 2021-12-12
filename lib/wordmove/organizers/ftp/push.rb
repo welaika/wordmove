@@ -37,10 +37,10 @@ module Wordmove
             ),
             iterate(:folder_tasks, [Wordmove::Actions::Ftp::PutDirectory])
           ].concat [
-            # Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
-            # Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
-            # Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
-            # Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
+            Wordmove::Actions::SetupContextForDb,
+            Wordmove::Actions::Ftp::BackupRemoteDb,
+            Wordmove::Actions::AdaptLocalDb,
+            Wordmove::Actions::Ftp::PutAndImportDumpRemotely,
             # Wordmove::Actions::Ssh::CleanupAfterAdapt
           ].concat [
             Wordmove::Actions::RunAfterPushHook # Will fail and warn the user

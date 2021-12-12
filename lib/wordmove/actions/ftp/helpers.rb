@@ -17,14 +17,24 @@ module Wordmove
             string.gsub('\\', '\\\\\\').gsub(/'/, '\\\\\'')
           end
 
-          def generate_dump_script(db:, password:)
-            template = ERB.new File.read(File.join(File.dirname(__FILE__), '../assets/dump.php.erb'))
+          def remote_php_scripts_token
+            SecureRandom.hex(40)
+          end
+
+          def generate_dump_script(remote_db_options:, token:)
+            template = ERB.new File.read(File.join(File.dirname(__FILE__), '../../assets/dump.php.erb'))
             template.result(binding)
           end
 
-          def generate_import_script(db:, password:)
-            template = ERB.new File.read(File.join(File.dirname(__FILE__), '../assets/import.php.erb'))
+          def generate_import_script(remote_db_options:, token:)
+            template = ERB.new File.read(File.join(File.dirname(__FILE__), '../../assets/import.php.erb'))
             template.result(binding)
+          end
+
+          def download(url:, local_path:)
+            File.open(local_path, 'w') do |file|
+              file << URI.parse(url).read
+            end
           end
 
           # To turn into an action

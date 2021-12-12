@@ -37,10 +37,11 @@ module Wordmove
             ),
             iterate(:folder_tasks, [Wordmove::Actions::Ftp::GetDirectory])
           ].concat [
-            # Wordmove::Actions::Ftp::SetupContextForDb,
-            # Wordmove::Actions::Ftp::BackupLocalDb,
-            # Wordmove::Actions::Ftp::AdaptRemoteDb,
-            # Wordmove::Actions::Ftp::CleanupAfterAdapt
+            Wordmove::Actions::SetupContextForDb,
+            Wordmove::Actions::BackupLocalDb,
+            Wordmove::Actions::Ftp::DownloadRemoteDb,
+            Wordmove::Actions::AdaptRemoteDb,
+            Wordmove::Actions::Ftp::CleanupAfterAdapt
           ].concat [
             Wordmove::Actions::RunAfterPullHook # Will fail and warn the user
           ]

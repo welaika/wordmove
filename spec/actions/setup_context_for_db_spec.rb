@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb do
+describe Wordmove::Actions::SetupContextForDb do
   let(:stubbed_actions) do
     [
-      Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
-      Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
+      Wordmove::Actions::Ssh::BackupRemoteDb,
+      Wordmove::Actions::AdaptLocalDb,
       Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
       Wordmove::Actions::Ssh::CleanupAfterAdapt
     ]

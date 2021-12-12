@@ -1,6 +1,6 @@
 <?php
 
-$shared_key = '<%= password %>';
+$shared_key = '<%= token %>';
 if ($_GET['shared_key'] != $shared_key) {
   die();
 }
@@ -214,14 +214,14 @@ class MySQLDump
 
 }
 
-$db_host = '<%= escape_php db[:host] %>';
-$db_port = '<%= db[:port] %>';
+$db_host = '<%= escape_php(string: remote_db_options[:host]) %>';
+$db_port = '<%= remote_db_options[:port] %>';
 if (!$db_port) {
   $db_port = ini_get("mysqli.default_port");
 }
-$db_user = '<%= escape_php db[:user] %>';
-$db_password = '<%= escape_php db[:password] %>';
-$db_name = '<%= escape_php db[:name] %>';
+$db_user = '<%= escape_php(string: remote_db_options[:user]) %>';
+$db_password = '<%= escape_php(string: remote_db_options[:password]) %>';
+$db_name = '<%= escape_php(string: remote_db_options[:name]) %>';
 
 $connection = new mysqli($db_host, $db_user, $db_password, $db_name, $db_port);
 $dump = new MySQLDump($connection);

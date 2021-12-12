@@ -17,6 +17,7 @@ module Wordmove
           result = Wordmove::Actions::PutFile.execute(
             logger: context.logger,
             photocopier: context.photocopier,
+            cli_options: context.cli_options,
             command_args: [
               context.db_paths.local.gzipped_adapted_path,
               context.db_paths.remote.gzipped_path
@@ -46,7 +47,7 @@ module Wordmove
           result = Wordmove::Actions::DeleteRemoteFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
-            command_args: [context.db_paths.remote.path]
+            remote_file: context.db_paths.remote.path
           )
           context.fail!(result.message) if result.failure?
         end

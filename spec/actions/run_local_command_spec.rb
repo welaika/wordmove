@@ -30,7 +30,7 @@ describe Wordmove::Actions::RunLocalCommand do
       )
 
       expect(result).to be_failure
-      expect(result.message).to eq('Local command status reports an error')
+      expect(result.message).to match(/Local command status reports an error/)
     end
   end
 

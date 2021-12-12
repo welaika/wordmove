@@ -50,7 +50,10 @@ module Wordmove
         def call_organizer_with(klass:, movefile:, **cli_options)
           result = klass.call(cli_options: cli_options, movefile: movefile)
 
-          result.success? ? exit(0) : exit(1)
+          exit 0 if result.success?
+
+          Logger.new($stdout).error(result.message)
+          exit 1
         end
       end
     end

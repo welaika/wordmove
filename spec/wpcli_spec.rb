@@ -8,7 +8,7 @@ describe Wordmove::Wpcli do
   end
 
   let(:a_context) do
-    OrganizerContextFactory.make_for(Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb, :pull)
+    OrganizerContextFactory.make_for(Wordmove::Actions::AdaptLocalDb, :pull)
   end
 
   context '.wpcli_config_path' do

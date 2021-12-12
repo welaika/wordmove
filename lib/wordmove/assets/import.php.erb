@@ -1,6 +1,6 @@
 <?php
 
-$shared_key = '<%= password %>';
+$shared_key = '<%= token %>';
 if ($_GET['shared_key'] != $shared_key) {
   die();
 }
@@ -43,20 +43,20 @@ error_reporting(E_ALL);
 
 // Database configuration
 
-$db_port = '<%= escape_php db[:port] %>';
+$db_port = '<%= escape_php(string: remote_db_options[:port]) %>';
 if (!$db_port) {
   $db_port = ini_get("mysqli.default_port");
 }
-$db_server = '<%= escape_php db[:host] %>';
-$db_username = '<%= escape_php db[:user] %>';
-$db_password = '<%= escape_php db[:password] %>';
-$db_name = '<%= escape_php db[:name] %>';
+$db_server = '<%= escape_php(string: remote_db_options[:host]) %>';
+$db_username = '<%= escape_php(string: remote_db_options[:user]) %>';
+$db_password = '<%= escape_php(string: remote_db_options[:password]) %>';
+$db_name = '<%= escape_php(string: remote_db_options[:name]) %>';
 
 // Connection charset should be the same as the dump file charset (utf8, latin1, cp1251, koi8r etc.)
 // See http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html for the full list
 // Change this if you have problems with non-latin letters
 
-$db_connection_charset = '<%= db[:charset] || 'utf8' %>';
+$db_connection_charset = '<%= remote_db_options[:charset] || 'utf8' %>';
 
 // OPTIONAL SETTINGS
 

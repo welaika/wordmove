@@ -37,9 +37,9 @@ module Wordmove
             ),
             iterate(:folder_tasks, [Wordmove::Actions::Ssh::GetDirectory])
           ].concat [
-            Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
-            Wordmove::Actions::Ssh::WpcliAdapter::BackupLocalDb,
-            Wordmove::Actions::Ssh::WpcliAdapter::AdaptRemoteDb,
+            Wordmove::Actions::SetupContextForDb,
+            Wordmove::Actions::BackupLocalDb,
+            Wordmove::Actions::AdaptRemoteDb,
             Wordmove::Actions::Ssh::CleanupAfterAdapt
           ].concat [
             Wordmove::Actions::RunAfterPullHook

@@ -18,12 +18,12 @@ describe Wordmove::Hook do
       Wordmove::Actions::Ssh::PullWordpress,
       Wordmove::Actions::Ssh::PutDirectory,
       Wordmove::Actions::Ssh::GetDirectory,
-      Wordmove::Actions::Ssh::WpcliAdapter::SetupContextForDb,
-      Wordmove::Actions::Ssh::WpcliAdapter::BackupRemoteDb,
-      Wordmove::Actions::Ssh::WpcliAdapter::AdaptLocalDb,
+      Wordmove::Actions::SetupContextForDb,
+      Wordmove::Actions::Ssh::BackupRemoteDb,
+      Wordmove::Actions::AdaptLocalDb,
       Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
-      Wordmove::Actions::Ssh::WpcliAdapter::BackupLocalDb,
-      Wordmove::Actions::Ssh::WpcliAdapter::AdaptRemoteDb,
+      Wordmove::Actions::BackupLocalDb,
+      Wordmove::Actions::AdaptRemoteDb,
       Wordmove::Actions::Ssh::CleanupAfterAdapt
     ]
   end
