@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ssh
+      # Downloads the remote DB over SSH protocol
       class DownloadRemoteDb
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -13,6 +14,15 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
+        # @!method execute
+        # @param remote_options [Hash] Remote host options fetched from
+        #        movefile (with symbolized keys)
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::SSH]
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
           next context if simulate?(cli_options: context.cli_options)
 

@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ssh
+      # Cleanup file created during DB push/pull operations
       class CleanupAfterAdapt
         extend ::LightService::Action
 
@@ -8,6 +9,12 @@ module Wordmove
                 :cli_options,
                 :logger
 
+        # @!method execute
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context|
           Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,

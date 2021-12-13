@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ssh
+      # Bakups the remote DB over SSH protocol
       class BackupRemoteDb
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -11,6 +12,14 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
+        # @!method execute
+        # @param remote_options [Hash] Options for the remote host fetched from the movefile
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::SSH]
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context|
           context.logger.task 'Backup remote DB'
 

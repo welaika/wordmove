@@ -8,6 +8,16 @@ module Wordmove
         extend ActiveSupport::Concern
 
         class_methods do
+          #
+          # Utility method to retrieve and augment ssh options from the superset of remote options.
+          # This is useful most because it appends +--dy-run+ rsync's flag to ssh options based
+          # on +--simulate+ flag presence
+          #
+          # @param [Hash] remote_options Remote host options fetcehd from movefile
+          # @param [Bool] simulate Tell the moethod if you're in a simulated operation
+          #
+          # @return [Hash] Ssh options
+          #
           def ssh_options(remote_options:, simulate: false)
             ssh_options = remote_options[:ssh]
 
@@ -20,6 +30,17 @@ module Wordmove
             ssh_options
           end
 
+          #
+          # Given the directory you're pushing/pulling, generates an array of path to be included
+          # by rsync while pushing. Note that by design include paths are always required but are
+          # only programmatically deduced and never user configured.
+          #
+          # @note The business logic behind how these paths are produced should be deepened
+          #
+          # @param [WordpressDirectory] local_task_dir An object representing a wordpress folder
+          #
+          # @return [Array] The array of path to be included by rsync
+          #
           def push_include_paths(local_task_dir:)
             Pathname.new(local_task_dir.relative_path)
                     .ascend
