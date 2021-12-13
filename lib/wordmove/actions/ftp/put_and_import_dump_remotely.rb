@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ftp
+      # Uploads a DB dump to remote host and import it in the remote database over FTP protocol
       class PutAndImportDumpRemotely
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -14,6 +15,15 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
+        # @!method execute
+        # @param logger [Wordmove::Logger]
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param remote_options [Hash] Remote host options fetched from
+        #        movefile (with symbolized keys)
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @param photocopier [Photocopier::FTP]
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
           result = Wordmove::Actions::PutFile.execute(
             logger: context.logger,
@@ -54,18 +64,6 @@ module Wordmove
               logger: context.logger,
               file_path: context.db_paths.ftp.local.temp_path
             )
-          end
-
-          result = Wordmove::Actions::DeleteRemoteFile.execute(
-            photocopier: context.photocopier,
-            logger: context.logger,
-            remote_file: context.db_paths.ftp.remote.import_script_path
-          )
-          if result.failure?
-            context.logger.warning 'Failed to delete remote file ' \
-                                  "#{context.db_paths.remote.import_script_path} because: " \
-                                  "#{result.message}" \
-                                  'Manual intervention required'
           end
         end
       end

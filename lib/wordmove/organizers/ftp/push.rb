@@ -41,7 +41,7 @@ module Wordmove
             Wordmove::Actions::Ftp::BackupRemoteDb,
             Wordmove::Actions::AdaptLocalDb,
             Wordmove::Actions::Ftp::PutAndImportDumpRemotely,
-            # Wordmove::Actions::Ssh::CleanupAfterAdapt
+            Wordmove::Actions::Ftp::CleanupAfterAdapt
           ].concat [
             Wordmove::Actions::RunAfterPushHook # Will fail and warn the user
           ]

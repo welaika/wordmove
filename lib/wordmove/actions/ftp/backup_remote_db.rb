@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ftp
+      # Bakups the remote DB over FTP protocol
       class BackupRemoteDb
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -11,12 +12,21 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
+        # @!method execute
+        # @param remote_options [Hash] Options for the remote host fetched from the movefile
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::FTP]
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context|
           context.logger.task 'Backup remote DB'
 
           # Most of the expectations are needed to be proxied to `DownloadRemoteDb`
           # DownloadRemoteDB will save the file in `db_paths.local.path`
-          Wordmove::Actions::Ftp::DownloadRemoteDb.execute(context)
+          result = Wordmove::Actions::Ftp::DownloadRemoteDb.execute(context)
+          context.fail_and_return!(result.message) if context.result.failure?
 
           begin
             result = Wordmove::Actions::RunLocalCommand.execute(

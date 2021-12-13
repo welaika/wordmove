@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ftp
+      # Cleanup file created during DB push/pull operations
       class CleanupAfterAdapt
         extend ::LightService::Action
 
@@ -9,18 +10,44 @@ module Wordmove
                 :logger,
                 :photocopier
 
-        executed do |context|
-          Wordmove::Actions::DeleteLocalFile.execute(
+        # @!method execute
+        # @param logger [Wordmove::Logger]
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @param photocopier [Photocopier::FTP]
+        # @!scope class
+        # @return [LightService::Context] Action's context
+        executed do |context| # rubocop:disable Metrics/BlockLength
+          result = Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,
             cli_options: context.cli_options,
             file_path: context.db_paths.local.path
           )
 
-          Wordmove::Actions::DeleteRemoteFile.execute(
-            photocopier: context.photocopier,
-            logger: context.logger,
-            remote_file: context.db_paths.ftp.remote.dump_script_path
-          )
+          if result.failure?
+            context.logger.warning 'Failed to delete remote file ' \
+                                  "#{context.db_paths.local.path} because: " \
+                                  "#{result.message}" \
+                                  '. Manual intervention required'
+          end
+
+          [
+            context.db_paths.ftp.remote.dump_script_path,
+            context.db_paths.ftp.remote.import_script_path
+          ].each do |file|
+            result = Wordmove::Actions::DeleteRemoteFile.execute(
+              photocopier: context.photocopier,
+              logger: context.logger,
+              remote_file: file
+            )
+
+            if result.failure? # rubocop:disable Style/Next
+              context.logger.warning 'Failed to delete remote file ' \
+                                    "#{file} because: " \
+                                    "#{result.message}" \
+                                    '. Manual intervention required'
+            end
+          end
         end
       end
     end

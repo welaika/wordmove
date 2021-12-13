@@ -1,6 +1,8 @@
 module Wordmove
   module Actions
     module Ftp
+      # Syncs wordpress folder (usually root folder), exluding +wp-content/+ folder, over FTP
+      # protocol from the remote server to local host
       class PullWordpress
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -9,9 +11,17 @@ module Wordmove
         expects :remote_options,
                 :local_options,
                 :logger,
-                :movefile,
                 :photocopier
 
+        # @!method execute
+        # @param remote_options [Hash] Remote host options fetched from
+        #        movefile (with symbolized keys)
+        # @param local_options [Hash] Local host options fetched from
+        #        movefile (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::FTP]
+        # @!scope class
+        # @return [LightService::Context] Action's context
         executed do |context|
           local_path = context.local_options[:wordpress_path]
 

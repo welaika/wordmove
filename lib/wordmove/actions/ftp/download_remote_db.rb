@@ -1,6 +1,7 @@
 module Wordmove
   module Actions
     module Ftp
+      # Downloads the remote DB over FTP protocol
       class DownloadRemoteDb
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -14,7 +15,16 @@ module Wordmove
                 :photocopier,
                 :db_paths
 
-        executed do |context|
+        # @!method execute
+        # @param remote_options [Hash] Remote host options fetched from
+        #        movefile (with symbolized keys)
+        # @param cli_options [Hash] Command line options (with symbolized keys)
+        # @param logger [Wordmove::Logger]
+        # @param photocopier [Photocopier::FTP]
+        # @param db_paths [BbPathsConfig] Configuration object for database
+        # @!scope class
+        # @return [LightService::Context] Action's context
+        executed do |context| # rubocop:disable Metrics/BlockLength
           next context if simulate?(cli_options: context.cli_options)
 
           result = Wordmove::Actions::PutFile.execute(
@@ -37,7 +47,7 @@ module Wordmove
           begin
             download(url: dump_url, local_path: context.db_paths.local.path)
           rescue => _e # rubocop:disable Style/RescueStandardError
-            context.fail_and_return!(e.message)
+            context.fail!(e.message)
           ensure
             Wordmove::Actions::DeleteRemoteFile.execute(
               photocopier: context.photocopier,
@@ -49,6 +59,10 @@ module Wordmove
               logger: context.logger,
               remote_file: context.db_paths.ftp.remote.dump_script_path
             )
+          end
+
+          unless File.exist? context.db_paths.local.path
+            context.fail!('Download of remote DB failed')
           end
         end
       end

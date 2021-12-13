@@ -14,8 +14,6 @@ module Wordmove
                 :db_paths
 
         executed do |context| # rubocop:disable Metrics/BlockLength
-          context.logger.task 'Pull remote DB'
-
           next context if simulate?(cli_options: context.cli_options)
 
           result = Wordmove::Actions::Ssh::RunRemoteCommand.execute(
