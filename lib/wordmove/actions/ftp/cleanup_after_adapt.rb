@@ -18,6 +18,8 @@ module Wordmove
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
+          context.logger.task 'Cleanup'
+
           result = Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,
             cli_options: context.cli_options,
@@ -35,11 +37,15 @@ module Wordmove
             context.db_paths.ftp.remote.dump_script_path,
             context.db_paths.ftp.remote.import_script_path
           ].each do |file|
-            result = Wordmove::Actions::DeleteRemoteFile.execute(
-              photocopier: context.photocopier,
-              logger: context.logger,
-              remote_file: file
-            )
+            begin
+              result = Wordmove::Actions::DeleteRemoteFile.execute(
+                photocopier: context.photocopier,
+                logger: context.logger,
+                remote_file: file
+              )
+            rescue Net::FTPPermError => e
+              context.logger.info "#{file} doesn't exist remotely. Nothing to cleanup"
+            end
 
             if result.failure? # rubocop:disable Style/Next
               context.logger.warning 'Failed to delete remote file ' \

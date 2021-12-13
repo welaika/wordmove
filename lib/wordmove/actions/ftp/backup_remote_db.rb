@@ -26,7 +26,7 @@ module Wordmove
           # Most of the expectations are needed to be proxied to `DownloadRemoteDb`
           # DownloadRemoteDB will save the file in `db_paths.local.path`
           result = Wordmove::Actions::Ftp::DownloadRemoteDb.execute(context)
-          context.fail_and_return!(result.message) if context.result.failure?
+          context.fail_and_return!(result.message) if result.failure?
 
           begin
             result = Wordmove::Actions::RunLocalCommand.execute(
