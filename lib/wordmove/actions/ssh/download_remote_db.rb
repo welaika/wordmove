@@ -64,7 +64,11 @@ module Wordmove
             cli_options: context.cli_options,
             remote_file: context.db_paths.remote.gzipped_path
           )
-          context.fail!(result.message) if result.failure?
+          context.fail_and_return!(result.message) if result.failure?
+
+          context.logger.success(
+            "Remote DB dump downloaded in #{context.db_paths.local.gzipped_path}"
+          )
         end
       end
     end

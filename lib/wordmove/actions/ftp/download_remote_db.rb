@@ -54,25 +54,14 @@ module Wordmove
           begin
             download(url: dump_url, local_path: context.db_paths.local.path)
           rescue => _e # rubocop:disable Style/RescueStandardError
-            context.fail!(e.message)
-          ensure
-            Wordmove::Actions::DeleteRemoteFile.execute(
-              photocopier: context.photocopier,
-              logger: context.logger,
-              cli_options: context.cli_options,
-              remote_file: context.db_paths.ftp.remote.dumped_path
-            )
-            Wordmove::Actions::DeleteRemoteFile.execute(
-              photocopier: context.photocopier,
-              logger: context.logger,
-              cli_options: context.cli_options,
-              remote_file: context.db_paths.ftp.remote.dump_script_path
-            )
+            context.fail_and_return!(e.message)
           end
 
           unless File.exist? context.db_paths.local.path
-            context.fail!('Download of remote DB failed')
+            context.fail_and_return!('Download of remote DB failed')
           end
+
+          context.logger.success "Remote DB dump downloaded in #{context.db_paths.local.path}"
         end
       end
     end

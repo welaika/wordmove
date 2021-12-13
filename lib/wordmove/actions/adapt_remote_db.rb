@@ -66,17 +66,21 @@ module Wordmove
           next context
         end
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: wpcli_search_replace_command(context, :vhost)
         )
+        context.fail_and_return!(result.message) if result.failure?
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: wpcli_search_replace_command(context, :wordpress_path)
         )
+        context.fail_and_return!(result.message) if result.failure?
+
+        context.logger.success 'Local DB adapted'
       end
     end
   end

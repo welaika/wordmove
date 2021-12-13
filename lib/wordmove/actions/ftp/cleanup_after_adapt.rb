@@ -42,7 +42,8 @@ module Wordmove
           [
             context.db_paths.ftp.remote.dump_script_path,
             context.db_paths.ftp.remote.import_script_path,
-            context.db_paths.remote.path
+            context.db_paths.remote.path,
+            context.db_paths.ftp.remote.dumped_path
           ].each do |file|
             begin
               result = Wordmove::Actions::DeleteRemoteFile.execute(

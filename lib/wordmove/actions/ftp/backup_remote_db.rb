@@ -1,7 +1,7 @@
 module Wordmove
   module Actions
     module Ftp
-      # Bakups the remote DB over FTP protocol
+      # Bakups an already downloaded remote DB dump
       class BackupRemoteDb
         extend ::LightService::Action
         include Wordmove::Actions::Helpers
@@ -30,11 +30,6 @@ module Wordmove
             next context
           end
 
-          # Most of the expectations are needed to be proxied to `DownloadRemoteDb`
-          # DownloadRemoteDB will save the file in `db_paths.local.path`
-          result = Wordmove::Actions::Ftp::DownloadRemoteDb.execute(context)
-          context.fail_and_return!(result.message) if result.failure?
-
           begin
             result = Wordmove::Actions::RunLocalCommand.execute(
               logger: context.logger,
@@ -48,7 +43,7 @@ module Wordmove
               context.db_paths.backup.remote.gzipped_path
             )
 
-            context.logger.info("Backup saved at #{context.db_paths.backup.remote.gzipped_path}")
+            context.logger.success("Backup saved at #{context.db_paths.backup.remote.gzipped_path}")
           rescue Errno::ENOENT, RuntimeError => e
             context.fail_and_return!("Remote DB backup failed with: <#{e.message}>. Aborting.")
           end
