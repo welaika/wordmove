@@ -24,6 +24,8 @@ module Wordmove
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
+          context.logger.task 'Download remote DB'
+
           next context if simulate?(cli_options: context.cli_options)
 
           result = Wordmove::Actions::Ssh::RunRemoteCommand.execute(
@@ -48,6 +50,7 @@ module Wordmove
           result = Wordmove::Actions::GetFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
+            cli_options: context.cli_options,
             command_args: [
               context.db_paths.remote.gzipped_path,
               context.db_paths.local.gzipped_path
@@ -58,6 +61,7 @@ module Wordmove
           result = Wordmove::Actions::DeleteRemoteFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
+            cli_options: context.cli_options,
             remote_file: context.db_paths.remote.gzipped_path
           )
           context.fail!(result.message) if result.failure?

@@ -4,6 +4,7 @@ module Wordmove
       # Cleanup file created during DB push/pull operations
       class CleanupAfterAdapt
         extend ::LightService::Action
+        include Wordmove::Actions::Helpers
 
         expects :db_paths,
                 :cli_options,
@@ -20,6 +21,11 @@ module Wordmove
         executed do |context| # rubocop:disable Metrics/BlockLength
           context.logger.task 'Cleanup'
 
+          if simulate?(cli_options: context.cli_options)
+            context.logger.info 'No cleanup during simulation'
+            next context
+          end
+
           result = Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,
             cli_options: context.cli_options,
@@ -35,15 +41,17 @@ module Wordmove
 
           [
             context.db_paths.ftp.remote.dump_script_path,
-            context.db_paths.ftp.remote.import_script_path
+            context.db_paths.ftp.remote.import_script_path,
+            context.db_paths.remote.path
           ].each do |file|
             begin
               result = Wordmove::Actions::DeleteRemoteFile.execute(
                 photocopier: context.photocopier,
                 logger: context.logger,
+                cli_options: context.cli_options,
                 remote_file: file
               )
-            rescue Net::FTPPermError => e
+            rescue Net::FTPPermError => _e
               context.logger.info "#{file} doesn't exist remotely. Nothing to cleanup"
             end
 

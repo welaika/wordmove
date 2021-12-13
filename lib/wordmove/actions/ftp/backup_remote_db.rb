@@ -23,6 +23,13 @@ module Wordmove
         executed do |context|
           context.logger.task 'Backup remote DB'
 
+          if simulate?(cli_options: context.cli_options)
+            context.logger.info 'A backup of the remote DB would have been saved into ' \
+                                "#{context.db_paths.backup.remote.gzipped_path}, " \
+                                'but you\'re simulating'
+            next context
+          end
+
           # Most of the expectations are needed to be proxied to `DownloadRemoteDb`
           # DownloadRemoteDB will save the file in `db_paths.local.path`
           result = Wordmove::Actions::Ftp::DownloadRemoteDb.execute(context)

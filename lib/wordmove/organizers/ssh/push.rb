@@ -38,6 +38,7 @@ module Wordmove
             iterate(:folder_tasks, [Wordmove::Actions::Ssh::PutDirectory])
           ].concat [
             Wordmove::Actions::SetupContextForDb,
+            Wordmove::Actions::Ssh::DownloadRemoteDb,
             Wordmove::Actions::Ssh::BackupRemoteDb,
             Wordmove::Actions::AdaptLocalDb,
             Wordmove::Actions::Ssh::PutAndImportDumpRemotely,

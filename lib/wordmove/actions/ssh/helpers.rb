@@ -39,7 +39,7 @@ module Wordmove
           #
           # @param [WordpressDirectory] local_task_dir An object representing a wordpress folder
           #
-          # @return [Array] The array of path to be included by rsync
+          # @return [Array<String>] The array of path to be included by rsync
           #
           def push_include_paths(local_task_dir:)
             Pathname.new(local_task_dir.relative_path)
@@ -52,6 +52,19 @@ module Wordmove
                     end
           end
 
+          #
+          # Given the directory you're pushing/pulling and the user configured exclude list,
+          # generates an array of path to be excluded
+          # by rsync while pushing. Note that by design exclude some paths are always required
+          # even when the user does not confiure any exclusion.
+          #
+          # @note The business logic behind how these paths are produced should be deepened
+          #
+          # @param [WordpressDirectory] local_task_dir An object representing a wordpress folder
+          # @param [Array<String>] pats_to_exclude An array of paths
+          #
+          # @return [Array<String>] The array of path to be included by rsync
+          #
           def push_exclude_paths(local_task_dir:, paths_to_exclude:)
             Pathname.new(local_task_dir.relative_path)
                     .dirname
@@ -67,6 +80,13 @@ module Wordmove
                     .concat(['/*'])
           end
 
+          #
+          # Same as Wordmove::Actions::Ssh::Helpers.push_include_path but for pull actions
+          #
+          # @param [WordpressDirectory] local_task_dir An object representing a wordpress folder
+          #
+          # @return [Array<String>] An array of paths
+          #
           def pull_include_paths(remote_task_dir:)
             Pathname.new(remote_task_dir.relative_path)
                     .ascend
@@ -78,6 +98,14 @@ module Wordmove
                     end
           end
 
+          #
+          # Same as Wordmove::Actions::Ssh::Helpers.push_exclude_path but for pull actions
+          #
+          # @param [WordpressDirectory] local_task_dir An object representing a wordpress folder
+          # @param [Array<String>] paths_to_exclude User configured array of paths to exclude
+          #
+          # @return [Array<String>] Array of paths to be excluded
+          #
           def pull_exclude_paths(remote_task_dir:, paths_to_exclude:)
             Pathname.new(remote_task_dir.relative_path)
                     .dirname

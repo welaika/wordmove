@@ -30,11 +30,11 @@ module Wordmove
 
         context.logger.task_step false, "#{command}: #{message}"
 
-        if simulate?(cli_options: context.cli_options)
-          result = true
-        else
-          result = context.photocopier.send(command, *context.command_args)
-        end
+        result = if simulate?(cli_options: context.cli_options)
+                   true
+                 else
+                   context.photocopier.send(command, *context.command_args)
+                 end
 
         next context if result == true
         # We can't trust the return from the fotocopier method when using FTP.  Keep on

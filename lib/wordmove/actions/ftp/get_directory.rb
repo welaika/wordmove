@@ -12,6 +12,7 @@ module Wordmove
         expects :logger,
                 :local_options,
                 :remote_options,
+                :cli_options,
                 :photocopier,
                 :folder_task
 
@@ -21,12 +22,15 @@ module Wordmove
         #        movefile (with symbolized keys)
         # @param remote_options [Hash] Remote host options fetched from
         #        movefile (with symbolized keys)
+        # @param cli_options [Hash] Command line options (with symbolized keys)
         # @param photocopier [Photocopier::FTP]
         # @param folder_task [Symbol] Symbolazied folder name
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context|
           context.logger.task "Pulling #{context.folder_task}"
+
+          next context if simulate?(cli_options: context.cli_options)
 
           command = 'get_directory'
 

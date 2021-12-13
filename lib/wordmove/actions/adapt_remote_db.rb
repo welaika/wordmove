@@ -1,5 +1,16 @@
 module Wordmove
   module Actions
+    #
+    # Adapt the remote DB for the local destination.
+    # "To adapt" in Wordmove jargon means to transform URLs strings into the database. This action
+    # will substitute remote URLs with local ones, in order to make the DB to work correctly once
+    # pulled to the local wordpress installation.
+    #
+    # @note This action is not responsible to download the remote DB nor to backup any DB at all.
+    #       It expects to find a dump of the remote DB into +context.db_paths.local.gzipped_path+
+    #       (SSH) or +context.db_paths.local.path+ (FTP), otherwise it will fail and stop the
+    #       procedure.
+    #
     class AdaptRemoteDb
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
@@ -10,6 +21,14 @@ module Wordmove
               :logger,
               :db_paths
 
+      # @!method execute
+      # @param local_options [Hash] Local host options fetched from
+      #        movefile (with symbolized keys)
+      # @param cli_options [Hash] Command line options
+      # @param logger [Wordmove::Logger]
+      # @param db_paths [BbPathsConfig] Configuration object for database
+      # @!scope class
+      # @return [LightService::Context] Action's context
       executed do |context| # rubocop:disable Metrics/BlockLength
         context.logger.task 'Adapt remote DB'
 

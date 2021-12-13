@@ -1,5 +1,8 @@
 module Wordmove
   module Actions
+    #
+    # Take a backup of the local database and save it in +wp-content/+ folder.
+    #
     class BackupLocalDb
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
@@ -9,8 +12,23 @@ module Wordmove
       expects :db_paths
       expects :logger
 
+      # @!method execute
+      # @param local_options [Hash] Local host options fetched from
+      #        movefile (with symbolized keys)
+      # @param cli_options [Hash] Command line options
+      # @param db_paths [BbPathsConfig] Configuration object for database
+      # @param logger [Wordmove::Logger]
+      # @!scope class
+      # @return [LightService::Context] Action's context
       executed do |context|
         context.logger.task 'Backup local DB'
+
+        if simulate?(cli_options: context.cli_options)
+          context.logger.info 'A backup of the local DB would have been saved into ' \
+                              "#{context.db_paths.backup.local.gzipped_path}, " \
+                              'but you\'re simulating'
+          next context
+        end
 
         Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
@@ -27,8 +45,7 @@ module Wordmove
           command: compress_command(file_path: context.db_paths.backup.local.path)
         )
 
-        context.logger.task_step(
-          true,
+        context.logger.success(
           "Backup saved at #{context.db_paths.backup.local.gzipped_path}"
         )
       end

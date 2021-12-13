@@ -15,9 +15,10 @@ module Wordmove
                :wordpress_task
 
       # @!method execute
-      #   @param guardian [Wordmove::Guardian]
-      #   @param cli_options [Hash]
-      #   @return [LightService::Context] Action's context
+      # @param guardian [Wordmove::Guardian]
+      # @param cli_options [Hash]
+      # @!scope class
+      # @return [LightService::Context] Action's context
       executed do |context|
         all_tasks = Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS
 

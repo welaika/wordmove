@@ -24,7 +24,8 @@ module Wordmove
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
-        executed do |context| # rubocop:disable Metrics/BlockLength
+          context.logger.task 'Upload and import adapted DB'
+
           result = Wordmove::Actions::PutFile.execute(
             logger: context.logger,
             photocopier: context.photocopier,
@@ -58,6 +59,7 @@ module Wordmove
           result = Wordmove::Actions::DeleteRemoteFile.execute(
             photocopier: context.photocopier,
             logger: context.logger,
+            cli_options: context.cli_options,
             remote_file: context.db_paths.remote.path
           )
           context.fail!(result.message) if result.failure?

@@ -4,20 +4,27 @@ module Wordmove
     # @note This action is *not* meant to be organized, but as a standalone one.
     class DeleteRemoteFile
       extend LightService::Action
+      include Wordmove::Actions::Helpers
 
       expects :photocopier,
               :logger,
+              :cli_options,
               :remote_file
 
       # @!method execute
-      #   @param photocopier [Photocopier]
-      #   @param logger [Wordmove::Logger]
-      #   @param remote_file ((String) remote file path)
-      #   @return [LightService::Context] Action's context
+      # @param photocopier [Photocopier]
+      # @param logger [Wordmove::Logger]
+      # @param cli_options [Hash] Command line options (with symbolized keys)
+      # @param remote_file ((String) remote file path)
+      # @!scope class
+      # @return [LightService::Context] Action's context
       executed do |context|
         command = 'delete'
 
         context.logger.task_step false, "#{command}: #{context.remote_file}"
+
+        next context if simulate?(cli_options: context.cli_options)
+
         _stdout, stderr, exit_code = context.photocopier.send(command, context.remote_file)
 
         next context if exit_code&.zero?

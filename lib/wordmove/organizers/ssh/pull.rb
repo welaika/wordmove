@@ -39,6 +39,7 @@ module Wordmove
           ].concat [
             Wordmove::Actions::SetupContextForDb,
             Wordmove::Actions::BackupLocalDb,
+            Wordmove::Actions::Ssh::DownloadRemoteDb,
             Wordmove::Actions::AdaptRemoteDb,
             Wordmove::Actions::Ssh::CleanupAfterAdapt
           ].concat [

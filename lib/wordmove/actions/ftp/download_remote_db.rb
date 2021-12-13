@@ -25,7 +25,14 @@ module Wordmove
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context| # rubocop:disable Metrics/BlockLength
-          next context if simulate?(cli_options: context.cli_options)
+          context.logger.task 'Download remote DB'
+
+          if simulate?(cli_options: context.cli_options)
+            context.logger.info 'A dump of the remote DB would have been saved into ' \
+                                "#{context.db_paths.local.path}, " \
+                                'but you\'re simulating'
+            next context
+          end
 
           result = Wordmove::Actions::PutFile.execute(
             photocopier: context.photocopier,
@@ -52,11 +59,13 @@ module Wordmove
             Wordmove::Actions::DeleteRemoteFile.execute(
               photocopier: context.photocopier,
               logger: context.logger,
+              cli_options: context.cli_options,
               remote_file: context.db_paths.ftp.remote.dumped_path
             )
             Wordmove::Actions::DeleteRemoteFile.execute(
               photocopier: context.photocopier,
               logger: context.logger,
+              cli_options: context.cli_options,
               remote_file: context.db_paths.ftp.remote.dump_script_path
             )
           end

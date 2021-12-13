@@ -43,7 +43,8 @@ module Wordmove
             command_args: [local_path, remote_path, exclude_paths],
             folder_task: :wordpress,
             local_options: context.local_options,
-            remote_options: context.remote_options
+            remote_options: context.remote_options,
+            cli_options: context.cli_options
           )
           context.fail!(result.message) if result.failure?
         end
