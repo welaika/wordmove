@@ -23,7 +23,6 @@ module Wordmove
         all_tasks = Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS
 
         requested_tasks = all_tasks.select do |task|
-          # binding.pry
           context.cli_options[task] ||
             (context.cli_options[:all] && context.cli_options[task] != false)
         end

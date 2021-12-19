@@ -6,7 +6,7 @@ module Wordmove
       @movefile = Wordmove::Movefile.new(cli_options, nil, false)
       @environment = @movefile.environment.to_sym
       @action = action
-      @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+      @logger = Logger.new($stdout).tap { |l| l.level = Logger::DEBUG }
     end
 
     def allows(task)

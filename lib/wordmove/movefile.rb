@@ -6,8 +6,8 @@ module Wordmove
                 :options,
                 :cli_options
 
-    def initialize(cli_options = {}, start_dir = nil, verbose = true)
-      @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+    def initialize(cli_options = {}, start_dir = nil, verbose = true) # rubocop:disable Style/OptionalBooleanParameter
+      @logger = Logger.new($stdout).tap { |l| l.level = Logger::DEBUG }
       @cli_options = cli_options.deep_symbolize_keys || {}
       @config_file_name = @cli_options.fetch(:config, nil)
       @start_dir = start_dir || current_dir
@@ -57,7 +57,7 @@ module Wordmove
 
     private
 
-    def fetch(verbose = true)
+    def fetch(verbose = true) # rubocop:disable Style/OptionalBooleanParameter
       load_dotenv
 
       entries = if config_file_name.nil?

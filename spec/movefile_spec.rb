@@ -204,14 +204,14 @@ describe Wordmove::Movefile do
       )
     end
 
-    context 'with more then one environment, but none chosen' do
+    context 'with more than one environment, but none chosen' do
       it 'raises an exception' do
         expect { movefile.environment }
           .to raise_exception(Wordmove::UndefinedEnvironment)
       end
     end
 
-    context 'with more then one environment, but invalid chosen' do
+    context 'with more than one environment, but invalid chosen' do
       let!(:movefile) do
         described_class.new(
           config: movefile_path_for('multi_environments'),
