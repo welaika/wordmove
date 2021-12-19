@@ -19,6 +19,7 @@ describe Wordmove::Hook do
       Wordmove::Actions::Ssh::PutDirectory,
       Wordmove::Actions::Ssh::GetDirectory,
       Wordmove::Actions::SetupContextForDb,
+      Wordmove::Actions::Ssh::DownloadRemoteDb,
       Wordmove::Actions::Ssh::BackupRemoteDb,
       Wordmove::Actions::AdaptLocalDb,
       Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
