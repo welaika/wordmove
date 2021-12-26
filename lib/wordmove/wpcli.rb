@@ -67,7 +67,9 @@ module Wordmove
         YAML.load_file(yml_path).with_indifferent_access['path']
       end
 
-      # Returns the wordpress path as per wp-cli configuration
+      # Returns the wordpress path as per wp-cli configuration.
+      # A possible scenario is that the used wpcli command could return an empty
+      # string: we thus rescue parse errors in order to ignore this config source
       #
       # @return [String, nil] The wordpress path as per wp-cli configuration or nil
       # @!scope class
@@ -75,6 +77,8 @@ module Wordmove
       def load_from_wpcli
         wpcli_config = JSON.parse(`wp cli param-dump --with-values`, symbolize_names: true)
         wpcli_config.dig(:path, :current)
+      rescue JSON::ParserError => _e
+        nil
       end
     end
   end

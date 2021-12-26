@@ -32,6 +32,19 @@ describe Wordmove::Wpcli do
         it 'returns the configured path' do
           expect(subject.wpcli_config_path(a_context)).to eq('/path/to/pudding')
         end
+
+        context 'when wp-cli param-dump returns empty string' do
+          before do
+            allow(subject)
+              .to receive(:`)
+              .with('wp cli param-dump --with-values')
+              .and_return('')
+          end
+
+          it 'will fallback to movefile config without raising errors' do
+            expect { subject.wpcli_config_path(a_context) }.to_not raise_error(JSON::ParserError)
+          end
+        end
       end
     end
   end

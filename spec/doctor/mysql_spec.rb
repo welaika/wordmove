@@ -4,8 +4,12 @@ describe Wordmove::Doctor::Mysql do
   let(:doctor) { described_class.new(movefile_name, movefile_dir) }
 
   context '.new' do
+    before do
+      allow(doctor).to receive(:mysql_server_doctor).and_return true
+      allow(doctor).to receive(:mysql_database_doctor).and_return true
+    end
     it 'implements #check! method' do
-      expect_any_instance_of(described_class).to receive(:check!)
+      expect(doctor).to receive(:check!)
 
       silence_stream($stdout) { doctor.check! }
     end
@@ -29,7 +33,7 @@ describe Wordmove::Doctor::Mysql do
     end
 
     it 'calls mysql database check' do
-      # expect(doctor).to receive(:mysql_database_doctor)
+      expect(doctor).to receive(:mysql_database_doctor)
 
       silence_stream($stdout) { doctor.check! }
     end
