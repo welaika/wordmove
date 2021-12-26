@@ -47,7 +47,9 @@ module Wordmove
           )
         )
 
-        if !context.cli_options[:no_adapt]
+        if context.cli_options[:no_adapt]
+          context.logger.warn 'Skipping DB adapt'
+        else
           Wordmove::Actions::RunLocalCommand.execute(
             cli_options: context.cli_options,
             logger: context.logger,
@@ -59,8 +61,6 @@ module Wordmove
             logger: context.logger,
             command: wpcli_search_replace_command(context, :wordpress_path)
           )
-        else
-          context.logger.warn 'Skipping DB adapt'
         end
 
         Wordmove::Actions::RunLocalCommand.execute(

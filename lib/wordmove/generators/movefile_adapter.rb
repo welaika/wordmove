@@ -16,7 +16,13 @@ module Wordmove
       end
 
       def config
-        OpenStruct.new(database_config)
+        Struct.new(
+          :name,
+          :user,
+          :password,
+          :host,
+          keyword_init: true
+        ).new(database_config)
       end
 
       def database_config

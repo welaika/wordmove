@@ -2,7 +2,6 @@ $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'tempfile'
 require 'pry-byebug'
-require 'priscilla'
 
 require 'simplecov'
 SimpleCov.start do

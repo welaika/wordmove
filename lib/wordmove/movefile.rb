@@ -30,7 +30,7 @@ module Wordmove
       if cli_options[:environment].present? &&
          !available_enviroments.include?(cli_options[:environment].to_sym)
         raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
-                                      "Available Environments: #{available_enviroments.join(' ')}"
+                                    "Available Environments: #{available_enviroments.join(' ')}"
       end
 
       # NOTE: This is Hash#fetch, not self.fetch.

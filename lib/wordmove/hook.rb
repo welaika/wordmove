@@ -1,7 +1,7 @@
 module Wordmove
   class Hook
     def self.logger
-      Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
+      Logger.new($stdout).tap { |l| l.level = Logger::DEBUG }
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -80,7 +80,7 @@ module Wordmove
         Wordmove::Hook.logger
       end
 
-      def self.run(command_hash, options, simulate = false)
+      def self.run(command_hash, options, simulate = false) # rubocop:disable Style/OptionalBooleanParameter
         wordpress_path = options[:wordpress_path]
 
         logger.task_step true, "Exec command: #{command_hash[:command]}"
@@ -103,7 +103,7 @@ module Wordmove
         Wordmove::Hook.logger
       end
 
-      def self.run(command_hash, options, simulate = false)
+      def self.run(command_hash, options, simulate = false) # rubocop:disable Style/OptionalBooleanParameter
         ssh_options = options[:ssh]
         wordpress_path = options[:wordpress_path]
 

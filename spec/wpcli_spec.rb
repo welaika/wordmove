@@ -41,7 +41,7 @@ describe Wordmove::Wpcli do
       a_context[:local_options][:wordpress_path] = fixture_folder_root_relative_path
       expect(subject.wpcli_search_replace_command(a_context, :wordpress_path))
         .to eq('wp search-replace --path=/path/to/steak /var/www/your_site spec/fixtures --quiet '\
-              '--skip-columns=guid --all-tables --allow-root')
+               '--skip-columns=guid --all-tables --allow-root')
     end
 
     context 'when wrong config_key is passed' do

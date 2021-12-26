@@ -5,7 +5,7 @@ describe Wordmove::Doctor::Ssh do
     it 'implements #check! method' do
       expect_any_instance_of(described_class).to receive(:check!)
 
-      silence_stream(STDOUT) { doctor.check! }
+      silence_stream($stdout) { doctor.check! }
     end
   end
 end

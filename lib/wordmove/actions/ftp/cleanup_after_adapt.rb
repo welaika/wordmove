@@ -34,9 +34,9 @@ module Wordmove
 
           if result.failure?
             context.logger.warning 'Failed to delete remote file ' \
-                                  "#{context.db_paths.local.path} because: " \
-                                  "#{result.message}" \
-                                  '. Manual intervention required'
+                                   "#{context.db_paths.local.path} because: " \
+                                   "#{result.message}" \
+                                   '. Manual intervention required'
           end
 
           [
@@ -58,9 +58,9 @@ module Wordmove
 
             if result.failure? # rubocop:disable Style/Next
               context.logger.warning 'Failed to delete remote file ' \
-                                    "#{file} because: " \
-                                    "#{result.message}" \
-                                    '. Manual intervention required'
+                                     "#{file} because: " \
+                                     "#{result.message}" \
+                                     '. Manual intervention required'
             end
           end
         end
