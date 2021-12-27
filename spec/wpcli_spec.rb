@@ -42,7 +42,8 @@ describe Wordmove::Wpcli do
           end
 
           it 'will fallback to movefile config without raising errors' do
-            expect { subject.wpcli_config_path(a_context) }.to_not raise_error(JSON::ParserError)
+            expect { subject.wpcli_config_path(a_context) }.to_not raise_error
+            # Would have been JSON::ParserError
           end
         end
       end
