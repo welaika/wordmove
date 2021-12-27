@@ -63,11 +63,18 @@ module Wordmove
           if context.cli_options[:debug]
             context.logger.debug "Operation log located at: #{context.db_paths.ftp.local.temp_path}"
           else
-            Wordmove::Actions::DeleteLocalFile.execute(
+            result = Wordmove::Actions::DeleteLocalFile.execute(
               cli_options: context.cli_options,
               logger: context.logger,
               file_path: context.db_paths.ftp.local.temp_path
             )
+
+            if result.failure?
+              context.logger.warning 'Failed to delete local file ' \
+                                     "#{context.db_paths.ftp.local.temp_path} because: " \
+                                     "#{result.message}" \
+                                     '. Manual intervention required'
+            end
           end
         end
       end

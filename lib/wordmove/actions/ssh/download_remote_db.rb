@@ -66,7 +66,12 @@ module Wordmove
             cli_options: context.cli_options,
             remote_file: context.db_paths.remote.gzipped_path
           )
-          context.fail_and_return!(result.message) if result.failure?
+          if result.failure?
+            context.logger.warning 'Failed to delete remote file ' \
+                                   "#{context.db_paths.remote.gzipped_path} because: " \
+                                   "#{result.message}" \
+                                   '. Manual intervention required'
+          end
 
           context.logger.success(
             "Remote DB dump downloaded in #{context.db_paths.local.gzipped_path}"

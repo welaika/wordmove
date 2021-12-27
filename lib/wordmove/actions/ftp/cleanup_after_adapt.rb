@@ -35,7 +35,7 @@ module Wordmove
           )
 
           if result.failure?
-            context.logger.warning 'Failed to delete remote file ' \
+            context.logger.warning 'Failed to delete local file ' \
                                    "#{context.db_paths.local.path} because: " \
                                    "#{result.message}" \
                                    '. Manual intervention required'
