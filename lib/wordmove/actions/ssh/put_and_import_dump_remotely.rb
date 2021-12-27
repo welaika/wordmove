@@ -64,7 +64,12 @@ module Wordmove
             cli_options: context.cli_options,
             remote_file: context.db_paths.remote.path
           )
-          context.fail!(result.message) if result.failure?
+          if result.failure?
+            context.logger.warning 'Failed to delete remote file ' \
+                                   "#{context.db_paths.remote.path} because: " \
+                                   "#{result.message}" \
+                                   '. Manual intervention required'
+          end
         end
       end
     end

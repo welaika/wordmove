@@ -31,14 +31,24 @@ module Wordmove
             cli_options: context.cli_options,
             file_path: context.db_paths.local.path
           )
-          context.fail_and_return!(result.message) if result.failure?
+          if result.failure?
+            context.logger.warning 'Failed to delete local file ' \
+                                   "#{context.db_paths.local.path} because: " \
+                                   "#{result.message}" \
+                                   '. Manual intervention required'
+          end
 
           result = Wordmove::Actions::DeleteLocalFile.execute(
             cli_options: context.cli_options,
             logger: context.logger,
             file_path: context.db_paths.local.gzipped_adapted_path
           )
-          context.fail_and_return!(result.message) if result.failure?
+          if result.failure?
+            context.logger.warning 'Failed to delete local file ' \
+                                   "#{context.db_paths.local.gzipped_adapted_path} because: " \
+                                   "#{result.message}" \
+                                   '. Manual intervention required'
+          end
         end
       end
     end
