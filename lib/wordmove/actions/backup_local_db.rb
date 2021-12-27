@@ -32,7 +32,7 @@ module Wordmove
           next context
         end
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: mysql_dump_command(
@@ -40,12 +40,14 @@ module Wordmove
             save_to_path: context.db_paths.backup.local.path
           )
         )
+        context.fail_and_return!(result.message) if result.failure?
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: compress_command(file_path: context.db_paths.backup.local.path)
         )
+        context.fail_and_return!(result.message) if result.failure?
 
         context.logger.success(
           "Backup saved at #{context.db_paths.backup.local.gzipped_path}"

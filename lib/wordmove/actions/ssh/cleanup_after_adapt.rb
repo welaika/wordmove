@@ -26,17 +26,19 @@ module Wordmove
             next context
           end
 
-          Wordmove::Actions::DeleteLocalFile.execute(
+          result = Wordmove::Actions::DeleteLocalFile.execute(
             logger: context.logger,
             cli_options: context.cli_options,
             file_path: context.db_paths.local.path
           )
+          context.fail_and_return!(result.message) if result.failure?
 
-          Wordmove::Actions::DeleteLocalFile.execute(
+          result = Wordmove::Actions::DeleteLocalFile.execute(
             cli_options: context.cli_options,
             logger: context.logger,
             file_path: context.db_paths.local.gzipped_adapted_path
           )
+          context.fail_and_return!(result.message) if result.failure?
         end
       end
     end

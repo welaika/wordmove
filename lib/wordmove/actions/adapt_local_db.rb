@@ -40,7 +40,7 @@ module Wordmove
 
         next context if simulate?(cli_options: context.cli_options)
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: mysql_dump_command(
@@ -48,24 +48,27 @@ module Wordmove
             save_to_path: context.db_paths.local.path
           )
         )
+        context.fail_and_return!(result.message) if result.failure?
 
         if context.cli_options[:no_adapt]
           context.logger.warn 'Skipping DB adapt'
         else
-          Wordmove::Actions::RunLocalCommand.execute(
+          result = Wordmove::Actions::RunLocalCommand.execute(
             cli_options: context.cli_options,
             logger: context.logger,
             command: wpcli_search_replace_command(context, :vhost)
           )
+          context.fail_and_return!(result.message) if result.failure?
 
-          Wordmove::Actions::RunLocalCommand.execute(
+          result = Wordmove::Actions::RunLocalCommand.execute(
             cli_options: context.cli_options,
             logger: context.logger,
             command: wpcli_search_replace_command(context, :wordpress_path)
           )
+          context.fail_and_return!(result.message) if result.failure?
         end
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
 
           logger: context.logger,
@@ -74,16 +77,18 @@ module Wordmove
             save_to_path: context.db_paths.local.adapted_path
           )
         )
+        context.fail_and_return!(result.message) if result.failure?
 
         if context.photocopier.is_a? Photocopier::SSH
-          Wordmove::Actions::RunLocalCommand.execute(
+          result = Wordmove::Actions::RunLocalCommand.execute(
             cli_options: context.cli_options,
             logger: context.logger,
             command: compress_command(file_path: context.db_paths.local.adapted_path)
           )
+          context.fail_and_return!(result.message) if result.failure?
         end
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: mysql_import_command(
@@ -91,6 +96,7 @@ module Wordmove
             env_db_options: context.local_options[:database]
           )
         )
+        context.fail_and_return!(result.message) if result.failure?
       end
     end
   end

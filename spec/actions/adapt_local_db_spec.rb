@@ -21,9 +21,9 @@ describe Wordmove::Actions::AdaptLocalDb do
     # Note we're stubbing subsequent actions from organizer.
     # This stubs could be useful for using spies on classes.
     stubbed_actions.each do |action|
-      allow(action).to receive(:execute)
+      stub_action(action)
     end
-    allow(local_command_stub).to receive(:execute)
+    stub_action(local_command_stub)
   end
 
   it 'works like it should' do

@@ -14,7 +14,7 @@ describe Wordmove::Actions::SetupContextForDb do
     # Note we're stubbing subsequent actions from organizer.
     # This stubs could be useful for using spies on classes.
     stubbed_actions.each do |action|
-      allow(action).to receive(:execute)
+      stub_action(action)
     end
   end
 

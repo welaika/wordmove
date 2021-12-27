@@ -15,17 +15,25 @@ describe Wordmove::Hook do
   let(:stubbed_actions) do
     [
       Wordmove::Actions::Ssh::PushWordpress,
+      Wordmove::Actions::Ftp::PushWordpress,
       Wordmove::Actions::Ssh::PullWordpress,
+      Wordmove::Actions::Ftp::PullWordpress,
       Wordmove::Actions::Ssh::PutDirectory,
+      Wordmove::Actions::Ftp::PutDirectory,
       Wordmove::Actions::Ssh::GetDirectory,
+      Wordmove::Actions::Ftp::GetDirectory,
       Wordmove::Actions::SetupContextForDb,
       Wordmove::Actions::Ssh::DownloadRemoteDb,
+      Wordmove::Actions::Ftp::DownloadRemoteDb,
       Wordmove::Actions::Ssh::BackupRemoteDb,
+      Wordmove::Actions::Ftp::BackupRemoteDb,
       Wordmove::Actions::AdaptLocalDb,
       Wordmove::Actions::Ssh::PutAndImportDumpRemotely,
+      Wordmove::Actions::Ftp::PutAndImportDumpRemotely,
       Wordmove::Actions::BackupLocalDb,
       Wordmove::Actions::AdaptRemoteDb,
-      Wordmove::Actions::Ssh::CleanupAfterAdapt
+      Wordmove::Actions::Ssh::CleanupAfterAdapt,
+      Wordmove::Actions::Ftp::CleanupAfterAdapt
     ]
   end
 
@@ -33,7 +41,7 @@ describe Wordmove::Hook do
     # Note we're stubbing actions from organizers others than ones
     # calling the hooks. I consider this approach to be affordable enough.
     stubbed_actions.each do |action|
-      allow(action).to receive(:execute)
+      stub_action(action)
     end
   end
 
@@ -237,21 +245,16 @@ describe Wordmove::Hook do
 
     context 'when pushing to a remote with ftp' do
       let(:options) { common_options.merge(environment: 'ftp_with_hooks') }
-      let(:context) do
-        {
-          cli_options: options,
-          movefile: Wordmove::Movefile.new(options)
-        }
-      end
 
       context 'having remote hooks' do
-        xit 'does not run the remote hooks' do
+        it 'does not run the remote hooks and alert the user' do
           expect(Wordmove::Hook::Remote)
             .to_not receive(:run)
 
-          silence_stream($stdout) do
-            Wordmove::Organizers::Ssh::Push.call(context)
-          end
+          expect { Wordmove::Organizers::Ftp::Push.call(**context) }
+            .to output(
+              /You have configured remote hooks to run over an FTP connection, but this is not possible/ # rubocop:disable Layout/LineLength
+            ).to_stdout_from_any_process
         end
       end
     end

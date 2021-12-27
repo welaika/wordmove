@@ -54,7 +54,7 @@ module Wordmove
           )
         end
 
-        Wordmove::Actions::RunLocalCommand.execute(
+        result = Wordmove::Actions::RunLocalCommand.execute(
           cli_options: context.cli_options,
           logger: context.logger,
           command: mysql_import_command(
@@ -62,6 +62,7 @@ module Wordmove
             env_db_options: context.local_options[:database]
           )
         )
+        context.fail_and_return!(result.message) if result.failure?
 
         if context.cli_options[:no_adapt]
           context.logger.warn 'Skipping DB adapt'

@@ -58,7 +58,15 @@ module ActionHelpers
   # Note that you have to call this mocking method before `context` is
   # initialized, in order to have the mocked logger right into the context.
   def silence_logger!
-    allow(Wordmove::Logger).to receive(:new).and_return(Wordmove::Logger.new('/dev/null'))
+    allow(Wordmove::Logger).to receive(:new).and_return(Wordmove::Logger.new(File::NULL))
+  end
+
+  def stub_action(action)
+    allow(action).to receive(:execute).and_return(stubbed_success_result)
+  end
+
+  def stubbed_success_result
+    Struct.new(:failure?, :success?).new(false, true)
   end
 end
 
