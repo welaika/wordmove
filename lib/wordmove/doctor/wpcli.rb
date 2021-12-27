@@ -36,7 +36,7 @@ module Wordmove
       end
 
       def up_to_date?
-        `wp cli check-update --format=json`.empty?
+        `wp cli check-update --format=json --allow-root`.empty?
       end
     end
   end

@@ -75,7 +75,10 @@ module Wordmove
       # @!scope class
       # @!visibility private
       def load_from_wpcli
-        wpcli_config = JSON.parse(`wp cli param-dump --with-values`, symbolize_names: true)
+        wpcli_config = JSON.parse(
+          `wp cli param-dump --with-values --allow-root`,
+          symbolize_names: true
+        )
         wpcli_config.dig(:path, :current)
       rescue JSON::ParserError => _e
         nil
