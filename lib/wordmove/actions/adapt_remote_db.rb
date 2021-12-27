@@ -30,6 +30,8 @@ module Wordmove
       # @!scope class
       # @return [LightService::Context] Action's context
       executed do |context| # rubocop:disable Metrics/BlockLength
+        next context if context.database_task == false
+
         context.logger.task 'Adapt remote DB'
 
         unless wp_in_path?

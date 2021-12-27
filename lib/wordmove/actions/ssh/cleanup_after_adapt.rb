@@ -17,6 +17,8 @@ module Wordmove
         # @!scope class
         # @return [LightService::Context] Action's context
         executed do |context|
+          next context if context.database_task == false
+
           context.logger.task 'Cleanup'
 
           if simulate?(cli_options: context.cli_options)

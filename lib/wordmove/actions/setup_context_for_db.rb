@@ -17,7 +17,6 @@ module Wordmove
 
       executed do |context| # rubocop:disable Metrics/BlockLength
         if context.database_task == false
-          context.skip_remaining!
           context.db_paths = false
           next context
         end
