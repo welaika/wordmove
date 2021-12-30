@@ -109,31 +109,31 @@ describe Wordmove::Hook do
       it 'runs registered before local hooks' do
         expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push before local/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered before local hooks in the wordpress folder' do
         expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/#{Dir.tmpdir}/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered before remote hooks' do
         expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push before remote/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered after local hooks' do
         expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push after local/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered after remote hooks' do
         expect { Wordmove::Organizers::Ssh::Push.call(context) }
           .to output(/Calling hook push after remote/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       context 'if --similate was passed by user on cli' do
@@ -144,7 +144,7 @@ describe Wordmove::Hook do
         it 'does not really run any commands' do
           expect { Wordmove::Organizers::Ssh::Push.call(context) }
             .not_to output(/Output:/)
-            .to_stdout_from_any_process
+            .to_stdout
         end
       end
 
@@ -156,7 +156,7 @@ describe Wordmove::Hook do
             expect do
               Wordmove::Organizers::Ssh::Push.call(context)
             end.to raise_exception(Wordmove::LocalHookException)
-          end.to output(/Error code: 127/).to_stdout_from_any_process
+          end.to output(/Error code: 127/).to_stdout
         end
 
         context 'with raise set to `false`' do
@@ -170,7 +170,7 @@ describe Wordmove::Hook do
                 Wordmove::Organizers::Ssh::Push.call(context)
               end.to_not raise_exception
             end.to output(/Error code: 127/)
-              .to_stdout_from_any_process
+              .to_stdout
           end
         end
       end
@@ -189,31 +189,31 @@ describe Wordmove::Hook do
       it 'runs registered before local hooks' do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull before local/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered before remote hooks' do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull before remote/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered after local hooks' do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull after local/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'runs registered after remote hooks' do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Calling hook pull after remote/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       it 'return remote stdout' do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/Stubbed remote stdout/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
 
       context 'with remote hook errored' do
@@ -230,7 +230,7 @@ describe Wordmove::Hook do
               Wordmove::Organizers::Ssh::Pull.call(context)
             end.to raise_exception(Wordmove::RemoteHookException)
           end.to output(/Stubbed remote stderr/)
-            .to_stdout_from_any_process
+            .to_stdout
         end
 
         it 'raises a RemoteHookException' do
@@ -254,7 +254,7 @@ describe Wordmove::Hook do
           expect { Wordmove::Organizers::Ftp::Push.call(**context) }
             .to output(
               /You have configured remote hooks to run over an FTP connection, but this is not possible/ # rubocop:disable Layout/LineLength
-            ).to_stdout_from_any_process
+            ).to_stdout
         end
       end
     end
@@ -276,7 +276,7 @@ describe Wordmove::Hook do
       it "works silently ignoring 'before' step is not present" do
         expect { Wordmove::Organizers::Ssh::Pull.call(context) }
           .to output(/I've partially configured my hooks/)
-          .to_stdout_from_any_process
+          .to_stdout
       end
     end
   end
