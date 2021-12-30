@@ -33,8 +33,8 @@ module Wordmove
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
-          context.remote_options[config_key],
-          context.local_options[config_key],
+          context.dig(:remote_options, config_key),
+          context.dig(:local_options, config_key),
           '--quiet',
           '--skip-columns=guid',
           '--all-tables',
@@ -50,7 +50,7 @@ module Wordmove
       # @return [String]
       # @!scope class
       def wpcli_config_path(context)
-        load_from_yml(context) || load_from_wpcli || context.local_options[:wordpress_path]
+        load_from_yml(context) || load_from_wpcli || context.dig(:local_options, :wordpress_path)
       end
 
       # If wordpress installation brings a `wp-cli.yml` file in its root folder,
@@ -60,7 +60,7 @@ module Wordmove
       # @!scope class
       # @!visibility private
       def load_from_yml(context)
-        yml_path = File.join(context.local_options[:wordpress_path], 'wp-cli.yml')
+        yml_path = File.join(context.dig(:local_options, :wordpress_path), 'wp-cli.yml')
 
         return unless File.exist?(yml_path)
 
