@@ -21,8 +21,6 @@ module Wordmove
       # @!scope class
       # @return [LightService::Context] Action's context
       executed do |context| # rubocop:disable Metrics/BlockLength
-        next context if context.database_task == false
-
         context.logger.task 'Backup local DB'
 
         if simulate?(cli_options: context.cli_options)

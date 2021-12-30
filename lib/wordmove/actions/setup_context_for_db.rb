@@ -16,11 +16,6 @@ module Wordmove
       promises :db_paths
 
       executed do |context| # rubocop:disable Metrics/BlockLength
-        if context.database_task == false
-          context.db_paths = false
-          next context
-        end
-
         next context if simulate?(cli_options: context.cli_options)
 
         content_dir = local_wp_content_dir(local_options: context.local_options)

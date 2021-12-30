@@ -35,14 +35,15 @@ module Wordmove
               ->(ctx) { ctx.wordpress_task },
               [Wordmove::Actions::Ftp::PullWordpress]
             ),
-            iterate(:folder_tasks, [Wordmove::Actions::Ftp::GetDirectory])
-          ].concat [
-            Wordmove::Actions::SetupContextForDb,
-            Wordmove::Actions::BackupLocalDb,
-            Wordmove::Actions::Ftp::DownloadRemoteDb,
-            Wordmove::Actions::AdaptRemoteDb,
-            Wordmove::Actions::Ftp::CleanupAfterAdapt
-          ].concat [
+            iterate(:folder_tasks, [Wordmove::Actions::Ftp::GetDirectory]),
+            reduce_if(->(ctx) { ctx.database_task },
+                      [
+                        Wordmove::Actions::SetupContextForDb,
+                        Wordmove::Actions::BackupLocalDb,
+                        Wordmove::Actions::Ftp::DownloadRemoteDb,
+                        Wordmove::Actions::AdaptRemoteDb,
+                        Wordmove::Actions::Ftp::CleanupAfterAdapt
+                      ]),
             Wordmove::Actions::RunAfterPullHook # Will fail and warn the user
           ]
         end

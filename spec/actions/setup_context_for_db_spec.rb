@@ -18,17 +18,6 @@ describe Wordmove::Actions::SetupContextForDb do
     end
   end
 
-  context 'when is not required to push/pull db' do
-    let(:context) do
-      OrganizerContextFactory.make_for(described_class, :push, cli_options: { db: false })
-    end
-
-    it 'skips remaining actions' do
-      result = described_class.execute(context)
-      expect(result.db_paths).to be false
-    end
-  end
-
   context 'when is required to push/pull db' do
     let(:context) do
       OrganizerContextFactory.make_for(described_class, :push, cli_options: { db: true })
@@ -36,7 +25,7 @@ describe Wordmove::Actions::SetupContextForDb do
 
     it 'execute remaining actions' do
       result = described_class.execute(context)
-      expect(result.skip_remaining?).to be false
+      expect(result.db_paths).to be DbPathsConfig
     end
   end
 end

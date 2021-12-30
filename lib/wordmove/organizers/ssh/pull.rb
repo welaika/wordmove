@@ -35,14 +35,15 @@ module Wordmove
               ->(ctx) { ctx.wordpress_task },
               [Wordmove::Actions::Ssh::PullWordpress]
             ),
-            iterate(:folder_tasks, [Wordmove::Actions::Ssh::GetDirectory])
-          ].concat [
-            Wordmove::Actions::SetupContextForDb,
-            Wordmove::Actions::BackupLocalDb,
-            Wordmove::Actions::Ssh::DownloadRemoteDb,
-            Wordmove::Actions::AdaptRemoteDb,
-            Wordmove::Actions::Ssh::CleanupAfterAdapt
-          ].concat [
+            iterate(:folder_tasks, [Wordmove::Actions::Ssh::GetDirectory]),
+            reduce_if(->(ctx) { ctx.database_task },
+                      [
+                        Wordmove::Actions::SetupContextForDb,
+                        Wordmove::Actions::BackupLocalDb,
+                        Wordmove::Actions::Ssh::DownloadRemoteDb,
+                        Wordmove::Actions::AdaptRemoteDb,
+                        Wordmove::Actions::Ssh::CleanupAfterAdapt
+                      ]),
             Wordmove::Actions::RunAfterPullHook
           ]
         end
