@@ -54,7 +54,8 @@ describe Wordmove::Wpcli do
     it 'returns the expected command' do
       a_context[:local_options][:wordpress_path] = fixture_folder_root_relative_path
       expect(subject.wpcli_search_replace_command(a_context, :wordpress_path))
-        .to eq('wp search-replace --path=/path/to/steak /var/www/your_site spec/fixtures --quiet '\
+        .to eq('wp search-replace --path=/path/to/steak "\A/var/www/your_site\Z" ' \
+               '"spec/fixtures" --regex-delimiter="|" --regex --precise --quiet ' \
                '--skip-columns=guid --all-tables --allow-root')
     end
 

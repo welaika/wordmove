@@ -33,8 +33,11 @@ module Wordmove
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
-          context.dig(:remote_options, config_key),
-          context.dig(:local_options, config_key),
+          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
+          '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
+          '--regex-delimiter="|"',
+          '--regex',
+          '--precise',
           '--quiet',
           '--skip-columns=guid',
           '--all-tables',
