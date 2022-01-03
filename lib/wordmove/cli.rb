@@ -32,16 +32,9 @@ module Wordmove
           exit 1
         end
 
-        def initial_context(cli_options)
-          cli_options.deep_symbolize_keys!
-          movefile = Wordmove::Movefile.new(cli_options)
-
-          [cli_options, movefile]
-        end
-
-        def movefile_from(**cli_options)
+        def movefile_from(cli_options)
           ensure_wordpress_options_presence!(cli_options)
-          Wordmove::Movefile.new(cli_options)
+          Wordmove::Movefile.new(cli_options, nil, true)
         rescue MovefileNotFound => e
           Logger.new($stdout).error(e.message)
           exit 1

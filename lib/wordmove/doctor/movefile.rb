@@ -5,7 +5,7 @@ module Wordmove
       attr_reader :movefile, :contents, :root_keys
 
       def initialize(cli_options = {}, dir = '.')
-        @movefile = Wordmove::Movefile.new(cli_options, dir)
+        @movefile = Wordmove::Movefile.new(cli_options, dir, false)
 
         begin
           @contents = movefile.options
