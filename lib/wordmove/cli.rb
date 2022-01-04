@@ -122,7 +122,9 @@ module Wordmove
               cli_options: cli_options
             )
           else
-            raise NoAdapterFound, 'No valid adapter found.'
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
           end
         rescue NoAdapterFound => e
           Logger.new($stdout).error(e.message)
@@ -157,7 +159,9 @@ module Wordmove
               cli_options: cli_options
             )
           else
-            raise NoAdapterFound, 'No valid adapter found.'
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
           end
         rescue NoAdapterFound => e
           Logger.new($stdout).error(e.message)
