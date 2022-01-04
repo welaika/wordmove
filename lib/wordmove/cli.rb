@@ -32,23 +32,16 @@ module Wordmove
           exit 1
         end
 
-        def initial_context(cli_options)
-          cli_options.deep_symbolize_keys!
-          movefile = Wordmove::Movefile.new(cli_options)
-
-          [cli_options, movefile]
-        end
-
-        def movefile_from(**cli_options)
+        def movefile_from(cli_options)
           ensure_wordpress_options_presence!(cli_options)
-          Wordmove::Movefile.new(cli_options)
+          Wordmove::Movefile.new(cli_options, nil, true)
         rescue MovefileNotFound => e
           Logger.new($stdout).error(e.message)
           exit 1
         end
 
-        def call_organizer_with(klass:, movefile:, **cli_options)
-          result = klass.call(cli_options: cli_options, movefile: movefile)
+        def call_organizer_with(klass:, movefile:, cli_options:)
+          result = klass.call(cli_options, movefile)
 
           exit 0 if result.success?
 
@@ -114,22 +107,24 @@ module Wordmove
         private
 
         def call_pull_organizer_with(**cli_options)
-          movefile = movefile_from(**cli_options)
+          movefile = movefile_from(cli_options)
 
           if movefile.options.dig(movefile.environment, :ssh)
             call_organizer_with(
               klass: Wordmove::Organizers::Ssh::Pull,
               movefile: movefile,
-              **cli_options
+              cli_options: cli_options
             )
           elsif movefile.options.dig(movefile.environment, :ftp)
             call_organizer_with(
               klass: Wordmove::Organizers::Ftp::Pull,
               movefile: movefile,
-              **cli_options
+              cli_options: cli_options
             )
           else
-            raise NoAdapterFound, 'No valid adapter found.'
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
           end
         rescue NoAdapterFound => e
           Logger.new($stdout).error(e.message)
@@ -149,22 +144,24 @@ module Wordmove
         private
 
         def call_push_organizer_with(**cli_options)
-          movefile = movefile_from(**cli_options)
+          movefile = movefile_from(cli_options)
 
           if movefile.options.dig(movefile.environment, :ssh)
             call_organizer_with(
               klass: Wordmove::Organizers::Ssh::Push,
               movefile: movefile,
-              **cli_options
+              cli_options: cli_options
             )
           elsif movefile.options.dig(movefile.environment, :ftp)
             call_organizer_with(
               klass: Wordmove::Organizers::Ftp::Push,
               movefile: movefile,
-              **cli_options
+              cli_options: cli_options
             )
           else
-            raise NoAdapterFound, 'No valid adapter found.'
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
           end
         rescue NoAdapterFound => e
           Logger.new($stdout).error(e.message)

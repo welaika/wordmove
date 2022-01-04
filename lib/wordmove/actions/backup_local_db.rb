@@ -30,26 +30,40 @@ module Wordmove
           next context
         end
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: mysql_dump_command(
-            env_db_options: context.local_options[:database],
-            save_to_path: context.db_paths.backup.local.path
-          )
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        context.logger.task_step true, dump_command(context)
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: compress_command(file_path: context.db_paths.backup.local.path)
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        begin
+          system(dump_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
+
+        context.logger.task_step true, compress_command(context)
+
+        begin
+          system(compress_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
 
         context.logger.success(
           "Backup saved at #{context.db_paths.backup.local.gzipped_path}"
         )
+      end
+
+      def self.dump_command(context)
+        "wp db export #{context.db_paths.backup.local.path} --allow-root --quiet"
+      end
+
+      def self.compress_command(context)
+        command = ['nice']
+        command << '-n'
+        command << '0'
+        command << 'gzip'
+        command << '-9'
+        command << '-f'
+        command << "\"#{context.db_paths.backup.local.path}\""
+        command.join(' ')
       end
     end
   end

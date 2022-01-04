@@ -14,8 +14,6 @@ describe Wordmove::Actions::AdaptLocalDb do
     ]
   end
 
-  let(:local_command_stub) { class_double('Wordmove::Actions::RunLocalCommand').as_stubbed_const }
-
   before do
     silence_logger!
     # Note we're stubbing subsequent actions from organizer.
@@ -23,7 +21,10 @@ describe Wordmove::Actions::AdaptLocalDb do
     stubbed_actions.each do |action|
       stub_action(action)
     end
-    stub_action(local_command_stub)
+
+    allow(described_class)
+      .to receive(:system)
+      .and_return(true)
   end
 
   it 'works like it should' do
@@ -31,10 +32,7 @@ describe Wordmove::Actions::AdaptLocalDb do
       context
     )
 
-    aggregate_failures 'testing sub-actions' do
-      expect(local_command_stub).to have_received(:execute).exactly(6).times
-      expect(result).to be_success
-    end
+    expect(result).to be_success
   end
 
   context 'when --no-adapt' do
@@ -50,8 +48,26 @@ describe Wordmove::Actions::AdaptLocalDb do
       )
 
       aggregate_failures 'testing sub-actions' do
-        expect(local_command_stub).to have_received(:execute).exactly(4).times
         expect(result).to be_success
+        expect(described_class)
+          .to_not have_received(:system)
+          .with(/wp search-replace/, exception: true)
+      end
+    end
+  end
+
+  context '.search_replace_command' do
+    it 'returns the expected command' do
+      expect(subject.class.search_replace_command(context, :wordpress_path))
+        .to eq('wp search-replace --path=~/dev/sites/your_site "\A~/dev/sites/your_site\Z" ' \
+               '"/var/www/your_site" --regex-delimiter="|" --regex --precise --quiet ' \
+               '--skip-columns=guid --all-tables --allow-root')
+    end
+
+    context 'when wrong config_key is passed' do
+      it 'raises an error' do
+        expect { subject.class.search_replace_command(context, :wrong) }
+          .to raise_error(ArgumentError)
       end
     end
   end

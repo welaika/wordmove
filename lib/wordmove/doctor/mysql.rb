@@ -7,7 +7,7 @@ module Wordmove
         @logger = Logger.new($stdout).tap { |l| l.level = Logger::INFO }
         begin
           @config = Wordmove::Movefile
-                    .new({ config: movefile_name }, movefile_dir)
+                    .new({ config: movefile_name }, movefile_dir, false)
                     .options[:local][:database]
         rescue Psych::SyntaxError => e
           logger.error e.message

@@ -1,13 +1,7 @@
 global:
-  sql_adapter: "default"
+  sql_adapter: "wpcli"
 local:
-  vhost: "http://vhost.local"
   wordpress_path: "~/dev/sites/your_site"
-  database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "host"
   paths:
     uploads: 'wp-content/pirate'
 remote:

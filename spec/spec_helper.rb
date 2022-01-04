@@ -10,7 +10,7 @@ end
 
 require 'wordmove'
 
-Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 
 # I don't know from where this method was imported,
 # but since last updates it was lost. I looked about
@@ -28,7 +28,7 @@ ensure
   old_stream.close
 end
 
-RSpec.configure do |config|
+RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
@@ -41,4 +41,34 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = './spec/examples.txt'
 
   config.formatter = :documentation
+
+  config.before :each do
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_option)
+      .and_return('an option')
+
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_option)
+      .with('siteurl', config_path: instance_of(String))
+      .and_return('http://example.com')
+
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_config)
+      .and_return('a config')
+
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_config)
+      .with('DB_PASSWORD', config_path: instance_of(String))
+      .and_return('local_database_password')
+
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_config)
+      .with('DB_HOST', config_path: instance_of(String))
+      .and_return('local_database_host')
+
+    allow(Wordmove::WpcliHelpers)
+      .to receive(:get_config)
+      .with('DB_NAME', config_path: instance_of(String))
+      .and_return('local_database_name')
+  end
 end

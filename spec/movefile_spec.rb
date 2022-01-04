@@ -159,7 +159,7 @@ describe Wordmove::Movefile do
         %w[
           local_database_password
           local_database_host
-          http://secrets.local
+          http://example.com
           ~/dev/sites/your_site
           remote_database_password
           remote_database_host
@@ -175,12 +175,17 @@ describe Wordmove::Movefile do
     end
 
     it 'returns all the secrets found in movefile excluding empty string values' do
+      allow(Wordmove::WpcliHelpers)
+        .to receive(:get_config)
+        .with('DB_PASSWORD', config_path: instance_of(String))
+        .and_return('')
+
       path = movefile_path_for('with_secrets_with_empty_local_db_password')
       movefile = described_class.new(config: path)
       expect(movefile.secrets).to eq(
         %w[
           local_database_host
-          http://secrets.local
+          http://example.com
           ~/dev/sites/your_site
           remote_database_password
           remote_database_host

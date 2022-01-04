@@ -45,10 +45,7 @@ class OrganizerContextFactory
     LightService::Testing::ContextFactory
       .make_from("Wordmove::Organizers::Ssh::#{wordmove_action.to_s.camelize}".constantize)
       .for(action)
-      .with(
-        cli_options: cli_options,
-        movefile: movefile
-      )
+      .with(cli_options, movefile)
   end
 end
 

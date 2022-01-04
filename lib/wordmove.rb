@@ -17,6 +17,8 @@ require 'yaml'
 
 require 'photocopier'
 
+require 'wordmove/wpcli'
+
 require 'wordmove/cli'
 require 'wordmove/doctor'
 require 'wordmove/doctor/movefile'
@@ -32,9 +34,7 @@ require 'wordmove/movefile'
 require 'wordmove/wordpress_directory'
 require 'wordmove/version'
 require 'wordmove/environments_list'
-require 'wordmove/wpcli'
 
-require 'wordmove/generators/movefile_adapter'
 require 'wordmove/generators/movefile'
 
 require 'wordmove/db_paths_config'
@@ -42,8 +42,8 @@ require 'wordmove/db_paths_config'
 require 'wordmove/actions/helpers'
 require 'wordmove/actions/ssh/helpers'
 require 'wordmove/actions/ftp/helpers'
-Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].sort.each { |file| require file }
-Dir[File.join(__dir__, 'wordmove/organizers/**/*.rb')].sort.each { |file| require file }
+Dir[File.join(__dir__, 'wordmove/actions/**/*.rb')].each { |file| require file }
+Dir[File.join(__dir__, 'wordmove/organizers/**/*.rb')].each { |file| require file }
 
 module Wordmove
   # Interactors' namespce. Interactors are called "Actions", following the LightService convention.

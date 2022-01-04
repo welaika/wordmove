@@ -50,14 +50,14 @@ describe WordpressDirectory do
     context 'given an additional path as a string' do
       it 'returns the URL of the folder joined with the additional path' do
         wd = described_class.new(:uploads, options)
-        expect(wd.url('pirate.png')).to eq('http://vhost.local/wp-content/uploads/pirate.png')
+        expect(wd.url('pirate.png')).to eq('http://example.com/wp-content/uploads/pirate.png')
       end
     end
 
     context 'without arguments' do
       it 'returns the URL for the required folder' do
         wd = described_class.new(:uploads, options)
-        expect(wd.url).to eq('http://vhost.local/wp-content/uploads')
+        expect(wd.url).to eq('http://example.com/wp-content/uploads')
       end
     end
   end

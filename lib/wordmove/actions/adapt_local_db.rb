@@ -9,7 +9,7 @@ module Wordmove
     class AdaptLocalDb
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
-      include Wordmove::Wpcli
+      include Wordmove::WpcliHelpers
 
       expects :local_options,
               :remote_options,
@@ -38,63 +38,104 @@ module Wordmove
 
         next context if simulate?(cli_options: context.cli_options)
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: mysql_dump_command(
-            env_db_options: context.local_options[:database],
-            save_to_path: context.db_paths.local.path
-          )
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        context.logger.task_step true, dump_command(context)
+        begin
+          system(dump_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
 
         if context.cli_options[:no_adapt]
           context.logger.warn 'Skipping DB adapt'
         else
-          result = Wordmove::Actions::RunLocalCommand.execute(
-            cli_options: context.cli_options,
-            logger: context.logger,
-            command: wpcli_search_replace_command(context, :vhost)
-          )
-          context.fail_and_return!(result.message) if result.failure?
+          %i[vhost wordpress_path].each do |key|
+            command = search_replace_command(context, key)
+            context.logger.task_step true, command
 
-          result = Wordmove::Actions::RunLocalCommand.execute(
-            cli_options: context.cli_options,
-            logger: context.logger,
-            command: wpcli_search_replace_command(context, :wordpress_path)
-          )
-          context.fail_and_return!(result.message) if result.failure?
+            begin
+              system(command, exception: true)
+            rescue RuntimeError, SystemExit => e
+              context.fail_and_return!("Local command status reports an error: #{e.message}")
+            end
+          end
         end
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-
-          logger: context.logger,
-          command: mysql_dump_command(
-            env_db_options: context.local_options[:database],
-            save_to_path: context.db_paths.local.adapted_path
-          )
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        context.logger.task_step true, dump_adapted_command(context)
+        begin
+          system(dump_adapted_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
 
         if context.photocopier.is_a? Photocopier::SSH
-          result = Wordmove::Actions::RunLocalCommand.execute(
-            cli_options: context.cli_options,
-            logger: context.logger,
-            command: compress_command(file_path: context.db_paths.local.adapted_path)
-          )
-          context.fail_and_return!(result.message) if result.failure?
+          context.logger.task_step true, compress_command(context)
+          begin
+            system(compress_command(context), exception: true)
+          rescue RuntimeError, SystemExit => e
+            context.fail_and_return!("Local command status reports an error: #{e.message}")
+          end
         end
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: mysql_import_command(
-            dump_path: context.db_paths.local.path,
-            env_db_options: context.local_options[:database]
-          )
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        context.logger.task_step true, import_original_db_command(context)
+        begin
+          system(import_original_db_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
+      end
+
+      def self.dump_command(context)
+        "wp db export #{context.db_paths.local.path} --allow-root --quiet " \
+          "--path=#{wpcli_config_path(context)}"
+      end
+
+      def self.dump_adapted_command(context)
+        "wp db export #{context.db_paths.local.adapted_path} --allow-root --quiet " \
+          "--path=#{wpcli_config_path(context)}"
+      end
+
+      def self.import_original_db_command(context)
+        "wp db import #{context.db_paths.local.path} --allow-root --quiet " \
+          "--path=#{wpcli_config_path(context)}"
+      end
+
+      def self.compress_command(context)
+        command = ['nice']
+        command << '-n'
+        command << '0'
+        command << 'gzip'
+        command << '-9'
+        command << '-f'
+        command << "\"#{context.db_paths.local.adapted_path}\""
+        command.join(' ')
+      end
+
+      # Compose and returns the search-replace command. It's intended to be
+      # used from a +LightService::Action+
+      #
+      # @param context [LightService::Context] The context of an action
+      # @param config_key [:vhost, :wordpress_path] Determines what will be replaced in DB
+      # @return [String]
+      # @!scope class
+      def self.search_replace_command(context, config_key)
+        unless %i[vhost wordpress_path].include?(config_key)
+          raise ArgumentError, "Unexpected `config_key` #{config_key}.:vhost" \
+                               'or :wordpress_path expected'
+        end
+
+        [
+          'wp search-replace',
+          "--path=#{wpcli_config_path(context)}",
+          '"\A' + context.dig(:local_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
+          '"' + context.dig(:remote_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
+          '--regex-delimiter="|"',
+          '--regex',
+          '--precise',
+          '--quiet',
+          '--skip-columns=guid',
+          '--all-tables',
+          '--allow-root'
+        ].join(' ')
       end
     end
   end

@@ -56,8 +56,6 @@ module Wordmove
     private
 
     def fetch(verbose = true) # rubocop:disable Style/OptionalBooleanParameter
-      load_dotenv
-
       entries = if config_file_name.nil?
                   Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
                 else
@@ -75,18 +73,40 @@ module Wordmove
       end
 
       found = entries.first
+
       logger.task("Using Movefile: #{found}") if verbose == true
-      YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
+      load_dotenv(verbose)
+
+      options = YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
+
+      merge_local_options_from_wpcli(options)
     end
 
-    def load_dotenv
+    def merge_local_options_from_wpcli(options)
+      config_path = options.dig(:local, :wordpress_path)
+
+      options.merge(
+        local: {
+          database: {
+            password: Wordmove::WpcliHelpers.get_config('DB_PASSWORD', config_path: config_path),
+            host: Wordmove::WpcliHelpers.get_config('DB_HOST', config_path: config_path),
+            name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path: config_path),
+            user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path: config_path)
+          },
+          vhost: Wordmove::WpcliHelpers.get_option('siteurl', config_path: config_path),
+          wordpress_path: config_path
+        }
+      )
+    end
+
+    def load_dotenv(verbose)
       env_files = Dir[File.join(start_dir, '.env')]
 
       found_env = env_files.first
 
       return false unless found_env.present?
 
-      logger.info("Using .env file: #{found_env}")
+      logger.info("Using .env file: #{found_env}") if verbose
       Dotenv.load(found_env)
     end
 
