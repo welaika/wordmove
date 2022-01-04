@@ -77,7 +77,7 @@ module Wordmove
       logger.task("Using Movefile: #{found}") if verbose == true
       load_dotenv(verbose)
 
-      options = YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
+      options = YAML.safe_load(ERB.new(File.read(found)).result, symbolize_names: true)
 
       merge_local_options_from_wpcli(options)
     end
@@ -88,12 +88,12 @@ module Wordmove
       options.merge(
         local: {
           database: {
-            password: Wordmove::WpcliHelpers.get_config('DB_PASSWORD', config_path: config_path),
-            host: Wordmove::WpcliHelpers.get_config('DB_HOST', config_path: config_path),
-            name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path: config_path),
-            user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path: config_path)
+            password: Wordmove::WpcliHelpers.get_config('DB_PASSWORD', config_path:),
+            host: Wordmove::WpcliHelpers.get_config('DB_HOST', config_path:),
+            name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path:),
+            user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path:)
           },
-          vhost: Wordmove::WpcliHelpers.get_option('siteurl', config_path: config_path),
+          vhost: Wordmove::WpcliHelpers.get_option('siteurl', config_path:),
           wordpress_path: config_path
         }
       )

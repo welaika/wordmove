@@ -11,18 +11,18 @@ module Wordmove
         def self.call(cli_options, movefile)
           logger = Logger.new($stdout, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = movefile.options[movefile.environment]
-          ftp_opts = ftp_options(remote_options: remote_options)
+          ftp_opts = ftp_options(remote_options:)
 
           LightService::Configuration.logger = ::Logger.new($stdout) if cli_options[:debug]
 
           with(
-            cli_options: cli_options,
+            cli_options:,
             global_options: movefile.options[:global],
             local_options: movefile.options[:local],
-            remote_options: remote_options,
-            movefile: movefile,
-            guardian: Wordmove::Guardian.new(cli_options: cli_options, action: :push),
-            logger: logger,
+            remote_options:,
+            movefile:,
+            guardian: Wordmove::Guardian.new(cli_options:, action: :push),
+            logger:,
             photocopier: Photocopier::FTP
                           .new(ftp_opts)
                           .tap { |c| c.logger = logger }

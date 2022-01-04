@@ -42,7 +42,7 @@ describe Wordmove::EnvironmentsList do
   end
 
   describe 'private #output_string' do
-    subject { instance.send(:output_string, vhost_list: vhost_list) }
+    subject { instance.send(:output_string, vhost_list:) }
 
     let(:vhost_list) do
       [
@@ -59,7 +59,7 @@ describe Wordmove::EnvironmentsList do
   end
 
   describe 'private #select_vhost' do
-    subject { instance.send(:select_vhost, contents: contents) }
+    subject { instance.send(:select_vhost, contents:) }
 
     let(:contents) do
       {

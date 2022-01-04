@@ -52,12 +52,10 @@ module Wordmove
           remote_options: context.remote_options
         ).url('import.php')
         DbPathsConfig.ftp.local.generated_dump_script_path = generate_dump_script(
-          remote_db_options: context.remote_options[:database],
-          token: token
+          remote_db_options: context.remote_options[:database], token:
         )
         DbPathsConfig.ftp.local.generated_import_script_path = generate_import_script(
-          remote_db_options: context.remote_options[:database],
-          token: token
+          remote_db_options: context.remote_options[:database], token:
         )
         DbPathsConfig.ftp.local.temp_path = local_wp_content_dir(
           local_options: context.local_options

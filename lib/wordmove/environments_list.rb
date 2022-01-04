@@ -16,8 +16,8 @@ module Wordmove
     end
 
     def print
-      contents = parse_movefile(movefile: movefile)
-      generate_vhost_list(contents: contents)
+      contents = parse_movefile(movefile:)
+      generate_vhost_list(contents:)
       output
     end
 
@@ -55,7 +55,7 @@ module Wordmove
     #
     def generate_vhost_list(contents:)
       # select object which has 'vhost' only
-      vhosts = select_vhost(contents: contents)
+      vhosts = select_vhost(contents:)
       vhosts.each do |list|
         if list[:env] == :local
           @local_vhost << list

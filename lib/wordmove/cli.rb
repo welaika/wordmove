@@ -112,14 +112,12 @@ module Wordmove
           if movefile.options.dig(movefile.environment, :ssh)
             call_organizer_with(
               klass: Wordmove::Organizers::Ssh::Pull,
-              movefile: movefile,
-              cli_options: cli_options
+              movefile:, cli_options:
             )
           elsif movefile.options.dig(movefile.environment, :ftp)
             call_organizer_with(
               klass: Wordmove::Organizers::Ftp::Pull,
-              movefile: movefile,
-              cli_options: cli_options
+              movefile:, cli_options:
             )
           else
             raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
@@ -149,14 +147,12 @@ module Wordmove
           if movefile.options.dig(movefile.environment, :ssh)
             call_organizer_with(
               klass: Wordmove::Organizers::Ssh::Push,
-              movefile: movefile,
-              cli_options: cli_options
+              movefile:, cli_options:
             )
           elsif movefile.options.dig(movefile.environment, :ftp)
             call_organizer_with(
               klass: Wordmove::Organizers::Ftp::Push,
-              movefile: movefile,
-              cli_options: cli_options
+              movefile:, cli_options:
             )
           else
             raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \

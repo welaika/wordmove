@@ -36,12 +36,12 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-configurable', '~> 0.13.0'
   spec.add_runtime_dependency 'kwalify', '~> 0.7.2'
   spec.add_runtime_dependency 'light-service', '~> 0.17.0'
-  spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.0'
+  spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.1'
   # spec.add_runtime_dependency 'thor', '~> 0.20.3'
   spec.add_runtime_dependency 'dry-cli', '~> 0.7.0'
   spec.add_runtime_dependency 'dry-files', '~> 0.1.0'
 
-  spec.required_ruby_version = '>= 3.0.2'
+  spec.required_ruby_version = '>= 3.1.0'
 
   spec.add_development_dependency 'bundler', '~> 2.3.3'
   spec.add_development_dependency 'pry-byebug', '~> 3.1'
