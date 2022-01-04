@@ -17,7 +17,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: welaika/wordmove:latest
+      image: welaika/wordmove:php7-wordmove6
 
     steps:
     - uses: actions/checkout@v2
