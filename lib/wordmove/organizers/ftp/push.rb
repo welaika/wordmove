@@ -6,7 +6,9 @@ module Wordmove
         include Wordmove::Actions::Helpers
         include Wordmove::Actions::Ftp::Helpers
 
-        def self.call(cli_options:, movefile:)
+        # Can't use keyword arguments since LightService still has some problems with modern
+        # ruby syntax: https://github.com/adomokos/light-service/pull/224
+        def self.call(cli_options, movefile)
           logger = Logger.new($stdout, movefile.secrets).tap { |l| l.level = Logger::DEBUG }
           remote_options = movefile.options[movefile.environment]
           ftp_opts = ftp_options(remote_options: remote_options)

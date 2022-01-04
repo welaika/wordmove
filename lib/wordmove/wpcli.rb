@@ -1,7 +1,7 @@
 module Wordmove
   # This class is a sort of mini-wrapper around the wp-cli executable.
   # It's responsible to run or produce wp-cli commands.
-  module Wpcli
+  module WpcliHelpers
     extend ActiveSupport::Concern
 
     included do
@@ -17,42 +17,27 @@ module Wordmove
         system('which wp > /dev/null 2>&1')
       end
 
-      # Compose and returns the search-replace command. It's intended to be
-      # used from a +LightService::Action+
-      #
-      # @param context [LightService::Context] The context of an action
-      # @param config_key [:vhost, :wordpress_path] Determines what will be replaced in DB
-      # @return [String]
-      # @!scope class
-      def wpcli_search_replace_command(context, config_key)
-        unless %i[vhost wordpress_path].include?(config_key)
-          raise ArgumentError, "Unexpected `config_key` #{config_key}.:vhost" \
-                               'or :wordpress_path expected'
-        end
-
-        [
-          'wp search-replace',
-          "--path=#{wpcli_config_path(context)}",
-          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
-          '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
-          '--regex-delimiter="|"',
-          '--regex',
-          '--precise',
-          '--quiet',
-          '--skip-columns=guid',
-          '--all-tables',
-          '--allow-root'
-        ].join(' ')
-      end
-
       # Returns the wordpress path from wp-cli (with precedence) or from movefile
       #
-      # It's intended to be used from a +LightService::Action+
+      # It's intended to be used from a +LightService::Action+, but it also supports
+      # to receive a path as argument. If the argument is not a LightService::Context
+      # then it will be treated as a path.
+      # The path passed as argument should be the wordpress installation path, but it's
+      # not strictly mandatory: the method will try to load a wpcli's YAML config
+      # from that path, so you can potentially use it with any path
       #
-      # @param context [LightService::Context] The context of an action
+      # @param context [LightService::Context|String] The context of an action or a path as string
       # @return [String]
       # @!scope class
-      def wpcli_config_path(context)
+      def wpcli_config_path(context_or_path)
+        context = if context_or_path.is_a? LightService::Context
+                    context_or_path
+                  else
+                    # We need to make it quack like a duck in order to be
+                    # backward compatible with previous code
+                    { local_options: { wordpress_path: context_or_path } }
+                  end
+
         load_from_yml(context) || load_from_wpcli || context.dig(:local_options, :wordpress_path)
       end
 
@@ -63,7 +48,8 @@ module Wordmove
       # @!scope class
       # @!visibility private
       def load_from_yml(context)
-        yml_path = File.join(context.dig(:local_options, :wordpress_path), 'wp-cli.yml')
+        config_path = context.dig(:local_options, :wordpress_path) || '.'
+        yml_path = File.join(config_path, 'wp-cli.yml')
 
         return unless File.exist?(yml_path)
 
@@ -86,6 +72,14 @@ module Wordmove
       rescue JSON::ParserError => _e
         nil
       end
+    end
+
+    def self.get_option(option, config_path:)
+      `wp option get #{option} --allow-root --path=#{config_path}`.chomp
+    end
+
+    def self.get_config(config, config_path:)
+      `wp config get #{config} --allow-root --path=#{config_path}`.chomp
     end
   end
 end

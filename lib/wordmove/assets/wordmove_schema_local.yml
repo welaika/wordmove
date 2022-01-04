@@ -3,6 +3,7 @@ mapping:
   vhost:
     pattern: /^https?:\/\//
   wordpress_path:
+    required: true
   database:
     type: map
     required: true
@@ -15,9 +16,6 @@ mapping:
         required: true
       host:
         required: true
-      mysqldump_options:
-      port:
-      charset:
   paths:
     type: map
     mapping:

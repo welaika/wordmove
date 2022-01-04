@@ -2,14 +2,15 @@ global:
   sql_adapter: wpcli
 
 local:
-  vhost: http://vhost.local
   wordpress_path: <%= wordpress_path %> # use an absolute path here
 
-  database:
-    name: <%= database.name %>
-    user: <%= database.user %>
-    password: "<%= database.password %>" # could be blank, so always use quotes around
-    host: <%= database.host %>
+  # paths: # you can customize wordpress internal paths
+  #   wp_content: wp-content
+  #   uploads: wp-content/uploads
+  #   plugins: wp-content/plugins
+  #   mu_plugins: wp-content/mu-plugins
+  #   themes: wp-content/themes
+  #   languages: wp-content/languages
 
 production:
   vhost: http://example.com
@@ -40,6 +41,7 @@ production:
     - 'wp-config.php'
     - 'wp-content/*.sql.gz'
     - '*.orig'
+    - 'wp-cli.yml'
 
   # paths: # you can customize wordpress internal paths
   #   wp_content: wp-content

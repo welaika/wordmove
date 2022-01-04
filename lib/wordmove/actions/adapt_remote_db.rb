@@ -14,7 +14,7 @@ module Wordmove
     class AdaptRemoteDb
       extend ::LightService::Action
       include Wordmove::Actions::Helpers
-      include Wordmove::Wpcli
+      include Wordmove::WpcliHelpers
 
       expects :local_options,
               :cli_options,
@@ -39,11 +39,12 @@ module Wordmove
         next context if simulate?(cli_options: context.cli_options)
 
         if File.exist?(context.db_paths.local.gzipped_path)
-          Wordmove::Actions::RunLocalCommand.execute(
-            cli_options: context.cli_options,
-            logger: context.logger,
-            command: uncompress_command(file_path: context.db_paths.local.gzipped_path)
-          )
+          context.logger.task_step true, uncompress_command(context)
+          begin
+            system(uncompress_command(context), exception: true)
+          rescue RuntimeError, SystemExit => e
+            context.fail_and_return!("Local command status reports an error: #{e.message}")
+          end
         end
 
         unless File.exist?(context.db_paths.local.path)
@@ -52,36 +53,75 @@ module Wordmove
           )
         end
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: mysql_import_command(
-            dump_path: context.db_paths.local.path,
-            env_db_options: context.local_options[:database]
-          )
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        context.logger.task_step true, import_db_command(context)
+        begin
+          system(import_db_command(context), exception: true)
+        rescue RuntimeError, SystemExit => e
+          context.fail_and_return!("Local command status reports an error: #{e.message}")
+        end
 
         if context.cli_options[:no_adapt]
           context.logger.warn 'Skipping DB adapt'
           next context
         end
 
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: wpcli_search_replace_command(context, :vhost)
-        )
-        context.fail_and_return!(result.message) if result.failure?
-
-        result = Wordmove::Actions::RunLocalCommand.execute(
-          cli_options: context.cli_options,
-          logger: context.logger,
-          command: wpcli_search_replace_command(context, :wordpress_path)
-        )
-        context.fail_and_return!(result.message) if result.failure?
+        %i[vhost wordpress_path].each do |key|
+          command = search_replace_command(context, key)
+          context.logger.task_step true, command
+          begin
+            system(command, exception: true)
+          rescue RuntimeError, SystemExit => e
+            context.fail_and_return!("Local command status reports an error: #{e.message}")
+          end
+        end
 
         context.logger.success 'Local DB adapted'
+      end
+
+      # Construct the command to deflate a compressed file as a string.
+      #
+      # @param file_path [String] The path where the file to be deflated is located
+      # @return [String] the command
+      # @!scope class
+      def self.uncompress_command(context)
+        command = ['gzip']
+        command << '-d'
+        command << '-f'
+        command << "\"#{context.db_paths.local.gzipped_path}\""
+        command.join(' ')
+      end
+
+      def self.import_db_command(context)
+        "wp db import #{context.db_paths.local.path} --allow-root --quiet " \
+          "--path=#{wpcli_config_path(context)}"
+      end
+
+      # Compose and returns the search-replace command. It's intended to be
+      # used from a +LightService::Action+
+      #
+      # @param context [LightService::Context] The context of an action
+      # @param config_key [:vhost, :wordpress_path] Determines what will be replaced in DB
+      # @return [String]
+      # @!scope class
+      def self.search_replace_command(context, config_key)
+        unless %i[vhost wordpress_path].include?(config_key)
+          raise ArgumentError, "Unexpected `config_key` #{config_key}.:vhost" \
+                               'or :wordpress_path expected'
+        end
+
+        [
+          'wp search-replace',
+          "--path=#{wpcli_config_path(context)}",
+          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
+          '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
+          '--regex-delimiter="|"',
+          '--regex',
+          '--precise',
+          '--quiet',
+          '--skip-columns=guid',
+          '--all-tables',
+          '--allow-root'
+        ].join(' ')
       end
     end
   end

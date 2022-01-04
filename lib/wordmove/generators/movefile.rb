@@ -1,16 +1,15 @@
 module Wordmove
   module Generators
     class Movefile
-      include MovefileAdapter
-
       def self.generate
-        new.copy_movefile
+        copy_movefile
       end
 
-      def copy_movefile
+      def self.copy_movefile
+        wordpress_path = File.expand_path(Dir.pwd)
         content = ERB.new(File.read(File.join(__dir__, 'movefile.yml'))).result(binding)
-        files = Dry::Files.new
 
+        files = Dry::Files.new
         files.write('movefile.yml', content)
       end
     end

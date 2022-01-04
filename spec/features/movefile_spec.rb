@@ -27,36 +27,11 @@ describe Wordmove::Generators::Movefile do
       expect(yaml['local']['wordpress_path']).to eq(Dir.pwd)
     end
 
-    it 'fills database configuration defaults' do
-      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
-      expect(yaml['local']['database']['name']).to eq('database_name')
-      expect(yaml['local']['database']['user']).to eq('user')
-      expect(yaml['local']['database']['password']).to eq('password')
-      expect(yaml['local']['database']['host']).to eq('127.0.0.1')
-    end
-
     it 'creates a Movifile having a "global.sql_adapter" key' do
       yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
       expect(yaml['global']).to be_present
       expect(yaml['global']['sql_adapter']).to be_present
       expect(yaml['global']['sql_adapter']).to eq('wpcli')
-    end
-  end
-
-  context 'database configuration' do
-    let(:wp_config) { File.join(File.dirname(__FILE__), '../fixtures/wp-config.php') }
-
-    before do
-      FileUtils.cp(wp_config, '.')
-      silence_stream($stdout) { Wordmove::Generators::Movefile.generate }
-    end
-
-    it 'fills database configuration from wp-config' do
-      yaml = YAML.safe_load(ERB.new(File.read(movefile)).result)
-      expect(yaml['local']['database']['name']).to eq('wordmove_db')
-      expect(yaml['local']['database']['user']).to eq('wordmove_user')
-      expect(yaml['local']['database']['password']).to eq('wordmove_password')
-      expect(yaml['local']['database']['host']).to eq('wordmove_host')
     end
   end
 end
