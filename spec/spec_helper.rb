@@ -49,7 +49,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
 
     allow(Wordmove::WpcliHelpers)
       .to receive(:get_option)
-      .with('siteurl', config_path: instance_of(String))
+      .with('home', config_path: instance_of(String))
       .and_return('http://example.com')
 
     allow(Wordmove::WpcliHelpers)

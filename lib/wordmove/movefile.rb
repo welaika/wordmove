@@ -93,7 +93,7 @@ module Wordmove
             name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path:),
             user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path:)
           },
-          vhost: Wordmove::WpcliHelpers.get_option('siteurl', config_path:),
+          vhost: Wordmove::WpcliHelpers.get_option('home', config_path:),
           wordpress_path: config_path
         }
       )
