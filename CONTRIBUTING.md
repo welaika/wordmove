@@ -13,8 +13,42 @@ different environments - Windows also, even if it isn't officially supported by 
 
 So *please*, follow the issue template when reporting a bug.
 
-If you're not sure if you're dealing with a Wordmove's bug, please [open a discussion](https://github.com/welaika/wordmove/discussions/new?category=general)
-labeling it as "Triage".
+If you're not sure if you're standing in front of a bug, please [open a discussion](https://github.com/welaika/wordmove/discussions/new?category=general)
+labeling it as "Triage", possibly using this template to report your problem (note: GH's discussions does not support templates ATM):
+
+```markdown
+**Describe the bug**
+
+> A clear and concise description of what the bug is.
+
+**Wordmove command**
+
+> Command used on the CLI: (e.g.: `wordmove pull --all --no-db`)
+
+**Expected behavior**
+
+> A clear and concise description of what you expected to happen.
+
+**movefile.yml**
+
+> Paste (removing personal data) the interesting part, if any, of your `movefile.yml` formatting it inside a code block with `yml` syntax and double checking the indentation.
+
+**Exception/trace**
+
+> Paste (removing personal data) the entire trace of error/exception you encountered, if any
+
+**Environment (please complete the following information):**
+
+- OS:
+- Ruby: (`ruby --version`)
+- Wordmove: (`wordmove --version`)
+
+**Doctor**
+
+* [x] running the `wordmove doctor` command returns all green
+
+> (If it is not, report the error you got.)
+```
 
 As a general advise: we tend to not support Wordmove's versions older than the latest stable.
 We'd appreciate your help opening an in depth report if you'd find that an older version is working
