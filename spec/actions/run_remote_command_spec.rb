@@ -72,7 +72,7 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
     let(:context) do
       OrganizerContextFactory.make_for(
         described_class,
-        :push,
+        :pull,
         cli_options: {
           config: movefile_path_for('with_secrets_castilma'),
           environment: :remote
