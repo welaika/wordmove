@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Discussion
     url: https://github.com/welaika/wordmove/discussions/new?category=general
-    about: Start an open discussion
+    about: Start an open discussion and ask for help
   - name: Idea or feature request
     url: https://github.com/welaika/wordmove/discussions/new?category=ideas
     about: Propose your own ideas. We'll triage them and decide if bring them to the issue tracker
