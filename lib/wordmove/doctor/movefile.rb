@@ -4,17 +4,17 @@ module Wordmove
       MANDATORY_SECTIONS = %i[global local].freeze
       attr_reader :movefile, :contents, :root_keys
 
-      def initialize(name = nil, dir = '.')
-        @movefile = Wordmove::Movefile.new(name, dir)
+      def initialize(cli_options = {}, dir = '.')
+        @movefile = Wordmove::Movefile.new(cli_options, dir, false)
 
         begin
-          @contents = movefile.fetch
+          @contents = movefile.options
           @root_keys = contents.keys
         rescue Psych::SyntaxError
-          movefile.logger.error "Your movefile is not parsable due to a syntax error"\
+          movefile.logger.error 'Your movefile is not parsable due to a syntax error'\
                                 "so we can't continue to validate it."
-          movefile.logger.debug "You could try to use https://yamlvalidator.com/ to"\
-                                "get a clue about the problem."
+          movefile.logger.debug 'You could try to use https://yamlvalidator.com/ to'\
+                                'get a clue about the problem.'
         end
       end
 
@@ -40,7 +40,7 @@ module Wordmove
         errors = validator.validate(contents[key].deep_stringify_keys)
 
         if errors&.empty?
-          movefile.logger.success "Formal validation passed"
+          movefile.logger.success 'Formal validation passed'
 
           return true
         end
@@ -69,7 +69,7 @@ module Wordmove
       def validate_protocol_presence(keys)
         return true if keys.include?(:ssh) || keys.include?(:ftp)
 
-        movefile.logger.error "This remote has not ssh nor ftp protocol defined"
+        movefile.logger.error 'This remote has not ssh nor ftp protocol defined'
 
         false
       end

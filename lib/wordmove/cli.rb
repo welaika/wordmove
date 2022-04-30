@@ -1,122 +1,176 @@
 module Wordmove
-  class CLI < Thor
-    map %w[--version -v] => :__print_version
+  module CLI
+    module PullPushShared
+      extend ActiveSupport::Concern
+      WORDPRESS_OPTIONS = %i[wordpress uploads themes plugins mu_plugins languages db].freeze
 
-    desc "--version, -v", "Print the version"
-    def __print_version
-      puts Wordmove::VERSION
+      included do # rubocop:disable Metrics/BlockLength
+        option :wordpress, type: :boolean, aliases: %w[w]
+        option :uploads, type: :boolean, aliases: %w[u]
+        option :themes, type: :boolean, aliases: %w[t]
+        option :plugins, type: :boolean, aliases: %w[p]
+        option :mu_plugins, type: :boolean, aliases: %w[m]
+        option :languages, type: :boolean, aliases: %w[l]
+        option :db, type: :boolean, aliases: %w[d]
+        option :simulate, type: :boolean
+        option :environment, aliases: %w[e]
+        option :config, aliases: %w[c]
+        option :no_adapt, type: :boolean
+        option :all, type: :boolean
+        # option :verbose, type: :boolean, aliases: %w[v]
+        option :debug, type: :boolean
+
+        private
+
+        def ensure_wordpress_options_presence!(cli_options)
+          return if (
+            cli_options.deep_symbolize_keys.keys &
+              (Wordmove::CLI::PullPushShared::WORDPRESS_OPTIONS + [:all])
+          ).present?
+
+          puts 'No options given. See wordmove --help'
+          exit 1
+        end
+
+        def movefile_from(cli_options)
+          ensure_wordpress_options_presence!(cli_options)
+          Wordmove::Movefile.new(cli_options, nil, true)
+        rescue MovefileNotFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
+        end
+
+        def call_organizer_with(klass:, movefile:, cli_options:)
+          result = klass.call(cli_options, movefile)
+
+          exit 0 if result.success?
+
+          Logger.new($stdout).error(result.message)
+          exit 1
+        end
+      end
     end
 
-    desc "init", "Generates a brand new movefile.yml"
-    def init
-      Wordmove::Generators::Movefile.start
-    end
+    module Commands
+      extend Dry::CLI::Registry
 
-    desc "doctor", "Do some local configuration and environment checks"
-    def doctor
-      Wordmove::Doctor.start
-    end
+      class Version < Dry::CLI::Command
+        desc 'Print the version'
 
-    shared_options = {
-      wordpress: { aliases: "-w", type: :boolean },
-      uploads: { aliases: "-u", type: :boolean },
-      themes: { aliases: "-t", type: :boolean },
-      plugins: { aliases: "-p", type: :boolean },
-      mu_plugins: { aliases: "-m", type: :boolean },
-      languages: { aliases: "-l", type: :boolean },
-      db: { aliases: "-d", type: :boolean },
-      verbose: { aliases: "-v", type: :boolean },
-      simulate: { aliases: "-s", type: :boolean },
-      environment: { aliases: "-e" },
-      config: { aliases: "-c" },
-      debug: { type: :boolean },
-      no_adapt: { type: :boolean },
-      all: { type: :boolean }
-    }
-
-    no_tasks do
-      def handle_options(options)
-        wordpress_options.each do |task|
-          yield task if options[task] || (options["all"] && options[task] != false)
+        def call(*)
+          puts Wordmove::VERSION
         end
       end
 
-      def wordpress_options
-        %w[wordpress uploads themes plugins mu_plugins languages db]
+      class Init < Dry::CLI::Command
+        desc 'Generates a brand new movefile.yml'
+
+        def call(*)
+          Wordmove::Generators::Movefile.generate
+        end
       end
 
-      def ensure_wordpress_options_presence!(options)
-        return if (options.keys & (wordpress_options + ["all"])).present?
+      class Doctor < Dry::CLI::Command
+        desc 'Do some local configuration and environment checks'
 
-        puts "No options given. See wordmove --help"
-        exit 1
+        def call(*)
+          Wordmove::Doctor.start
+        end
       end
 
-      def logger
-        Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
-      end
-    end
+      class List < Dry::CLI::Command
+        desc 'List all environments and vhosts'
 
-    desc "list", "List all environments and vhosts"
-    shared_options.each do |option, args|
-      method_option option, args
-    end
-    def list
-      Wordmove::EnvironmentsList.print(options)
-    rescue Wordmove::MovefileNotFound => e
-      logger.error(e.message)
-      exit 1
-    rescue Psych::SyntaxError => e
-      logger.error("Your movefile is not parsable due to a syntax error: #{e.message}")
-      exit 1
-    end
+        option :config, aliases: %w[c]
 
-    desc "pull", "Pulls WP data from remote host to the local machine"
-    shared_options.each do |option, args|
-      method_option option, args
-    end
-    def pull
-      ensure_wordpress_options_presence!(options)
-      begin
-        deployer = Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
-      rescue MovefileNotFound => e
-        logger.error(e.message)
-        exit 1
+        def call(**cli_options)
+          Wordmove::EnvironmentsList.print(cli_options)
+        rescue Wordmove::MovefileNotFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
+        rescue Psych::SyntaxError => e
+          Logger.new($stdout)
+                .error("Your movefile is not parsable due to a syntax error: #{e.message}")
+          exit 1
+        end
       end
 
-      Wordmove::Hook.run(:pull, :before, options)
+      class Pull < Dry::CLI::Command
+        desc 'Pulls WP data from remote host to the local machine'
 
-      guardian = Wordmove::Guardian.new(options: options, action: :pull)
+        include Wordmove::CLI::PullPushShared
 
-      handle_options(options) do |task|
-        deployer.send("pull_#{task}") if guardian.allows(task.to_sym)
+        def call(**cli_options)
+          call_pull_organizer_with(**cli_options)
+        end
+
+        private
+
+        def call_pull_organizer_with(**cli_options)
+          movefile = movefile_from(cli_options)
+
+          if movefile.options.dig(movefile.environment, :ssh)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ssh::Pull,
+              movefile:, cli_options:
+            )
+          elsif movefile.options.dig(movefile.environment, :ftp)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ftp::Pull,
+              movefile:, cli_options:
+            )
+          else
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
+          end
+        rescue NoAdapterFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
+        end
       end
 
-      Wordmove::Hook.run(:pull, :after, options)
-    end
+      class Push < Dry::CLI::Command
+        desc 'Pulls WP data from remote host to the local machine'
 
-    desc "push", "Pushes WP data from local machine to remote host"
-    shared_options.each do |option, args|
-      method_option option, args
-    end
-    def push
-      ensure_wordpress_options_presence!(options)
-      begin
-        deployer = Wordmove::Deployer::Base.deployer_for(options.deep_symbolize_keys)
-      rescue MovefileNotFound => e
-        logger.error(e.message)
-        exit 1
+        include Wordmove::CLI::PullPushShared
+
+        def call(**cli_options)
+          call_push_organizer_with(**cli_options)
+        end
+
+        private
+
+        def call_push_organizer_with(**cli_options)
+          movefile = movefile_from(cli_options)
+
+          if movefile.options.dig(movefile.environment, :ssh)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ssh::Push,
+              movefile:, cli_options:
+            )
+          elsif movefile.options.dig(movefile.environment, :ftp)
+            call_organizer_with(
+              klass: Wordmove::Organizers::Ftp::Push,
+              movefile:, cli_options:
+            )
+          else
+            raise NoAdapterFound, 'No valid adapter found. It seems like your movefile.yml lacks ' \
+                                  'an ssh or ftp section for the current environment. ' \
+                                  'Run `wordmove doctor` for more info'
+          end
+        rescue NoAdapterFound => e
+          Logger.new($stdout).error(e.message)
+          exit 1
+        end
       end
 
-      Wordmove::Hook.run(:push, :before, options)
-
-      guardian = Wordmove::Guardian.new(options: options, action: :push)
-
-      handle_options(options) do |task|
-        deployer.send("push_#{task}") if guardian.allows(task.to_sym)
-      end
-
-      Wordmove::Hook.run(:push, :after, options)
+      register 'version', Version, aliases: %w[v -v --version]
+      register 'init', Init
+      register 'doctor', Doctor
+      register 'list', List
+      register 'pull', Pull
+      register 'push', Push
     end
   end
 end

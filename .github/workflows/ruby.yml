@@ -15,16 +15,23 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
+    container:
+      image: welaika/wordmove:php7-wordmove6
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+    - name: Cache gems
+      uses: actions/cache@v2
       with:
-        ruby-version: 2.6
+        path: .vendor/bundle
+        key: wordmove-${{ hashFiles('wordmove.gemspec') }}
+    - name: Install bundler
+      run: |
+        echo $(pwd)
+        bundle config set path .vendor/bundle
+        gem install bundler:2.3.3
     - name: Install dependencies
-      run: bundle install
+      run : bundle install
     - name: Run tests
       run: bundle exec rake

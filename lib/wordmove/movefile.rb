@@ -1,74 +1,43 @@
 module Wordmove
   class Movefile
-    attr_reader :logger, :name, :start_dir
+    attr_reader :logger,
+                :config_file_name,
+                :start_dir,
+                :options,
+                :cli_options
 
-    def initialize(name = nil, start_dir = current_dir)
-      @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
-      @name = name
-      @start_dir = start_dir
+    def initialize(cli_options = {}, start_dir = nil, verbose = true) # rubocop:disable Style/OptionalBooleanParameter
+      @logger = Logger.new($stdout).tap { |l| l.level = Logger::DEBUG }
+      @cli_options = cli_options.deep_symbolize_keys || {}
+      @config_file_name = @cli_options.fetch(:config, nil)
+      @start_dir = start_dir || current_dir
+
+      @options = fetch(verbose)
+                 .deep_symbolize_keys!
+                 .freeze
     end
 
-    def fetch(verbose = true)
-      entries = if name.nil?
-                  Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
-                else
-                  Dir["#{File.join(start_dir, name)}{,.yml,.yaml}"]
-                end
-
-      if entries.empty?
-        if last_dir?(start_dir)
-          raise MovefileNotFound, "Could not find a valid Movefile. Searched"\
-                                  " for filename \"#{name}\" in folder \"#{start_dir}\""
-        end
-
-        @start_dir = upper_dir(start_dir)
-        return fetch(verbose)
-      end
-
-      found = entries.first
-      logger.task("Using Movefile: #{found}") if verbose == true
-      YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
-    end
-
-    def load_dotenv(cli_options = {})
-      env = environment(cli_options)
-      env_files = Dir[File.join(start_dir, ".env{.#{env},}")]
-
-      found_env = env_files.first
-
-      return false unless found_env.present?
-
-      logger.info("Using .env file: #{found_env}")
-      Dotenv.load(found_env)
-    end
-
-    def environment(cli_options = {})
-      options = fetch(false)
+    def environment
       available_enviroments = extract_available_envs(options)
-      options.merge!(cli_options).deep_symbolize_keys!
 
-      if options[:environment] != 'local'
-        if available_enviroments.size > 1 && options[:environment].nil?
-          raise(
-            UndefinedEnvironment,
-            "You need to specify an environment with --environment parameter"
-          )
-        end
-
-        if options[:environment].present?
-          unless available_enviroments.include?(options[:environment].to_sym)
-            raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
-                                        "Available Environments: #{available_enviroments.join(' ')}"
-          end
-        end
+      if available_enviroments.size > 1 && cli_options[:environment].nil?
+        raise(
+          UndefinedEnvironment,
+          'You need to specify an environment with --environment parameter'
+        )
       end
 
-      (options[:environment] || available_enviroments.first).to_sym
+      if cli_options[:environment].present? &&
+         !available_enviroments.include?(cli_options[:environment].to_sym)
+        raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
+                                    "Available Environments: #{available_enviroments.join(' ')}"
+      end
+
+      # NOTE: This is Hash#fetch, not self.fetch.
+      cli_options.fetch(:environment, available_enviroments.first).to_sym
     end
 
     def secrets
-      options = fetch(false)
-
       secrets = []
       options.each_key do |env|
         secrets << options.dig(env, :database, :password)
@@ -86,12 +55,67 @@ module Wordmove
 
     private
 
+    def fetch(verbose = true) # rubocop:disable Style/OptionalBooleanParameter
+      entries = if config_file_name.nil?
+                  Dir["#{File.join(start_dir, '{M,m}ovefile')}{,.yml,.yaml}"]
+                else
+                  Dir["#{File.join(start_dir, config_file_name)}{,.yml,.yaml}"]
+                end
+
+      if entries.empty?
+        if last_dir?(start_dir)
+          raise MovefileNotFound, 'Could not find a valid Movefile. Searched'\
+                                  " for filename \"#{config_file_name}\" in folder \"#{start_dir}\""
+        end
+
+        @start_dir = upper_dir(start_dir)
+        return fetch(verbose)
+      end
+
+      found = entries.first
+
+      logger.task("Using Movefile: #{found}") if verbose == true
+      load_dotenv(verbose)
+
+      options = YAML.safe_load(ERB.new(File.read(found)).result, symbolize_names: true)
+
+      merge_local_options_from_wpcli(options)
+    end
+
+    def merge_local_options_from_wpcli(options)
+      config_path = options.dig(:local, :wordpress_path)
+
+      options.merge(
+        local: {
+          database: {
+            password: Wordmove::WpcliHelpers.get_config('DB_PASSWORD', config_path:),
+            host: Wordmove::WpcliHelpers.get_config('DB_HOST', config_path:),
+            name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path:),
+            user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path:)
+          },
+          vhost: Wordmove::WpcliHelpers.get_option('home', config_path:),
+          wordpress_path: config_path
+        }
+      )
+    end
+
+    def load_dotenv(verbose)
+      env_files = Dir[File.join(start_dir, '.env')]
+
+      found_env = env_files.first
+
+      return false unless found_env.present?
+
+      logger.info("Using .env file: #{found_env}") if verbose
+      Dotenv.load(found_env)
+    end
+
     def extract_available_envs(options)
-      options.keys.map(&:to_sym) - %i[local global]
+      options.keys - %i[local global]
     end
 
     def last_dir?(directory)
-      directory == "/" || File.exist?(File.join(directory, 'wp-config.php'))
+      directory == '/' || File.exist?(File.join(directory, 'wp-config.php'))
     end
 
     def upper_dir(directory)

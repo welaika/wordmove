@@ -1,7 +1,8 @@
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.1.0
   DisplayCopNames: true
   DisplayStyleGuide: true
+  NewCops: enable
 
   Exclude:
     - 'bin/*'
@@ -26,10 +27,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Max: 10
-
-Style/StringLiterals:
-  Enabled: false
-  EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false

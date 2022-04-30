@@ -9,15 +9,15 @@ module Wordmove
     end
 
     def initialize(options)
-      @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
-      @movefile = Wordmove::Movefile.new(options[:config])
+      @logger = Logger.new($stdout).tap { |l| l.level = Logger::INFO }
+      @movefile = Wordmove::Movefile.new(options)
       @remote_vhosts = []
       @local_vhost = []
     end
 
     def print
-      contents = parse_movefile(movefile: movefile)
-      generate_vhost_list(contents: contents)
+      contents = parse_movefile(movefile:)
+      generate_vhost_list(contents:)
       output
     end
 
@@ -29,7 +29,7 @@ module Wordmove
     end
 
     def parse_movefile(movefile:)
-      movefile.fetch
+      movefile.options
     end
 
     def output
@@ -43,7 +43,7 @@ module Wordmove
     def output_string(vhost_list:)
       return 'vhost list is empty' if vhost_list.empty?
 
-      vhost_list.each_with_object("") do |entry, retval|
+      vhost_list.each_with_object('') do |entry, retval|
         retval << "#{entry[:env]}: #{entry[:vhost]}\n"
       end
     end
@@ -55,7 +55,7 @@ module Wordmove
     #
     def generate_vhost_list(contents:)
       # select object which has 'vhost' only
-      vhosts = select_vhost(contents: contents)
+      vhosts = select_vhost(contents:)
       vhosts.each do |list|
         if list[:env] == :local
           @local_vhost << list

@@ -2,6 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "rdbg",
+            "name": "Attach to remote rdbg",
+            "request": "attach"
+        },
+        {
+            "type": "rdbg",
+            "name": "Debug current file",
+            "request": "launch",
+            "script": "${file}",
+            "askParameters": true
+        },
+        {
             "name": "Debug Local File",
             "type": "Ruby",
             "request": "launch",
@@ -9,65 +21,34 @@
             "program": "${workspaceRoot}/main.rb"
         },
         {
-            "name": "Listen for rdebug-ide",
-            "type": "Ruby",
-            "request": "attach",
-            "cwd": "${workspaceRoot}",
-            "remoteHost": "127.0.0.1",
-            "remotePort": "1234",
-            "remoteWorkspaceRoot": "${workspaceRoot}"
-        },
-        {
-            "name": "Rails server",
-            "type": "Ruby",
-            "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/rails",
-            "args": [
-                "server"
-            ]
-        },
-        {
             "name": "RSpec - all",
-            "type": "Ruby",
+            "type": "rdbg",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/rspec",
-            "args": [
-                "-I",
-                "${workspaceRoot}"
-            ]
+            "command": "bundle exec",
+            "script": "rspec",
+            "askParameters": false,
+            "args": []
         },
         {
             "name": "RSpec - active spec file only",
-            "type": "Ruby",
+            "type": "rdbg",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/rspec",
-            "args": [
-                "-I",
-                "${workspaceRoot}",
-                "${file}"
-            ]
+            "command": "bundle exec rspec",
+            "script": "${file}",
+            "askParameters": false,
+            "args": []
         },
         {
             "name": "RSpec - active test only",
-            "type": "Ruby",
+            "type": "rdbg",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/rspec",
-            "args": [
-                "-I",
-                "${workspaceRoot}",
-                "${file}:${lineNumber}"
-            ]
-        },
-        {
-            "name": "Cucumber",
-            "type": "Ruby",
-            "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/cucumber"
+            "command": "bundle exec rspec",
+            "script": "${file}:${lineNumber}",
+            "askParameters": false,
+            "args": []
         }
     ]
 }

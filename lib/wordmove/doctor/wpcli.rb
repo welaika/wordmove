@@ -4,17 +4,17 @@ module Wordmove
       attr_reader :logger
 
       def initialize
-        @logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
+        @logger = Logger.new($stdout).tap { |l| l.level = Logger::INFO }
       end
 
       def check!
-        logger.task "Checking local wp-cli installation"
+        logger.task 'Checking local wp-cli installation'
 
         if in_path?
-          logger.success "wp-cli is correctly installed"
+          logger.success 'wp-cli is correctly installed'
 
           if up_to_date?
-            logger.success "wp-cli is up to date"
+            logger.success 'wp-cli is up to date'
           else
             logger.error <<-LONG
   wp-cli is not up to date.
@@ -36,7 +36,7 @@ module Wordmove
       end
 
       def up_to_date?
-        `wp cli check-update --format=json`.empty?
+        `wp cli check-update --format=json --allow-root`.empty?
       end
     end
   end

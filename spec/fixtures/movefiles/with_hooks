@@ -1,17 +1,10 @@
 <% require 'tmpdir' %>
 
 global:
-  sql_adapter: "default"
+  sql_adapter: "wpcli"
 
 local:
-  vhost: "http://localhost:8080"
   wordpress_path: "<%= Dir.tmpdir %>"
-
-  database:
-    name: "database_name"
-    user: "user"
-    password: "password"
-    host: "host"
 
 ssh_with_hooks:
   vhost: "http://staging.mysite.example.com"
