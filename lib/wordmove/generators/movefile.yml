@@ -93,14 +93,14 @@ production:
   #     themes: false
   #     languages: false
   #     uploads: false
-  #     mu-plugins: false
+  #     mu_plugins: false
   #   pull:
   #     db: false
   #     plugins: false
   #     themes: false
   #     languages: false
   #     uploads: false
-  #     mu-plugins: false
+  #     mu_plugins: false
 
 # staging: # multiple environments can be specified
 #   [...]
