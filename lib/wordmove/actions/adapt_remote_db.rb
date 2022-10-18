@@ -112,7 +112,7 @@ module Wordmove
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
-          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
+          '"' + context.dig(:remote_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
           '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
           '--regex-delimiter="|"',
           '--regex',
