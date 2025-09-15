@@ -29,7 +29,7 @@ module Wordmove
 
       if cli_options[:environment].present? &&
          !available_enviroments.include?(cli_options[:environment].to_sym)
-        raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". "\
+        raise UndefinedEnvironment, "No environment found for \"#{options[:environment]}\". " \
                                     "Available Environments: #{available_enviroments.join(' ')}"
       end
 
@@ -64,8 +64,8 @@ module Wordmove
 
       if entries.empty?
         if last_dir?(start_dir)
-          raise MovefileNotFound, 'Could not find a valid Movefile. Searched'\
-                                  " for filename \"#{config_file_name}\" in folder \"#{start_dir}\""
+          raise MovefileNotFound, 'Could not find a valid Movefile. Searched ' \
+                                  "for filename \"#{config_file_name}\" in folder \"#{start_dir}\""
         end
 
         @start_dir = upper_dir(start_dir)

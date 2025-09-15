@@ -30,7 +30,7 @@ module Wordmove
 
           next context if exit_code.zero?
 
-          context.fail! "Error code #{exit_code} returned by command "\
+          context.fail! "Error code #{exit_code} returned by command " \
                         "#{context.command}: #{stderr}"
         end
       end

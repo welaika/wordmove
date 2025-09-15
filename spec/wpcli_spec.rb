@@ -32,7 +32,7 @@ describe Wordmove::WpcliHelpers do
           allow(subject)
             .to receive(:`)
             .with('wp cli param-dump --with-values --allow-root')
-            .and_return("{\"path\":{\"current\":\"\/path\/to\/pudding\"}}")
+            .and_return('{"path":{"current":"/path/to/pudding"}}')
         end
 
         it 'returns the configured path' do

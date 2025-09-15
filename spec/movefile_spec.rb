@@ -44,7 +44,7 @@ describe Wordmove::Movefile do
       end
 
       it 'loads environment variables' do
-        expect(ENV['OBIWAN']).to eq('KENOBI')
+        expect(ENV.fetch('OBIWAN', nil)).to eq('KENOBI')
       end
     end
   end

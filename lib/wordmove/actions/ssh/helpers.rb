@@ -77,7 +77,7 @@ module Wordmove
                       array << path
                     end
                     .concat(paths_to_exclude)
-                    .concat(['/*'])
+                    .push('/*')
           end
 
           #
@@ -118,7 +118,7 @@ module Wordmove
                       array << path
                     end
                     .concat(paths_to_exclude)
-                    .concat(['/*'])
+                    .push('/*')
           end
         end
       end

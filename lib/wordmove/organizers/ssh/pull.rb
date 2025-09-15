@@ -34,11 +34,11 @@ module Wordmove
             Wordmove::Actions::RunBeforePullHook,
             Wordmove::Actions::FilterAndSetupTasksToRun,
             reduce_if(
-              ->(ctx) { ctx.wordpress_task },
+              lambda(&:wordpress_task),
               [Wordmove::Actions::Ssh::PullWordpress]
             ),
             iterate(:folder_tasks, [Wordmove::Actions::Ssh::GetDirectory]),
-            reduce_if(->(ctx) { ctx.database_task },
+            reduce_if(lambda(&:database_task),
                       [
                         Wordmove::Actions::SetupContextForDb,
                         Wordmove::Actions::BackupLocalDb,

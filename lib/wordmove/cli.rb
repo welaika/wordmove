@@ -2,6 +2,7 @@ module Wordmove
   module CLI
     module PullPushShared
       extend ActiveSupport::Concern
+
       WORDPRESS_OPTIONS = %i[wordpress uploads themes plugins mu_plugins languages db].freeze
 
       included do # rubocop:disable Metrics/BlockLength

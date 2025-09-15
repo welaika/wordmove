@@ -20,7 +20,8 @@ Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 # @see https://github.com/rails/rails/commit/481e49c64f790e46f4aff3ed539ed227d2eb46cb
 def silence_stream(stream)
   old_stream = stream.dup
-  stream.reopen(RbConfig::CONFIG['host_os'].match?(/mswin|mingw/) ? 'NUL:' : '/dev/null')
+  # Both branches resulted in File::NULL; simplifying conditional
+  stream.reopen(File::NULL)
   stream.sync = true
   yield
 ensure
@@ -42,33 +43,26 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
 
   config.formatter = :documentation
 
-  config.before :each do
-    allow(Wordmove::WpcliHelpers)
-      .to receive(:get_option)
-      .and_return('an option')
+  config.before do
+    allow(Wordmove::WpcliHelpers).to receive_messages(
+      get_option: 'an option',
+      get_config: 'a config'
+    )
 
     allow(Wordmove::WpcliHelpers)
       .to receive(:get_option)
       .with('home', config_path: instance_of(String))
       .and_return('http://example.com')
 
-    allow(Wordmove::WpcliHelpers)
-      .to receive(:get_config)
-      .and_return('a config')
-
-    allow(Wordmove::WpcliHelpers)
-      .to receive(:get_config)
-      .with('DB_PASSWORD', config_path: instance_of(String))
-      .and_return('local_database_password')
-
-    allow(Wordmove::WpcliHelpers)
-      .to receive(:get_config)
-      .with('DB_HOST', config_path: instance_of(String))
-      .and_return('local_database_host')
-
-    allow(Wordmove::WpcliHelpers)
-      .to receive(:get_config)
-      .with('DB_NAME', config_path: instance_of(String))
-      .and_return('local_database_name')
+    {
+      'DB_PASSWORD' => 'local_database_password',
+      'DB_HOST' => 'local_database_host',
+      'DB_NAME' => 'local_database_name'
+    }.each do |key, value|
+      allow(Wordmove::WpcliHelpers)
+        .to receive(:get_config)
+        .with(key, config_path: instance_of(String))
+        .and_return(value)
+    end
   end
 end

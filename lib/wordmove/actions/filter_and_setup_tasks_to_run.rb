@@ -27,7 +27,9 @@ module Wordmove
             (context.cli_options[:all] && context.cli_options[task] != false)
         end
 
-        allowed_tasks = requested_tasks.select { |task| context.guardian.allows task }
+        allowed_tasks = requested_tasks.select do |task|
+          context.guardian.allow? task
+        end
 
         # Since we `promises` the following variables, we cannot set them as `nil`
         context.database_task = allowed_tasks.delete(:db) || false

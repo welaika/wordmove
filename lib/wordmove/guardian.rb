@@ -9,7 +9,8 @@ module Wordmove
       @logger = Logger.new($stdout).tap { |l| l.level = Logger::DEBUG }
     end
 
-    def allows(task)
+    # Predicate form for checking if a task is allowed.
+    def allow?(task)
       if forbidden?(task)
         logger.task("#{action.capitalize}ing #{task.capitalize}")
         logger.warn("You tried to #{action} #{task}, but is forbidden by configuration. Skipping")
@@ -17,6 +18,9 @@ module Wordmove
 
       !forbidden?(task)
     end
+
+    # Backwards compatibility: keep old API temporarily
+    alias allows allow?
 
     private
 

@@ -30,21 +30,21 @@ class WordpressDirectory
     DEFAULT_PATHS[sym]
   end
 
-  def path(*args)
-    File.join(options[:wordpress_path], relative_path(*args))
+  def path(*)
+    File.join(options[:wordpress_path], relative_path(*))
   end
 
-  def url(*args)
-    File.join(options[:vhost], relative_path(*args))
+  def url(*)
+    File.join(options[:vhost], relative_path(*))
   end
 
-  def relative_path(*args)
+  def relative_path(*)
     path = if options[:paths] && options[:paths][folder]
              options[:paths][folder]
            else
              DEFAULT_PATHS[folder]
            end
-    File.join(path, *args)
+    File.join(path, *)
   end
 
   module RemoteHelperMethods

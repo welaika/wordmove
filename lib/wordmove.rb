@@ -1,5 +1,10 @@
 require 'English'
 
+require 'logger' # Must be required before ActiveSupport so Logger constant exists
+require 'base64' # No longer auto-loaded in Ruby >= 3.4 when AS expects it
+require 'bigdecimal'
+require 'benchmark'
+require 'mutex_m'
 require 'active_support'
 require 'active_support/core_ext'
 require 'colorize'
@@ -10,7 +15,6 @@ require 'dry/files'
 require 'erb'
 require 'kwalify'
 require 'light-service'
-require 'logger'
 require 'open-uri'
 require 'ostruct'
 require 'yaml'

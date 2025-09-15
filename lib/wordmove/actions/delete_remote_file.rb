@@ -34,7 +34,7 @@ module Wordmove
         # FTP protocol. The problem is how +Net::FTP+ ruby class behaves.
         # IMO this is an acceptable tradeoff.
         unless exit_code.nil?
-          context.fail! "Error code #{exit_code} returned while deleting file "\
+          context.fail! "Error code #{exit_code} returned while deleting file " \
                         "#{context.remote_file}: #{stderr}"
         end
       end

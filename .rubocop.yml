@@ -1,14 +1,20 @@
 AllCops:
-  TargetRubyVersion: 3.1.0
+  TargetRubyVersion: 3.4
   DisplayCopNames: true
   DisplayStyleGuide: true
   NewCops: enable
 
   Exclude:
-    - 'bin/*'
+    - "bin/*"
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+plugins:
+  - rubocop-rspec
 
 Metrics/MethodLength:
   Max: 20
@@ -18,9 +24,9 @@ Metrics/ClassLength:
 
 Metrics/BlockLength:
   Exclude:
-    - 'spec/**/*_spec.rb'
-    - 'spec/factories/*.rb'
-    - '*.gemspec'
+    - "spec/**/*_spec.rb"
+    - "spec/factories/*.rb"
+    - "*.gemspec"
 
 Metrics/CyclomaticComplexity:
   Max: 10
@@ -36,3 +42,7 @@ Style/FrozenStringLiteralComment:
 
 Metrics/AbcSize:
   Max: 40
+
+Lint/RedundantCopDisableDirective:
+  Exclude:
+    - "spec/spec_helper.rb"

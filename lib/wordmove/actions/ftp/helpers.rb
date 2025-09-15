@@ -29,7 +29,7 @@ module Wordmove
 
             # replaces \ with \\
             # replaces ' with \'
-            string.gsub('\\', '\\\\\\').gsub(/'/, '\\\\\'')
+            string.gsub('\\', '\\\\\\').gsub('\'', '\\\\\'')
           end
 
           #

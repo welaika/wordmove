@@ -30,26 +30,31 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'activesupport', '~> 6.1'
-  spec.add_runtime_dependency 'colorize', '~> 0.8.1'
-  spec.add_runtime_dependency 'dotenv', '~> 2.7.5'
-  spec.add_runtime_dependency 'dry-configurable', '~> 0.13.0'
-  spec.add_runtime_dependency 'kwalify', '~> 0.7.2'
-  spec.add_runtime_dependency 'light-service', '~> 0.17.0'
-  spec.add_runtime_dependency 'photocopier', '~> 1.4', '>= 1.4.1'
+  spec.add_dependency 'activesupport', '~> 6.1'
+  spec.add_dependency 'colorize', '~> 0.8.1'
+  spec.add_dependency 'dotenv', '~> 2.7.5'
+  spec.add_dependency 'dry-configurable', '~> 0.13.0'
+  spec.add_dependency 'kwalify', '~> 0.7.2'
+  spec.add_dependency 'light-service', '~> 0.17.0'
+  spec.add_dependency 'photocopier', '~> 1.4', '>= 1.4.1'
   # spec.add_runtime_dependency 'thor', '~> 0.20.3'
-  spec.add_runtime_dependency 'dry-cli', '~> 0.7.0'
-  spec.add_runtime_dependency 'dry-files', '~> 0.1.0'
+  spec.add_dependency 'dry-cli', '~> 0.7.0'
+  spec.add_dependency 'dry-files', '~> 0.1.0'
+  # Ruby 3.4/3.5 start removing some stdlib libs from default gems; explicitly depend
+  # on them so requiring wordmove doesn't break on newer Rubies.
+  spec.add_dependency 'base64'
+  spec.add_dependency 'bigdecimal'
+  spec.add_dependency 'logger'
+  spec.add_dependency 'ostruct'
 
-  spec.required_ruby_version = '>= 3.1.0'
+  spec.required_ruby_version = '>= 3.4.5'
 
-  spec.add_development_dependency 'bundler', '~> 2.3.3'
-  spec.add_development_dependency 'debug', '~> 1.4.0'
-  spec.add_development_dependency 'rake', '~> 13.0.1'
-  spec.add_development_dependency 'rspec', '~> 3.9'
-  spec.add_development_dependency 'rubocop', '~> 1.24.0'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.6.0'
-  spec.add_development_dependency 'simplecov', '~> 0.21.2'
+  spec.add_development_dependency 'debug'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-rspec'
+  spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'yard'
   spec.add_development_dependency 'yard-activesupport-concern'
 
