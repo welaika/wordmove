@@ -77,26 +77,7 @@ module Wordmove
       logger.task("Using Movefile: #{found}") if verbose == true
       load_dotenv(verbose)
 
-      options = YAML.safe_load(ERB.new(File.read(found)).result, symbolize_names: true)
-
-      merge_local_options_from_wpcli(options)
-    end
-
-    def merge_local_options_from_wpcli(options)
-      config_path = options.dig(:local, :wordpress_path)
-
-      options.merge(
-        local: {
-          database: {
-            password: Wordmove::WpcliHelpers.get_config('DB_PASSWORD', config_path:),
-            host: Wordmove::WpcliHelpers.get_config('DB_HOST', config_path:),
-            name: Wordmove::WpcliHelpers.get_config('DB_NAME', config_path:),
-            user: Wordmove::WpcliHelpers.get_config('DB_USER', config_path:)
-          },
-          vhost: Wordmove::WpcliHelpers.get_option('home', config_path:),
-          wordpress_path: config_path
-        }
-      )
+      YAML.safe_load(ERB.new(File.read(found)).result, symbolize_names: true)
     end
 
     def load_dotenv(verbose)
