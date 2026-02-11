@@ -1,12 +1,12 @@
 require 'English'
 
+require 'logger'
 require 'active_support'
 require 'active_support/core_ext'
 require 'colorize'
 require 'dotenv'
 require 'erb'
 require 'kwalify'
-require 'logger'
 require 'open-uri'
 require 'ostruct'
 require 'thor'

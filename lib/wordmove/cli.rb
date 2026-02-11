@@ -15,6 +15,12 @@ module Wordmove
     desc "doctor", "Do some local configuration and environment checks"
     def doctor
       Wordmove::Doctor.start
+    rescue Wordmove::MovefileNotFound => e
+      logger.error(e.message)
+      exit 1
+    rescue Psych::SyntaxError => e
+      logger.error("Your movefile is not parsable due to a syntax error: #{e.message}")
+      exit 1
     end
 
     shared_options = {

@@ -12,7 +12,7 @@ module Wordmove
           run wpcli_search_replace(local_options, remote_options, :wordpress_path)
 
           local_search_replace_dump_path = local_wp_content_dir.path("search_replace_dump.sql")
-          local_gzipped_search_replace_dump_path = local_search_replace_dump_path + '.gz'
+          local_gzipped_search_replace_dump_path = "#{local_search_replace_dump_path}.gz"
 
           save_local_db(local_search_replace_dump_path)
           run compress_command(local_search_replace_dump_path)

@@ -1,3 +1,4 @@
+TMPDIR = "/tmp/wordmove".freeze
 describe Wordmove::Movefile do
   let(:movefile) { described_class.new }
 
@@ -8,8 +9,6 @@ describe Wordmove::Movefile do
   end
 
   context ".load_env" do
-    TMPDIR = "/tmp/wordmove".freeze
-
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:dotenv_path) { File.join(TMPDIR, '.env') }
     let(:yaml) { "name: Waldo\njob: Hider" }
@@ -41,8 +40,6 @@ describe Wordmove::Movefile do
   end
 
   context ".fetch" do
-    TMPDIR = "/tmp/wordmove".freeze
-
     let(:path) { File.join(TMPDIR, 'movefile.yml') }
     let(:yaml) { "name: Waldo\njob: Hider" }
     let(:movefile) { described_class.new(nil, path) }

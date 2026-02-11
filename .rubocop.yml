@@ -1,13 +1,30 @@
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.1
   DisplayCopNames: true
   DisplayStyleGuide: true
+  SuggestExtensions: false
+  NewCops: disable
 
   Exclude:
     - 'bin/*'
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
+
+Style/GlobalStdStream:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Style/SoleNestedConditional:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Security/Open:
+  Enabled: false
 
 Metrics/MethodLength:
   Max: 20

@@ -27,7 +27,7 @@ module Wordmove
 
       found = entries.first
       logger.task("Using Movefile: #{found}") if verbose == true
-      YAML.safe_load(ERB.new(File.read(found)).result, [], [], true).deep_symbolize_keys!
+      YAML.safe_load(ERB.new(File.read(found)).result).deep_symbolize_keys!
     end
 
     def load_dotenv(cli_options = {})

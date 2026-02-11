@@ -95,7 +95,7 @@ module Wordmove
 
         # replaces \ with \\
         # replaces ' with \'
-        string.gsub('\\', '\\\\\\').gsub(/[']/, '\\\\\'')
+        string.gsub('\\', '\\\\\\').gsub(/'/, '\\\\\'')
       end
 
       def generate_dump_script(db, password)

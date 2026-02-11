@@ -22,7 +22,7 @@ module Wordmove
 
         @local_dump_path = local_wp_content_dir.path("dump.sql")
         @local_backup_path = local_wp_content_dir.path("local-backup-#{Time.now.to_i}.sql")
-        @local_gzipped_dump_path = local_dump_path + '.gz'
+        @local_gzipped_dump_path = "#{local_dump_path}.gz"
         @local_gzipped_backup_path = local_wp_content_dir
                                      .path("#{environment}-backup-#{Time.now.to_i}.sql.gz")
       end
@@ -86,7 +86,7 @@ module Wordmove
 
       def import_remote_dump(local_gizipped_dump_path)
         remote_dump_path = remote_wp_content_dir.path("dump.sql")
-        remote_gizipped_dump_path = remote_dump_path + '.gz'
+        remote_gizipped_dump_path = "#{remote_dump_path}.gz"
 
         remote_put(local_gizipped_dump_path, remote_gizipped_dump_path)
         remote_run uncompress_command(remote_gizipped_dump_path)

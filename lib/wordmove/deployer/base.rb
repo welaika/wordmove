@@ -1,9 +1,7 @@
 module Wordmove
   module Deployer
     class Base
-      attr_reader :options
-      attr_reader :logger
-      attr_reader :environment
+      attr_reader :options, :logger, :environment
 
       class << self
         def deployer_for(cli_options)

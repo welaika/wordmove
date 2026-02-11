@@ -21,6 +21,38 @@ describe Wordmove::CLI do
       expect(Wordmove::Doctor).to receive(:start)
       cli.invoke(:doctor, [], options)
     end
+
+    context "without a movefile" do
+      before do
+        allow(Wordmove::Doctor).to receive(:start)
+          .and_raise(Wordmove::MovefileNotFound, "Could not find a valid Movefile.")
+      end
+
+      it "rescues from a MovefileNotFound exception" do
+        expect do
+          expect { cli.invoke(:doctor, [], options) }.to raise_error SystemExit
+        end.to output(
+          /Could not find a valid Movefile\./
+        ).to_stdout_from_any_process
+      end
+    end
+
+    context "with an invalid movefile" do
+      before do
+        allow(Wordmove::Doctor).to receive(:start)
+          .and_raise(
+            Psych::SyntaxError.new(nil, 1, 1, 0, "found character that cannot start any token", nil)
+          )
+      end
+
+      it "rescues from a syntax error" do
+        expect do
+          expect { cli.invoke(:doctor, [], options) }.to raise_error SystemExit
+        end.to output(
+          /Your movefile is not parsable due to a syntax error/
+        ).to_stdout_from_any_process
+      end
+    end
   end
 
   context "#pull" do
