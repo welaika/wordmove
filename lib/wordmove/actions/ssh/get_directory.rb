@@ -68,7 +68,7 @@ module Wordmove
 
           next context if result == true
 
-          context.fail!("Failed to push #{context.folder_task}")
+          context.fail!("Failed to pull #{context.folder_task}")
         end
       end
     end

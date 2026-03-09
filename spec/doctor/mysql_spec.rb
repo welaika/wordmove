@@ -8,6 +8,7 @@ describe Wordmove::Doctor::Mysql do
       allow(doctor).to receive(:mysql_server_doctor).and_return true
       allow(doctor).to receive(:mysql_database_doctor).and_return true
     end
+
     it 'implements #check! method' do
       expect(doctor).to receive(:check!)
 

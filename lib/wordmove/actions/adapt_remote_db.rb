@@ -96,12 +96,14 @@ module Wordmove
           "--path=#{wpcli_config_path(context)}"
       end
 
-      # Compose and returns the search-replace command. It's intended to be
+      # Compose and returns the search-replace commands. It's intended to be
       # used from a +LightService::Action+
+      #
+      # @note For the :vhost config key, two commands will be returned: one for http and one for https scheme.
       #
       # @param context [LightService::Context] The context of an action
       # @param config_key [:vhost, :wordpress_path] Determines what will be replaced in DB
-      # @return [String]
+      # @return [Array<String>]
       # @!scope class
       def self.search_replace_command(context, config_key)
         unless %i[vhost wordpress_path].include?(config_key)
@@ -112,11 +114,8 @@ module Wordmove
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
-          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
+          '"' + context.dig(:remote_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
           '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
-          '--regex-delimiter="|"',
-          '--regex',
-          '--precise',
           '--quiet',
           '--skip-columns=guid',
           '--all-tables',

@@ -3,6 +3,11 @@ global:
 
 local:
   wordpress_path: "/home/welaika/sites/your_site"
+  database:
+    name: "database_name"
+    user: "user"
+    password: "password"
+    host: "host"
 
 staging:
   vhost: "http://staging.mysite.example.com"

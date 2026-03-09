@@ -159,7 +159,6 @@ describe Wordmove::Movefile do
         %w[
           local_database_password
           local_database_host
-          http://example.com
           ~/dev/sites/your_site
           remote_database_password
           remote_database_host
@@ -185,7 +184,7 @@ describe Wordmove::Movefile do
       expect(movefile.secrets).to eq(
         %w[
           local_database_host
-          http://example.com
+          http://your_site.local
           ~/dev/sites/your_site
           remote_database_password
           remote_database_host
