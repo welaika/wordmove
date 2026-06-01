@@ -4,7 +4,8 @@ module Wordmove
 
     def initialize(device, strings_to_hide = [])
       super(device, formatter: proc { |_severity, _datetime, _progname, message|
-        formatted_message = if strings_to_hide.empty?
+        formatted_message = if strings_to_hide.empty? ||
+                               ENV.fetch('WORDMOVE_REVEAL_SECRETS', nil).present?
                               message
                             else
                               message.gsub(
@@ -20,38 +21,38 @@ module Wordmove
     end
 
     def task(title)
-      prefix = "▬" * 2
+      prefix = '▬' * 2
       title = " #{title} "
-      padding = "▬" * padding_length(title)
+      padding = '▬' * padding_length(title)
       add(INFO, prefix + title.light_white + padding)
     end
 
     def task_step(local_step, title)
       if local_step
-        add(INFO, "    local".cyan + " | ".black + title.to_s)
+        add(INFO, '    local'.cyan + ' | '.black + title.to_s)
       else
-        add(INFO, "   remote".yellow + " | ".black + title.to_s)
+        add(INFO, '   remote'.yellow + ' | '.black + title.to_s)
       end
     end
 
     def error(message)
-      add(ERROR, "    ❌  error".red + " | ".black + message.to_s)
+      add(ERROR, '    ❌  error'.red + ' | '.black + message.to_s)
     end
 
     def success(message)
-      add(INFO, "    ✅  success".green + " | ".black + message.to_s)
+      add(INFO, '    ✅  success'.green + ' | '.black + message.to_s)
     end
 
     def debug(message)
-      add(DEBUG, "    🛠  debug".magenta + " | ".black + message.to_s)
+      add(DEBUG, '    🛠  debug'.magenta + ' | '.black + message.to_s)
     end
 
     def warn(message)
-      add(WARN, "    ⚠️  warning".yellow + " | ".black + message.to_s)
+      add(WARN, '    ⚠️  warning'.yellow + ' | '.black + message.to_s)
     end
 
     def info(message)
-      add(INFO, "    ℹ️  info".yellow + " | ".black + message.to_s)
+      add(INFO, '    ℹ️  info'.yellow + ' | '.black + message.to_s)
     end
 
     def plain(message)

@@ -1,11 +1,19 @@
-require 'wordmove/wordpress_directory/path'
-
 class WordpressDirectory
-  attr_accessor :type, :options
+  attr_reader :folder, :options
 
-  def initialize(type, options)
-    @type = type
+  def initialize(folder, options)
+    @folder = folder
     @options = options
+  end
+
+  module Path
+    WP_CONTENT = :wp_content
+    WP_CONFIG  = :wp_config
+    PLUGINS    = :plugins
+    MU_PLUGINS = :mu_plugins
+    THEMES     = :themes
+    UPLOADS    = :uploads
+    LANGUAGES  = :languages
   end
 
   DEFAULT_PATHS = {
@@ -22,20 +30,80 @@ class WordpressDirectory
     DEFAULT_PATHS[sym]
   end
 
-  def path(*args)
-    File.join(options[:wordpress_path], relative_path(*args))
+  def path(*)
+    File.join(options[:wordpress_path], relative_path(*))
   end
 
-  def url(*args)
-    File.join(options[:vhost], relative_path(*args))
+  def url(*)
+    File.join(options[:vhost], relative_path(*))
   end
 
-  def relative_path(*args)
-    path = if options[:paths] && options[:paths][type]
-             options[:paths][type]
+  def relative_path(*)
+    path = if options[:paths] && options[:paths][folder]
+             options[:paths][folder]
            else
-             DEFAULT_PATHS[type]
+             DEFAULT_PATHS[folder]
            end
-    File.join(path, *args)
+    File.join(path, *)
+  end
+
+  module RemoteHelperMethods
+    extend ActiveSupport::Concern
+
+    class_methods do
+      def remote_wp_content_dir(remote_options:)
+        WordpressDirectory.new(:wp_content, remote_options)
+      end
+
+      def remote_plugins_dir(remote_options:)
+        WordpressDirectory.new(:plugins, remote_options)
+      end
+
+      def remote_mu_plugins_dir(remote_options:)
+        WordpressDirectory.new(:mu_plugins, remote_options)
+      end
+
+      def remote_themes_dir(remote_options:)
+        WordpressDirectory.new(:themes, remote_options)
+      end
+
+      def remote_uploads_dir(remote_options:)
+        WordpressDirectory.new(:uploads, remote_options)
+      end
+
+      def remote_languages_dir(remote_options:)
+        WordpressDirectory.new(:languages, remote_options)
+      end
+    end
+  end
+
+  module LocalHelperMethods
+    extend ActiveSupport::Concern
+
+    class_methods do
+      def local_wp_content_dir(local_options:)
+        WordpressDirectory.new(:wp_content, local_options)
+      end
+
+      def local_plugins_dir(local_options:)
+        WordpressDirectory.new(:plugins, local_options)
+      end
+
+      def local_mu_plugins_dir(local_options:)
+        WordpressDirectory.new(:mu_plugins, local_options)
+      end
+
+      def local_themes_dir(local_options:)
+        WordpressDirectory.new(:themes, local_options)
+      end
+
+      def local_uploads_dir(local_options:)
+        WordpressDirectory.new(:uploads, local_options)
+      end
+
+      def local_languages_dir(local_options:)
+        WordpressDirectory.new(:languages, local_options)
+      end
+    end
   end
 end

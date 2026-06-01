@@ -102,6 +102,21 @@ or run the executable directly
 bin/wordmove --version
 ```
 
+#### Documenting
+
+A large part of the code is documented using https://yardoc.org/.
+
+Please, stick with this practice when you're implementing new code. If you want to preview yard
+documentation locally
+
+```
+yard server -r
+```
+
+then visit the served HTML at http://localhost:8808.
+
+YARD documentation is automatically published by rubygems site at each release.
+
 ### Maintainer tasks
 
 ToDo:
