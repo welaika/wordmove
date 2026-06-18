@@ -8,7 +8,6 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
   let(:bad_command) { 'exit 1' }
 
   before do
-    silence_logger!
     allow(context[:photocopier])
       .to receive(:exec!).with(good_command)
                          .and_return([nil, nil, 0])
@@ -18,6 +17,8 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
   end
 
   it 'works like it should' do
+    silence_logger!
+
     result = described_class.execute(
       photocopier: context.fetch(:photocopier),
       cli_options: context.fetch(:cli_options),
@@ -30,6 +31,8 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
 
   context 'when it fails' do
     it 'sets the expected error message into result' do
+      silence_logger!
+
       result = described_class.execute(
         photocopier: context.fetch(:photocopier),
         cli_options: context.fetch(:cli_options),
@@ -44,6 +47,8 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
 
   context 'when `--simulate`' do
     it 'does not execute the command and result is successful' do
+      silence_logger!
+
       context[:cli_options][:simulate] = true
 
       result = described_class.execute(
@@ -54,6 +59,40 @@ describe Wordmove::Actions::Ssh::RunRemoteCommand do
       )
 
       expect(result).to be_success
+    end
+  end
+
+  context 'testing @castilma\'s big report' do
+    let(:command) do
+      'mysqldump --host=remote_database_host --user=user ' \
+      '--password=R4ndom#+Str1nG ' \
+      '--result-file="/var/www/your_site/wp-content/dump.sql" database_name'
+    end
+
+    let(:context) do
+      OrganizerContextFactory.make_for(
+        described_class,
+        :pull,
+        cli_options: {
+          config: movefile_path_for('with_secrets_castilma'),
+          environment: :remote
+        }
+      )
+    end
+
+    it 'censors the password on STDOUT' do
+      allow(context[:photocopier])
+        .to receive(:exec!).with(command)
+                           .and_return([nil, nil, 0])
+
+      expect do
+        described_class.execute(
+          photocopier: context.fetch(:photocopier),
+          cli_options: context.fetch(:cli_options),
+          logger: context.fetch(:logger),
+          command: command
+        )
+      end.to output(/--password=\[secret\]/).to_stdout_from_any_process
     end
   end
 end
