@@ -109,11 +109,15 @@ module Wordmove
                                'or :wordpress_path expected'
         end
 
+        from = context.dig(:remote_options, config_key)
+        to = context.dig(:local_options, config_key)
+        search, replace = wpcli_search_replace_patterns(config_key, from, to)
+
         [
           'wp search-replace',
           "--path=#{wpcli_config_path(context)}",
-          '"\A' + context.dig(:remote_options, config_key) + '\Z"', # rubocop:disable Style/StringConcatenation
-          '"' + context.dig(:local_options, config_key) + '"', # rubocop:disable Style/StringConcatenation
+          search,
+          replace,
           '--regex-delimiter="|"',
           '--regex',
           '--precise',
@@ -122,6 +126,20 @@ module Wordmove
           '--all-tables',
           '--allow-root'
         ].join(' ')
+      end
+
+      # Builds the regex search pattern and replacement string for wp search-replace.
+      #
+      # For vhost: no anchors so the URL is replaced everywhere it appears (post content,
+      # meta, serialized data). Regexp.escape handles special chars in the URL.
+      # For wordpress_path: exact anchors (\A...\Z) prevent replacing substrings
+      # (e.g. /html appearing inside text/html — see issue #616).
+      def self.wpcli_search_replace_patterns(config_key, from, to)
+        if config_key == :vhost
+          [Regexp.escape(from).shellescape, to.shellescape]
+        else
+          ["\\A#{Regexp.escape(from)}\\Z".shellescape, to.shellescape]
+        end
       end
     end
   end

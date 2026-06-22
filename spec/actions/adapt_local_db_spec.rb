@@ -57,11 +57,30 @@ describe Wordmove::Actions::AdaptLocalDb do
   end
 
   context '.search_replace_command' do
-    it 'returns the expected command' do
-      expect(subject.class.search_replace_command(context, :wordpress_path))
-        .to eq('wp search-replace --path=~/dev/sites/your_site "\A~/dev/sites/your_site\Z" ' \
-               '"/var/www/your_site" --regex-delimiter="|" --regex --precise --quiet ' \
-               '--skip-columns=guid --all-tables --allow-root')
+    context 'with :wordpress_path' do
+      it 'uses exact-match anchors to avoid substring false positives (issue #616)' do
+        expect(subject.class.search_replace_command(context, :wordpress_path))
+          .to eq('wp search-replace --path=~/dev/sites/your_site ' \
+                 '\\\\A\\~/dev/sites/your_site\\\\Z /var/www/your_site ' \
+                 '--regex-delimiter="|" --regex --precise --quiet ' \
+                 '--skip-columns=guid --all-tables --allow-root')
+      end
+    end
+
+    context 'with :vhost' do
+      before do
+        allow(Wordmove::WpcliHelpers).to receive(:get_option)
+          .with('home', config_path: '~/dev/sites/your_site')
+          .and_return('http://vhost.local')
+      end
+
+      it 'replaces the URL everywhere it appears without anchoring to the full field value' do
+        expect(subject.class.search_replace_command(context, :vhost))
+          .to eq('wp search-replace --path=~/dev/sites/your_site ' \
+                 'http://vhost\\\\.local http://example.com ' \
+                 '--regex-delimiter="|" --regex --precise --quiet ' \
+                 '--skip-columns=guid --all-tables --allow-root')
+      end
     end
 
     context 'when wrong config_key is passed' do
